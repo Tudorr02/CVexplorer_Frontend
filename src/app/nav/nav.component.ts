@@ -23,7 +23,7 @@ export class NavComponent implements OnInit {
 
     this.Router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.isLoginRoute = this.Router.url === '/login'; // ✅ Always updated when route changes
+        this.isLoginRoute = this.Router.url === '/login'; // Always updated when route changes
       }
     }); // Check if the current route is the login page
     // Check localStorage for saved theme preference
