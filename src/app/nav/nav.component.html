@@ -1,0 +1,25 @@
+
+<nav class="navbar">
+    <a aria-label="CVexplorer Logo" href="/dashboard" class="logo-container">
+        <img [src]="logoPath" alt="Logo" width="10%"/>
+    </a>
+
+    @if(!isLoginRoute){
+        <ul class="topbar-items">
+            <li class="nav-item ">
+                <p-button label="User Name" variant="text" styleClass="nav-username" />
+            </li>
+            <li>
+                <p-button label="{{ buttonText }}" [size]="'small'"  icon="{{iconClass}}" class="topbar-item" [style]="{ 'width':'7.8rem'}"    [outlined]="true" (click)="toggleTheme()"/>
+            </li>
+            <li>
+                <p-button label="Sign Out" [size]="'small'" severity="danger" icon="pi pi-sign-out"  [outlined]="true" (onClick)="signOut()"/>
+            </li>
+        </ul>
+    }
+    
+    
+    
+</nav>
+
+

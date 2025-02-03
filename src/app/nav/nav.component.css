@@ -1,0 +1,37 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+.navbar {
+    display: flex; /* Makes the navbar a flex container */
+    justify-content: space-between; /* Pushes items to the edges */
+    align-items: center; /* Vertically centers items */
+    padding: 0vh var(--width-padding-site); /* Add spacing inside the navbar */
+    vertical-align: middle;
+    height: var(--navbar-height);
+  }
+  
+
+
+:host ::ng-deep .nav-username{
+    color: white;
+    font-size: 1.1rem;
+
+}
+
+.logo-container {
+    width: 10vw; /* Increase the parent container's width */
+  }
+.logo-container img {
+    width: 100%; /* Make the logo fit the container */
+    height: 100%; /* Maintain aspect ratio */
+}
+
+.topbar-items {
+    
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    gap: 1vw;
+    align-items: center;
+}
+

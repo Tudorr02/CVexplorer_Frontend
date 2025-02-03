@@ -1,0 +1,33 @@
+
+<div #vantaBackground id="vanta-background"></div>
+<div class="login-container">
+    <div class="login-card">
+        <div id="title">
+           <p>Member Login</p>
+        </div>
+    
+        <div id = "login-form">
+            <div class="login-field">
+                <label for="username">Username</label>
+                <input type="text" pInputText id="username" [(ngModel)]="model.username" />
+            </div>
+            <div class="login-field">
+                <label for="password">Password</label>
+                <p-password [feedback]="false" [toggleMask]="true" [(ngModel)]="model.password"/>
+            </div>
+            
+            <div class="login-field">
+                <p-button label="Log In"  [raised]="true" (onClick)="login()"/>
+            </div>
+            
+        </div>
+    
+        
+    
+      
+    </div>
+    
+</div>
+
+
+

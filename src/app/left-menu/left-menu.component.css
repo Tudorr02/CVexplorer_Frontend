@@ -1,0 +1,5 @@
+
+::ng-deep .p-tree {
+    background-color: transparent !important; /* Makes the tree's background transparent */
+   
+}

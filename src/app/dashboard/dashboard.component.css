@@ -1,0 +1,24 @@
+.left-menu-container{
+    width: 100%;
+    height: 100%;
+    margin-top: 1vh;
+  
+}
+
+.component-container{
+    width: 100%;
+    height: 100%;
+    margin-top: 1vh;
+    padding-inline: 1vw;
+  
+}
+::ng-deep .p-splitter {
+    height: var(--menu-height); /* Sets the height of the splitter */
+    margin-inline: 1vw;
+}
+
+::ng-deep .p-splitter-gutter {
+    background: transparent; /* Makes the gutter invisible */
+    border: none;            /* Removes any gutter border */
+}
+

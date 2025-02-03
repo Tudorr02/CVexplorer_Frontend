@@ -1,0 +1,46 @@
+<div id="homeContainer">
+    
+
+    <p-splitter [panelSizes]="[20, 80]" 
+    [minSizes]="[20,80]" 
+    [gutterSize]="0"
+    [style]="{
+            'border': 'none',          
+            'borderRadius': 'var(--card-border-radius)'
+    }"
+    >
+
+        <ng-template #panel>
+        <div class="left-menu-container">
+                <app-left-menu></app-left-menu>
+        </div>  
+        </ng-template>
+
+        <ng-template #panel>
+            <div class="component-container">
+            
+                <p-tabs value="/dashboard" >
+                    <p-tablist> 
+                        @for(tab of tabs; track tab.route){
+                            <p-tab [value]="tab.route"  >
+                                <i [class]="tab.icon"></i>
+                                <span>{{ tab.label }}</span>
+                            </p-tab>
+                        }
+                    </p-tablist>
+                </p-tabs>
+                
+                <p-tabpanels>
+                    
+                    <router-outlet></router-outlet>
+                </p-tabpanels>
+                
+                
+                
+            </div>
+        </ng-template>
+
+    </p-splitter>
+
+    
+</div>

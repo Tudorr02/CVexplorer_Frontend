@@ -1,0 +1,21 @@
+:root{
+    --navbar-height: 7vh;
+    --width-padding-site: 2vw;
+
+    /* PANELS VALUES */
+    --menu-height: calc(98vh - var(--navbar-height)); /* panel 1 and panel 2 size */
+    
+    --card-border-radius: 40px;
+}
+
+
+
+/* Background colors */
+.my-app-light{
+  --light-background-color: #e2ffe9;
+}
+
+.my-app-dark{
+  --dark-background-color: #222222;
+}
+

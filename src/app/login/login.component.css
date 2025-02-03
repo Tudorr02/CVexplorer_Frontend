@@ -1,0 +1,70 @@
+
+ #vanta-background{
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  position: absolute;
+ }
+ 
+ .login-container{
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+
+ }
+
+ .login-card{
+  
+  width: 18vw;
+  height: 40vh;
+  background: #2c2e2c ;
+  border-radius: var(--card-border-radius);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  grid-column: 3 ; 
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  font-family: sans-serif;
+ }
+
+#title{
+grid-row: 1 / 2;
+display: flex;
+justify-content: center;
+font-size: 2rem;
+
+}
+
+#login-form{
+ 
+  grid-row: 2 / 6;
+  align-items: center;
+  justify-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+
+.login-field{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  
+  label{
+    display: block;
+    font-size: 1.2rem;
+  }
+  
+  input , p-password{
+    width : 250px;
+  }
+  
+  p-button{
+    margin-top: 2vh;
+  }
+}
+
