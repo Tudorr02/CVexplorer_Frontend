@@ -2,9 +2,11 @@ import { Component , OnInit,Input , inject} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../_services/user.service';
 import { NavigationEnd, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-nav',
-  imports: [ButtonModule],
+  imports: [CommonModule,ButtonModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
@@ -69,4 +71,7 @@ export class NavComponent implements OnInit {
     this.Router.navigate(['/login']);
   }
 
+  isLogin(): boolean {
+    return this.Router.url.includes('/login'); // Adjust this based on your route structure
+  }
 }

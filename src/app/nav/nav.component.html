@@ -1,5 +1,5 @@
 
-<nav class="navbar">
+<nav class="navbar" [ngClass]="{'navbar-login': isLogin()}">
     <a aria-label="CVexplorer Logo" href="/dashboard" class="logo-container">
         <img [src]="logoPath" alt="Logo" width="10%"/>
     </a>

@@ -23,7 +23,6 @@ export class LoginComponent {
   Router = inject(Router);
 
   model = { username: '', password: '' };
-  errorMessage = '';
 
 
   ngAfterViewInit(): void {
@@ -62,7 +61,7 @@ export class LoginComponent {
 
   login() {
     if(!this.model.username || !this.model.password) {
-      this.errorMessage = 'Please enter your username and password.';
+      this.triggerButtonAnimation();
       return;
     }
 
@@ -72,10 +71,27 @@ export class LoginComponent {
         this.Router.navigate(['/dashboard']);
       },
       error: (error) => {
-        this.errorMessage = error.error;
-        console.log('Login failed:', error);
+        console.log('Login failed!');
+        this.model.username = '';
+        this.model.password = '';
+        this.triggerButtonAnimation();
       }
     });
   
+  }
+
+  triggerButtonAnimation() {
+    const button = document.querySelector('.login-button'); // Target the whole button
+    const label = document.querySelector('.login-button .p-button-label'); // Target only the text
+  
+    if (button && label) {
+      button.classList.add('shake'); // Apply shake to the button
+      label.classList.add('text-red'); // Change text color
+  
+      setTimeout(() => {
+        button.classList.remove('shake'); // Remove shake after animation
+        label.classList.remove('text-red'); // Reset text color
+      }, 500);
+    }
   }
 }

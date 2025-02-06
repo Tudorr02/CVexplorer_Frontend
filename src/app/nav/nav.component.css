@@ -9,6 +9,10 @@
     height: var(--navbar-height);
   }
   
+.navbar-login{
+  position: absolute;
+  z-index: 0;
+}
 
 
 :host ::ng-deep .nav-username{

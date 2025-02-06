@@ -1,0 +1,17 @@
+
+.footer {
+    height: var(--footer-height);
+    width: 100%;
+    color: rgba(255, 255, 255, 0.277);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
+   
+}
+  
+.dashboard-footer {
+    height:calc(var(--footer-height) + 3%)  !important; /* Example: Different height */
+  }

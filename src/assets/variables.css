@@ -6,6 +6,7 @@
     --menu-height: calc(98vh - var(--navbar-height)); /* panel 1 and panel 2 size */
     
     --card-border-radius: 40px;
+    --footer-height: 5%;
 }
 
 
