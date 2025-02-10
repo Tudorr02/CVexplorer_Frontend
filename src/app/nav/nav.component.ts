@@ -13,22 +13,23 @@ import { CommonModule } from '@angular/common';
 export class NavComponent implements OnInit {
 
   isLoginRoute: boolean = false; // Default route
-
   Router = inject(Router);
   UserServices = inject(UserService);
   isDarkMode: boolean = true; // Default theme mode
   buttonText: string = 'Dark Mode'; // Default button text
   logoPath: string = 'logos/CVexplorerDark.svg'; // Path to the logo image
   iconClass: string = 'pi pi-moon'; // Default icon class
+  username: string = '';
 
   ngOnInit(): void {
-
     this.Router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isLoginRoute = this.Router.url === '/login'; // Always updated when route changes
       }
-    }); // Check if the current route is the login page
+    }); 
+    // Check if the current route is the login page
     // Check localStorage for saved theme preference
+    this.username = this.UserServices.currentUser()?.username || '';
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
       this.isDarkMode = true;
@@ -72,6 +73,6 @@ export class NavComponent implements OnInit {
   }
 
   isLogin(): boolean {
-    return this.Router.url.includes('/login'); // Adjust this based on your route structure
+    return this.Router.url.includes('/login'); 
   }
 }

@@ -34,5 +34,9 @@ export class UserService {
     localStorage.removeItem('userData');
     this.currentUser.set(null);
   }
+
+  isLoggedIn(): boolean {
+    return this.currentUser() !== null || localStorage.getItem('userData') !== null;
+  }
   
 }

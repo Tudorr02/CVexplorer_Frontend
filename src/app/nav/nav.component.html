@@ -7,7 +7,7 @@
     @if(!isLoginRoute){
         <ul class="topbar-items">
             <li class="nav-item ">
-                <p-button label="User Name" variant="text" styleClass="nav-username" />
+                <p-button label="{{username}}" variant="text" styleClass="nav-username" />
             </li>
             <li>
                 <p-button label="{{ buttonText }}" [size]="'small'"  icon="{{iconClass}}" class="topbar-item" [style]="{ 'width':'7.8rem'}"    [outlined]="true" (click)="toggleTheme()"/>

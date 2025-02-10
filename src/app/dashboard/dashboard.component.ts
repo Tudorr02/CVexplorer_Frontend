@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component , OnInit , inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SplitterModule } from 'primeng/splitter';
 import { LeftMenuComponent } from '../left-menu/left-menu.component';
@@ -13,8 +13,13 @@ import { UserService } from '../_services/user.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
+  UserService = inject(UserService);
+  Router = inject(Router);
+  ngOnInit(): void {
+    
+  }
    // Define tabs
    tabs = [
     {
