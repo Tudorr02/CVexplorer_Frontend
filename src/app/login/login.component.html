@@ -12,7 +12,10 @@
             </div>
             <div class="login-field">
                 <label for="password">Password</label>
-                <p-password [feedback]="false" [toggleMask]="true" [(ngModel)]="model.password"/>
+                <div class = "password-field">
+                    <p-password [feedback]="false" [toggleMask]="true" [(ngModel)]="model.password"/>
+                </div>
+                
             </div>
             
             <div class="login-field">

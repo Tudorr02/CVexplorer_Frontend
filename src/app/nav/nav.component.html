@@ -7,7 +7,7 @@
     @if(!isLoginRoute){
         <ul class="topbar-items">
             <li class="nav-item ">
-                <p-button label="{{username}}" variant="text" styleClass="nav-username" />
+                <p-button label="{{username}}" variant="text" styleClass="nav-username" (onClick)="showDetails()" />
             </li>
             <li>
                 <p-button label="{{ buttonText }}" [size]="'small'"  icon="{{iconClass}}" class="topbar-item" [style]="{ 'width':'7.8rem'}"    [outlined]="true" (click)="toggleTheme()"/>
@@ -21,5 +21,26 @@
     
     
 </nav>
+
+
+<p-dialog header="Edit Account Details" [modal]="true" [(visible)]="visibleDetails" [style]="{ width: '25rem' }">
+    <span class="p-text-secondary block mb-4">Update your information.</span>
+
+    <div class="content">
+        <div class="field">
+            <label for="username" class="font-semibold w-24">Username</label>
+            <input pInputText id="username"  autocomplete="off" />
+        </div>
+        <div class="field">
+            <label for="email" class="font-semibold w-24">Email</label>
+            <input pInputText id="email" autocomplete="off" />
+        </div>
+    </div>
+    
+    <div class="flex justify-end gap-2 w-full">
+        <p-button class="ml-auto" label="Cancel" severity="secondary" (click)="visibleDetails = false" />
+        <p-button label="Save" (click)="visibleDetails = false" />
+    </div>
+</p-dialog>
 
 

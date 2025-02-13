@@ -3,15 +3,18 @@ import { ButtonModule } from 'primeng/button';
 import { UserService } from '../_services/user.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Dialog } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-nav',
-  imports: [CommonModule,ButtonModule],
+  imports: [CommonModule,ButtonModule,Dialog,InputTextModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
 export class NavComponent implements OnInit {
 
+  visibleDetails: boolean = false;
   isLoginRoute: boolean = false; // Default route
   Router = inject(Router);
   UserServices = inject(UserService);
@@ -74,5 +77,9 @@ export class NavComponent implements OnInit {
 
   isLogin(): boolean {
     return this.Router.url.includes('/login'); 
+  }
+
+  showDetails(): void {
+    this.visibleDetails = true;
   }
 }

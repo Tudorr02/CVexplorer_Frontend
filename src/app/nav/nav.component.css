@@ -39,3 +39,15 @@
     align-items: center;
 }
 
+.content{
+  display: block;
+  margin-block: 5vh ;
+  margin-inline: 1vw;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}

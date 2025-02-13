@@ -16,7 +16,7 @@
 
  .login-card{
   width: 18vw;
-  height: 40vh;
+  height: 50%;
   background: #2c2e2c ;
   border-radius: var(--card-border-radius);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -65,23 +65,40 @@
 
 
 .login-field{
+  background-color: red;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  width: 80%;
   
   label{
     font-size: 1.2rem;
-    align-self: flex-start; /* Aligns label to the left */
+    align-self: flex-start; 
   }
   
-  input , p-password{
+  input {
     font-size: 1.1rem;
+    width: 100%;
     
-  }
+  }  
+ 
+
+  
+} 
+
+
+.password-field{
+  background-color: yellow;
+  width: 100%;
+
   
   
+}
+
+#login-form > div:nth-child(2) > div > p-password > div > input {
+  width: 100%;
 }
 
 ::ng-deep .shake {

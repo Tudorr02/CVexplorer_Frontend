@@ -20,7 +20,7 @@ export class UserService {
   }
 
   login(model: any) : Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/login`, model).pipe(
+    return this.http.post<User>(`${this.apiUrl}/Login`, model).pipe(
       tap(user => { 
         if (user) {
           this.currentUser.set(user); //  Update currentUser
