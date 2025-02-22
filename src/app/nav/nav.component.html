@@ -23,23 +23,55 @@
 </nav>
 
 
-<p-dialog header="Edit Account Details" [modal]="true" [(visible)]="visibleDetails" [style]="{ width: '25rem' }">
-    <span class="p-text-secondary block mb-4">Update your information.</span>
+<p-dialog header="Account Details" 
+[modal]="true" [(visible)]="visibleDetails" 
+[style]="{ width: '25rem' , border: 'None' }"
+(onHide)="cancelEdit()"
+> 
 
     <div class="content">
         <div class="field">
-            <label for="username" class="font-semibold w-24">Username</label>
-            <input pInputText id="username"  autocomplete="off" />
+            <label for="companyName" class="font-semibold w-24">Company</label>
+            <input pInputText id="companyName" [(ngModel)]="userDetails.companyName" [readOnly]="true" variant="filled" autocomplete="off" />
+        </div>
+        <div class="field">
+            <label for="firstName" class="font-semibold w-24">First Name</label>
+            <input pInputText id="firstName" 
+            [(ngModel)]="userDetails.firstName" 
+            [readOnly]="!isEditing" 
+            autocomplete="off"
+            [variant]="!isEditing ? 'filled' : 'outlined'" 
+            />
+        </div>
+        <div class="field">
+            <label for="lastName" class="font-semibold w-24">Last Name</label>
+            <input pInputText id="lastName" 
+            [(ngModel)]="userDetails.lastName" 
+            [variant]="!isEditing ? 'filled' : 'outlined'"  
+            [readOnly]="!isEditing"
+            autocomplete="off" />
         </div>
         <div class="field">
             <label for="email" class="font-semibold w-24">Email</label>
-            <input pInputText id="email" autocomplete="off" />
+            <input pInputText id="email"
+            [(ngModel)]="userDetails.email" 
+            [variant]="!isEditing ? 'filled' : 'outlined'" 
+            [readOnly]="!isEditing" 
+            autocomplete="off" />
         </div>
     </div>
     
     <div class="flex justify-end gap-2 w-full">
-        <p-button class="ml-auto" label="Cancel" severity="secondary" (click)="visibleDetails = false" />
-        <p-button label="Save" (click)="visibleDetails = false" />
+        
+        @if(isEditing){
+            <p-button class="ml-auto" label="Cancel" severity="secondary" (click)="cancelEdit()" />
+            <p-button label="Save" (click)="visibleDetails = false" />
+        }
+        @else {
+            <p-button class="ml-auto" label="Edit" severity="secondary" (click)="editFields()" />
+        }
+        
+
     </div>
 </p-dialog>
 

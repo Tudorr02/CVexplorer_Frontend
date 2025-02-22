@@ -19,6 +19,6 @@ export class AppComponent  {
   constructor(private router: Router) {}
 
   isDashboard(): boolean {
-    return this.router.url.includes('/dashboard'); // Adjust this based on your route structure
+    return this.router.url.includes('/dashboard'); 
   }
 }

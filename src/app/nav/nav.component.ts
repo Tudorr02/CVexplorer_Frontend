@@ -5,10 +5,12 @@ import { NavigationEnd, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { UserDetails } from '../_models/userDetails';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-nav',
-  imports: [CommonModule,ButtonModule,Dialog,InputTextModule],
+  imports: [FormsModule,CommonModule,ButtonModule,Dialog,InputTextModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
@@ -17,13 +19,22 @@ export class NavComponent implements OnInit {
   visibleDetails: boolean = false;
   isLoginRoute: boolean = false; // Default route
   Router = inject(Router);
-  UserServices = inject(UserService);
+  UserService = inject(UserService);
   isDarkMode: boolean = true; // Default theme mode
   buttonText: string = 'Dark Mode'; // Default button text
   logoPath: string = 'logos/CVexplorerDark.svg'; // Path to the logo image
   iconClass: string = 'pi pi-moon'; // Default icon class
   username: string = '';
+  isEditing: boolean = false;
+  userDetails: UserDetails = {
+    firstName: 'not available',
+    lastName: 'not available',
+    companyName: 'not available',
+    email: 'not available',
+  };
 
+  userDetailsBackup: UserDetails = { ...this.userDetails }; // Create a backup
+  
   ngOnInit(): void {
     this.Router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -32,7 +43,7 @@ export class NavComponent implements OnInit {
     }); 
     // Check if the current route is the login page
     // Check localStorage for saved theme preference
-    this.username = this.UserServices.currentUser()?.username || '';
+    this.username = this.UserService.currentUser()?.username || '';
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
       this.isDarkMode = true;
@@ -41,6 +52,15 @@ export class NavComponent implements OnInit {
       this.isDarkMode = false;
       this.applyTheme();
     }
+  }
+
+  editFields() {
+    this.isEditing = true;
+  }
+
+  cancelEdit() {
+    this.isEditing = false;
+    this.userDetails = { ...this.userDetailsBackup }
   }
 
   toggleTheme(): void {
@@ -71,7 +91,7 @@ export class NavComponent implements OnInit {
   }
 
   signOut(){
-    this.UserServices.logout();
+    this.UserService.logout();
     this.Router.navigate(['/login']);
   }
 
@@ -80,6 +100,22 @@ export class NavComponent implements OnInit {
   }
 
   showDetails(): void {
-    this.visibleDetails = true;
+    this.UserService.getUserDetails().subscribe(
+      (response: UserDetails) => {
+        this.userDetails = {
+          firstName: response.firstName ?? 'Not Available',
+          lastName: response.lastName ?? 'Not Available',
+          companyName: response.companyName ?? 'Not Available',
+          email: response.email ?? 'Not Available'
+        };
+        this.userDetailsBackup = { ...this.userDetails }; // Store a backup before editing
+        this.visibleDetails = true;  // Open the dialog
+      },
+      (error) => {
+        console.error('Error fetching account details:', error);
+      }
+    );
+   
+
   }
 }

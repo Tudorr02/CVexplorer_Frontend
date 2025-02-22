@@ -1,8 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { User } from '../../_models/user';
+import { User } from '../_models/user';
 import { Observable, tap } from 'rxjs';
+import { UserDetails } from '../_models/userDetails';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class UserService {
   private http =  inject(HttpClient);
   private apiUrl = `${environment.apiBaseUrl}/Account`;
   currentUser = signal<User | null>(null);
-
+  
   constructor() {
     const userData = localStorage.getItem('userData');
     if (userData) {
@@ -39,4 +40,8 @@ export class UserService {
     return this.currentUser() !== null || localStorage.getItem('userData') !== null;
   }
   
+  getUserDetails(): Observable<UserDetails> {
+    return this.http.get<UserDetails>(`${this.apiUrl}/Details`);
+  }
+
 }
