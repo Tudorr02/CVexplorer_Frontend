@@ -7,10 +7,11 @@ import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { UserDetails } from '../_models/userDetails';
 import { FormsModule } from '@angular/forms';
-
+import { computed } from '@angular/core';
+import { ProgressSpinner } from 'primeng/progressspinner';
 @Component({
   selector: 'app-nav',
-  imports: [FormsModule,CommonModule,ButtonModule,Dialog,InputTextModule],
+  imports: [ProgressSpinner,FormsModule,CommonModule,ButtonModule,Dialog,InputTextModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
@@ -23,8 +24,8 @@ export class NavComponent implements OnInit {
   isDarkMode: boolean = true; // Default theme mode
   buttonText: string = 'Dark Mode'; // Default button text
   logoPath: string = 'logos/CVexplorerDark.svg'; // Path to the logo image
+  username = computed(() => this.UserService.currentUser()?.username || '');
   iconClass: string = 'pi pi-moon'; // Default icon class
-  username: string = '';
   isEditing: boolean = false;
   userDetails: UserDetails = {
     firstName: 'not available',
@@ -32,9 +33,12 @@ export class NavComponent implements OnInit {
     companyName: 'not available',
     email: 'not available',
   };
+  loading: boolean = false; // Flag to control the loading spinner visibility
+
 
   userDetailsBackup: UserDetails = { ...this.userDetails }; // Create a backup
   
+
   ngOnInit(): void {
     this.Router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -42,8 +46,9 @@ export class NavComponent implements OnInit {
       }
     }); 
     // Check if the current route is the login page
-    // Check localStorage for saved theme preference
-    this.username = this.UserService.currentUser()?.username || '';
+    
+
+    //this.username = this.UserService.currentUser()?.username || '';
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
       this.isDarkMode = true;
@@ -62,6 +67,22 @@ export class NavComponent implements OnInit {
     this.isEditing = false;
     this.userDetails = { ...this.userDetailsBackup }
   }
+
+  updateDetails() {
+    this.loading = true; // Flag to control the loading spinner visibility
+    this.UserService.updateUserDetails(this.userDetails).subscribe(
+      (response: UserDetails) => {
+        this.showDetails(); 
+        this.isEditing = false; // Close edit mode
+        this.loading = false; // Hide the spinner
+      },
+      (error) => {
+        console.error('Error updating account details:', error);
+        this.loading = false; // Hide the loading spinner
+      }
+    );
+  }
+
 
   toggleTheme(): void {
     // Toggle between light and dark modes

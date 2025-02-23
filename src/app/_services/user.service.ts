@@ -44,4 +44,8 @@ export class UserService {
     return this.http.get<UserDetails>(`${this.apiUrl}/Details`);
   }
 
+  updateUserDetails(userDetails: UserDetails): Observable<UserDetails> {
+    return this.http.put<UserDetails>(`${this.apiUrl}/Details`, userDetails);
+  }
+
 }

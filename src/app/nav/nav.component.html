@@ -7,7 +7,7 @@
     @if(!isLoginRoute){
         <ul class="topbar-items">
             <li class="nav-item ">
-                <p-button label="{{username}}" variant="text" styleClass="nav-username" (onClick)="showDetails()" />
+                <p-button label="{{username()}}" variant="text" styleClass="nav-username" (onClick)="showDetails()" />
             </li>
             <li>
                 <p-button label="{{ buttonText }}" [size]="'small'"  icon="{{iconClass}}" class="topbar-item" [style]="{ 'width':'7.8rem'}"    [outlined]="true" (click)="toggleTheme()"/>
@@ -23,12 +23,14 @@
 </nav>
 
 
+
+
 <p-dialog header="Account Details" 
 [modal]="true" [(visible)]="visibleDetails" 
 [style]="{ width: '25rem' , border: 'None' }"
 (onHide)="cancelEdit()"
-> 
-
+>     
+    
     <div class="content">
         <div class="field">
             <label for="companyName" class="font-semibold w-24">Company</label>
@@ -50,6 +52,7 @@
             [variant]="!isEditing ? 'filled' : 'outlined'"  
             [readOnly]="!isEditing"
             autocomplete="off" />
+            
         </div>
         <div class="field">
             <label for="email" class="font-semibold w-24">Email</label>
@@ -61,17 +64,17 @@
         </div>
     </div>
     
-    <div class="flex justify-end gap-2 w-full">
-        
+    <div class="dialog-actions">
+         <!-- @if(loading){
+            <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
+        } -->
         @if(isEditing){
-            <p-button class="ml-auto" label="Cancel" severity="secondary" (click)="cancelEdit()" />
-            <p-button label="Save" (click)="visibleDetails = false" />
+            <p-button  label="Cancel" severity="secondary" (click)="cancelEdit()" />
+            <p-button label="Save" (click)="updateDetails()" />
         }
         @else {
-            <p-button class="ml-auto" label="Edit" severity="secondary" (click)="editFields()" />
-        }
-        
-
+            <p-button  label="Edit" severity="secondary" (click)="editFields()" />  
+        } 
     </div>
 </p-dialog>
 

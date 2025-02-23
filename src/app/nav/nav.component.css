@@ -55,3 +55,12 @@
 input{
   text-align: center;
 }
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end; /* ✅ Aligns buttons to the right */
+  align-items: center; /* ✅ Ensures vertical alignment */
+  gap: 1rem; /* ✅ Adds spacing between elements */
+  
+}
+
