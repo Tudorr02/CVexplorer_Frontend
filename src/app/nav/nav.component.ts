@@ -9,6 +9,7 @@ import { UserDetails } from '../_models/userDetails';
 import { FormsModule } from '@angular/forms';
 import { computed } from '@angular/core';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { NotificationService } from '../_services/notification.service';
 @Component({
   selector: 'app-nav',
   imports: [ProgressSpinner,FormsModule,CommonModule,ButtonModule,Dialog,InputTextModule],
@@ -21,6 +22,7 @@ export class NavComponent implements OnInit {
   isLoginRoute: boolean = false; // Default route
   Router = inject(Router);
   UserService = inject(UserService);
+  NotificationService = inject(NotificationService);
   isDarkMode: boolean = true; // Default theme mode
   buttonText: string = 'Dark Mode'; // Default button text
   logoPath: string = 'logos/CVexplorerDark.svg'; // Path to the logo image
@@ -43,6 +45,7 @@ export class NavComponent implements OnInit {
     this.Router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isLoginRoute = this.Router.url === '/login'; // Always updated when route changes
+
       }
     }); 
     // Check if the current route is the login page
@@ -73,11 +76,13 @@ export class NavComponent implements OnInit {
     this.UserService.updateUserDetails(this.userDetails).subscribe(
       (response: UserDetails) => {
         this.showDetails(); 
+        this.NotificationService.showSuccess('Account details updated successfully!');
         this.isEditing = false; // Close edit mode
         this.loading = false; // Hide the spinner
       },
       (error) => {
         console.error('Error updating account details:', error);
+        this.NotificationService.showError('Failed to update account details.');
         this.loading = false; // Hide the loading spinner
       }
     );
@@ -119,6 +124,8 @@ export class NavComponent implements OnInit {
   isLogin(): boolean {
     return this.Router.url.includes('/login'); 
   }
+
+  
 
   showDetails(): void {
     this.UserService.getUserDetails().subscribe(

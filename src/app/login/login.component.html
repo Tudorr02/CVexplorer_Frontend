@@ -5,7 +5,7 @@
         <div id="title">
            <p>Member Login</p>
         </div>
-        <div id = "login-form">
+        <!-- <div id = "login-form">
             <div class="login-field">
                 <label for="username">Username</label>
                 <input type="text" pInputText id="username" [(ngModel)]="model.username" />
@@ -20,7 +20,26 @@
                 <p-button label="Log In" class="login-button"  [raised]="true" (onClick)="login()"/>
             </div>
             
-        </div>
+        </div> -->
+
+            <form (ngSubmit)="login()" id = "login-form">
+                <div class="login-field">
+                    <label for="username">Username</label>
+                    <input type="text" pInputText id="username" autocomplete="username"
+                            [(ngModel)]="model.username" name="username" required />
+                </div>
+    
+                <div class="login-field">
+                    <label for="password">Password</label>      
+                    <p-password [feedback]="false" [toggleMask]="true" autocomplete="current-password"
+                                [(ngModel)]="model.password" name="password" required/>
+                </div>
+                
+                <div class="login-field">
+                    <p-button label="Log In" class="login-button" [raised]="true" type="submit" />
+                </div>
+            </form>
+        
     
     </div>
       
