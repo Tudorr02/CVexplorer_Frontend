@@ -10,10 +10,10 @@
     }"
     >
 
-        <ng-template #panel>
-        <div class="left-menu-container">
+        <ng-template #panel *appHasRole="['HRUser','HRLeader']" >
+            <div class="left-menu-container">
                 <app-left-menu></app-left-menu>
-        </div>  
+            </div>  
         </ng-template>
 
         <ng-template #panel>
@@ -21,8 +21,8 @@
             
                 <p-tabs value="/dashboard" >
                     <p-tablist> 
-                        @for(tab of tabs; track tab.route){
-                            <p-tab [value]="tab.route"  >
+                        @for(tab of tabs(); track tab.route){
+                            <p-tab [value]="tab.route" [routerLink]="tab.route">
                                 <i [class]="tab.icon"></i>
                                 <span>{{ tab.label }}</span>
                             </p-tab>
@@ -31,12 +31,8 @@
                 </p-tabs>
                 
                 <p-tabpanels>
-                    
                     <router-outlet></router-outlet>
-                </p-tabpanels>
-                
-                
-                
+                </p-tabpanels> 
             </div>
         </ng-template>
 
