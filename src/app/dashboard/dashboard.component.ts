@@ -1,15 +1,15 @@
 import { Component , OnInit , inject , computed } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+
 import { SplitterModule } from 'primeng/splitter';
-import { LeftMenuComponent } from '../left-menu/left-menu.component';
+
 import { CommonModule } from '@angular/common';
 import { TabsModule } from 'primeng/tabs';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../_services/user.service';
-import { HasRoleDirective } from '../_directives/has-role.directive';
+
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterModule,HasRoleDirective,RouterOutlet, SplitterModule,LeftMenuComponent,CommonModule,TabsModule],
+  imports: [RouterModule, SplitterModule,CommonModule,TabsModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

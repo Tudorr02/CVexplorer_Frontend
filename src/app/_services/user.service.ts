@@ -7,6 +7,7 @@ import { UserDetails } from '../_models/userDetails';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { NotificationService } from './notification.service';
+
 @Injectable({
   providedIn: 'root'
 })

@@ -60,6 +60,6 @@ export class AppComponent  {
 
   // ✅ Compute tabs dynamically based on user role
   tabs = computed(() => {
-    return this.UserService.currentUser()?.roles.includes('Moderator') ? this.adminTabs : this.userTabs;
+    return (this.UserService.currentUser()?.roles.includes('Admin') || this.UserService.currentUser()?.roles.includes('Moderator') ) ? this.adminTabs : this.userTabs;
   });
 }

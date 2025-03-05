@@ -1,1 +1,164 @@
-<p>manage-users works!</p>
+<div class="card">
+    <p-table #dtUsers 
+    [value]="users" dataKey="username"  
+    [scrollable]="true" scrollHeight="70vh" 
+    editMode="row"  
+    [style]="{'width': '100%'}"
+    [globalFilterFields]="['username', 'companyName', 'firstName', 'lastName', 'email','userRoles']"
+    
+    >
+        <ng-template #caption>
+            <p-iconfield iconPosition="left">
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" [(ngModel)]="globalFilter" (input)="filterGlobal()" placeholder="Search users..." />
+            </p-iconfield>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th>Username</th>
+                <th>Company</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th class="roles-th">Roles</th>
+                <th style='width: 5%;'></th>
+                <th style='width: 7%;'></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-user let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="user">
+    
+                <!-- Username (Read-Only) -->
+                <td>{{ user.username }}</td>
+    
+                <!-- Company Name (Editable) -->
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" [(ngModel)]="user.companyName" required />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            <span [ngClass]="{'grey-text': !user.companyName}">
+                                {{ user.companyName || 'Not Available' }}
+                            </span>
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <!-- First Name (Editable) -->
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" [(ngModel)]="user.firstName" required />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            <span [ngClass]="{'grey-text': !user.firstName}">
+                                {{ user.firstName || 'Not Available' }}
+                            </span>
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <!-- Last Name (Editable) -->
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" [(ngModel)]="user.lastName" required />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            <span [ngClass]="{'grey-text': !user.lastName}">
+                                {{ user.lastName || 'Not Available' }}
+                            </span>
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <!-- Email (Editable) -->
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="email" [(ngModel)]="user.email" required />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            <span [ngClass]="{'grey-text': !user.email}">
+                                {{ user.email || 'Not Available' }}
+                            </span>
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+
+                <!-- Roles (Editable Dropdown) -->
+                <td>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <p-multiSelect 
+                                [options]="rolesOptions" 
+                                [(ngModel)]="user.userRoles"
+                                appendTo="body"
+                                [filter]="false"
+                                [showToggleAll]="false"
+                                [style]="{'width':'100%'}"
+                                placeholder="Select roles">
+                                <ng-template let-role pTemplate="selectedItem">
+                                    <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
+                                </ng-template>
+                                <ng-template let-role pTemplate="item">
+                                    <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            <div class="flex flex-wrap gap-1">
+                                @if(user.userRoles.length === 0) {
+                                    <p-tag [severity]="getRoleSeverity('')">No roles assigned</p-tag>
+                                }
+                                @else {
+                                    <ng-container *ngFor="let role of user.userRoles">
+                                        <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
+                                    </ng-container>
+                                }
+                            </div>
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                
+                <!-- Actions -->
+                <td>
+                    <div class="flex items-center justify-center gap-2">
+                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
+                            icon="pi pi-pencil" (click)="onRowEditInit(user)" text rounded severity="secondary"></button>
+                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
+                            icon="pi pi-check" (click)="onRowEditSave(user)" text rounded severity="secondary"></button>
+                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
+                            icon="pi pi-times" (click)="onRowEditCancel(user)" text rounded severity="secondary"></button>
+                        
+                    </div>
+                </td>
+                <td>
+                    <!-- Default Mode: Show Trash Icon -->
+                    <button *ngIf="!deletingUsers[user.username]" pButton pRipple type="button" 
+                    icon="pi pi-trash" (click)="onRowDeleteInit(user.username)" text rounded severity="danger"></button>
+
+                    <!-- Delete Mode: Show Confirm & Cancel -->
+                    <ng-container *ngIf="deletingUsers[user.username]">
+                        <button pButton pRipple type="button" pSaveEditableRow 
+                            icon="pi pi-check" (click)="onRowDeleteConfirm(user.username)" 
+                            text rounded severity="secondary">
+                        </button>
+                        <button pButton pRipple type="button" pCancelEditableRow 
+                            icon="pi pi-times" (click)="onRowDeleteCancel(user.username)" 
+                            text rounded severity="secondary">
+                        </button>
+                    </ng-container>
+                </td>
+                
+            </tr>
+        </ng-template>
+    </p-table>
+    
+</div>
+
