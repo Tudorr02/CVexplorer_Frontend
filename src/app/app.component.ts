@@ -34,6 +34,11 @@ export class AppComponent  {
     if (this.userService.isTokenExpired()) {
       this.userService.logout(); 
     }
+
+  }
+
+  isUserAdmin(): boolean {
+    return (this.UserService.currentUser()?.roles.includes('Admin') || this.UserService.currentUser()?.roles.includes('Moderator') ? true : false);
   }
 
   isDashboard(): boolean {
@@ -52,7 +57,7 @@ export class AppComponent  {
   ];
 
   private adminTabs = [
-    { label: 'Manage Users', route: '/manage-users', icon: 'pi pi-users' },
+    { label: 'Manage Users', route: 'admin/manage-users', icon: 'pi pi-users' },
     { label: 'Manage Companies', route: '/settings', icon: 'pi pi-building' },
     { label: 'Logs', route: '/logs', icon: 'pi pi-file' }
   ];

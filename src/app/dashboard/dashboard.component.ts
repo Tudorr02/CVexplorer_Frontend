@@ -21,23 +21,4 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     
   }
-
-  private userTabs = [
-    { label: 'Dashboard', route: '/dashboard', icon: 'pi pi-home' },
-    { label: 'Settings', route: '/settings', icon: 'pi pi-cog' },
-    { label: 'Profile', route: '/profile', icon: 'pi pi-user' },
-    { label: 'Help', route: '/help', icon: 'pi pi-question-circle' }
-  ];
-
-  private adminTabs = [
-    { label: 'Manage Users', route: '/manage-users', icon: 'pi pi-users' },
-    { label: 'Manage Companies', route: '/settings', icon: 'pi pi-building' },
-    { label: 'Logs', route: '/logs', icon: 'pi pi-file' }
-  ];
-
-
-  // ✅ Compute tabs dynamically based on user role
-  tabs = computed(() => {
-    return this.UserService.currentUser()?.roles.includes('Moderator') ? this.adminTabs : this.userTabs;
-  });
 }
