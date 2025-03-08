@@ -14,9 +14,10 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { Table } from 'primeng/table';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 @Component({ 
   selector: 'app-manage-users',
-  imports: [InputIcon,IconField,MultiSelectModule,FormsModule,TableModule, ToastModule, CommonModule, TagModule, SelectModule, ButtonModule, InputTextModule],
+  imports: [ScrollPanelModule,InputIcon,IconField,MultiSelectModule,FormsModule,TableModule, ToastModule, CommonModule, TagModule, SelectModule, ButtonModule, InputTextModule],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.css',
   providers: [ConfirmationService]
@@ -26,6 +27,8 @@ export class ManageUsersComponent implements OnInit{
   @ViewChild('dtUsers') dt!: Table; // Reference to PrimeNG Table
   users: UserManagement[] = [];
   rolesOptions: string[] = [];
+  companies: string[] = [];
+  loadingCompanies: boolean = false; // Control loading state
   globalFilter: string = '';
   clonedUsers: { [username: string]: UserManagement } = {};
   deletingUsers: { [username: string]: boolean } = {}; // ✅ Track rows in delete mode
@@ -54,6 +57,24 @@ export class ManageUsersComponent implements OnInit{
       next: (roles) => this.rolesOptions = roles,
       error: (err) => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load roles' })
 
+    });
+  }
+
+  fetchCompanies() {
+
+    if (this.companies.length > 0) return; // Prevent multiple requests
+
+    this.loadingCompanies = true; // Show loading indicator
+
+    this.adminService.getCompanies().subscribe({
+      next: (companies) => {
+        this.companies = companies.map(company => company.name); // Format company names
+        this.loadingCompanies = false; // Hide loading indicator
+    }, // Format company names
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch companies' });
+        this.loadingCompanies = false; // Hide loading indicator
+      }
     });
   }
 

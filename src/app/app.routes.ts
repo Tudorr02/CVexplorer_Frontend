@@ -9,6 +9,7 @@ import { roleGuard } from './_guards/role.guard';
 import { ManageUsersComponent } from './admin/manage-users/manage-users.component';
 import { EnrollUserComponent } from './admin/enroll-user/enroll-user.component';
 import { guestGuard } from './_guards/guest.guard';
+import { ManageCompaniesComponent } from './admin/manage-companies/manage-companies.component';
 export const routes: Routes = [
 
     {path : 'login', component: LoginComponent, canActivate : [guestGuard]},
@@ -18,7 +19,7 @@ export const routes: Routes = [
         children: [
             { path: 'manage-users', component: ManageUsersComponent },
             { path: 'enroll-user', component: EnrollUserComponent },
-           
+            { path: 'manage-companies', component: ManageCompaniesComponent }
         ]
 
     },

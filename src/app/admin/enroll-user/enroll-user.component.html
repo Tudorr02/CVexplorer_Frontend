@@ -1,1 +1,71 @@
-<p>enroll-user works!</p>
+<div class="card">
+    <div class="grid-container">
+        <!-- ✅ MANDATORY PANEL -->
+        <div class="container">
+            <h2>Mandatory Fields</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input pInputText id="username" type="text" [(ngModel)]="userEnrollment.username" required/>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input pInputText id="password" [(ngModel)]="userEnrollment.password"/>
+                </div>
+
+                <div class="form-group-roles">
+                    <label>Roles</label>
+                    <div *ngFor="let role of rolesOptions" class="flex items-center c-group">
+                        <p-checkbox 
+                            [inputId]="role.key" 
+                            name="rolesGroup" 
+                            [value]="role.key" 
+                            [(ngModel)]="userEnrollment.userRoles">
+                        </p-checkbox>
+                        <label [for]="'role_' + role.key" class="ml-2"> {{ role.name }} </label>
+                    </div>  
+                </div>
+            </div>
+        </div>
+
+        <!-- ✅ OPTIONAL PANEL -->
+        <div class="container">
+            <h2>Optional Fields</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input pInputText id="firstName" type="text" [(ngModel)]="userEnrollment.firstName"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input pInputText id="lastName" type="text" [(ngModel)]="userEnrollment.lastName"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input pInputText id="email" type="email" [(ngModel)]="userEnrollment.email"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="companyName">Company</label>
+                    <p-select id="companyName" 
+                              [(ngModel)]="userEnrollment.companyName"
+                              [options]="companies" 
+                              [filter]="true"
+                              placeholder="Select a Company"
+                              (click)="fetchCompanies()"
+                              [loading]="loadingCompanies"
+                            >
+                    </p-select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Submit Button -->
+    <div class="form-actions">
+        <p-button label="Enroll User" icon="pi pi-user-plus" (click)="enrollUser()" />
+    </div>
+</div>
