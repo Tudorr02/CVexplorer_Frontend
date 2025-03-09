@@ -27,10 +27,40 @@ export class ManageCompaniesComponent implements OnInit {
   clonedCompanies: { [name: string]: CompanyManagement} = {};
   deletingCompanies: { [name: string]: boolean } = {};
   globalFilter: string = '';
+  addingCompany = false;
+  newCompanyName = '';
 
   ngOnInit() {
     this.fetchCompanies();
   }
+
+  addCompanyInit() {
+    this.addingCompany = true;
+  }
+
+  confirmAddCompany() {
+    if (this.newCompanyName.trim()) {
+      const newCompany: CompanyManagement = { name: this.newCompanyName, employees: 0 };
+      
+      this.adminService.createCompany(newCompany).subscribe({
+        next: (createdCompany) => {
+          this.fetchCompanies();
+          this.notificationService.showSuccess(`Company ${createdCompany.name} added successfully!`);
+          this.newCompanyName = '';
+          this.addingCompany = false;
+        },
+        error: (err) => {
+          this.notificationService.showError("Failed to add company. " + err.error.error);
+        }
+      });
+    }
+  }
+
+  cancelAddCompany() {
+    this.newCompanyName = '';
+    this.addingCompany = false;
+  }
+
 
   fetchCompanies() {
     this.adminService.getCompanies().subscribe({

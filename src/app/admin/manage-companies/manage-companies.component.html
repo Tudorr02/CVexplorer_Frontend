@@ -9,21 +9,43 @@
         editMode="row"
         >
         
-        <ng-template #caption>
-            <p-iconfield iconPosition="left">
-                <p-inputicon>
-                    <i class="pi pi-search"></i>
-                </p-inputicon>
-                <input pInputText type="text" [(ngModel)]="globalFilter" (input)="filterGlobal()" placeholder="Search companies..." />
-            </p-iconfield>
+        <ng-template #caption >
+
+            <div class="flex justify-between items-center " >
+
+                <p-iconfield iconPosition="left">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" [(ngModel)]="globalFilter" (input)="filterGlobal()" placeholder="Search companies..." />
+                </p-iconfield>
+
+                <div style="margin-inline: 2%;">
+                    <!-- Add Button -->
+                    <button *ngIf="!addingCompany"  pButton pRipple type="button" icon="pi pi-building" label="Add a company"
+                    (click)="addCompanyInit()" W>
+                    </button>
+
+                    
+                    <!-- Add Company Row -->
+                    <div *ngIf="addingCompany" class="flex items-center gap-2" style="position: absolute;">
+                        <p-icon-field icon="pi pi-building">
+                            <input pInputText type="text" [(ngModel)]="newCompanyName" placeholder="Enter company name..." required />
+                        </p-icon-field>
+                        <button pButton pRipple type="button" icon="pi pi-check" (click)="confirmAddCompany()"  text rounded severity="success"></button>
+                        <button pButton pRipple type="button" icon="pi pi-times" (click)="cancelAddCompany()"  text rounded severity="danger"></button>
+                    </div>
+                </div>
+
+            </div>
         </ng-template>
 
         <ng-template #header>
             <tr>
                 <th style="width: 40%;">Company Name</th>
                 <th style="width: 40%;">Employees</th>
-                <th></th>
-                <th></th>
+                <th style="width: 10%;"></th>
+                <th style="width: 10%;"></th>
             </tr>
         </ng-template>
         
@@ -83,5 +105,6 @@
         </ng-template>
     
     </p-table>
+    
     
 </div>

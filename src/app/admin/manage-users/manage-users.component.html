@@ -19,14 +19,14 @@
 
         <ng-template #header>
             <tr>
-                <th>Username</th>
-                <th>Company</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th class="roles-th">Roles</th>
-                <th style='width: 5%;'></th>
-                <th style='width: 7%;'></th>
+                <th style="width: 10%;">Username</th>
+                <th style="width: 15%;">Company</th>
+                <th style="width: 10%;">First Name</th>
+                <th style="width: 10%;">Last Name</th>
+                <th style="width: 15%;">Email</th>
+                <th style="width: 20%;">Roles</th>
+                <th style="width: 7%;"></th>
+                <th style="width: 7%;"></th>
             </tr>
         </ng-template>
         
@@ -48,9 +48,14 @@
                         placeholder="Select a Company"
                         (click)="fetchCompanies()"
                         [loading]="loadingCompanies"
+                        
                         >
                         </p-select>
+                        
+                        
                     </ng-template>
+                   
+                    
                     <ng-template pTemplate="output">
                         <span [ngClass]="{'grey-text': !user.companyName}">
                             {{ user.companyName || 'Not Available' }}
