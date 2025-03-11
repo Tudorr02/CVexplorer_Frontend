@@ -41,15 +41,15 @@ export class EnrollUserComponent implements OnInit {
 
 
   ngOnInit() {
-    this.fetchRoles();
+    this.loadRoles();
   }
 
-  fetchRoles() {
+  loadRoles() {
     this.adminService.getRoles().subscribe({
       next: (roles) => {
         this.rolesOptions = roles.map(role => ({ key: role, name: role })); // Format role names
       },
-      error: () => this.notificationService.showError("Failed to fetch roles.")
+      error: () => this.notificationService.showError("Failed to load roles.")
     });
   }
 

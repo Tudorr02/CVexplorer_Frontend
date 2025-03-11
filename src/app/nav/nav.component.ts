@@ -1,4 +1,4 @@
-import { Component , OnInit,Input , inject} from '@angular/core';
+import { Component , OnInit,Input , inject, HostListener} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../_services/user.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { computed } from '@angular/core';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { NotificationService } from '../_services/notification.service';
+import { ScreenSizeService } from '../_services/screen-size.service';
 @Component({
   selector: 'app-nav',
   imports: [ProgressSpinner,FormsModule,CommonModule,ButtonModule,Dialog,InputTextModule],
@@ -23,6 +24,7 @@ export class NavComponent implements OnInit {
   Router = inject(Router);
   UserService = inject(UserService);
   NotificationService = inject(NotificationService);
+  ScreenSizeService = inject(ScreenSizeService);
   isDarkMode: boolean = true; // Default theme mode
   buttonText: string = 'Dark Mode'; // Default button text
   logoPath: string = 'logos/CVexplorerDark.svg'; // Path to the logo image
@@ -36,12 +38,13 @@ export class NavComponent implements OnInit {
     email: 'not available',
   };
   loading: boolean = false; // Flag to control the loading spinner visibility
-
-
   userDetailsBackup: UserDetails = { ...this.userDetails }; // Create a backup
-  
+  isLargeScreen = computed(() => this.ScreenSizeService.isLargeScreen());
 
+  
   ngOnInit(): void {
+
+
     this.Router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isLoginRoute = this.Router.url === '/login'; // Always updated when route changes

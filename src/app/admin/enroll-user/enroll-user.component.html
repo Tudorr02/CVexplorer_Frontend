@@ -6,7 +6,7 @@
             <div class="form-container">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input pInputText id="username" type="text" [(ngModel)]="userEnrollment.username" required/>
+                    <input pInputText id="username" type="text" [(ngModel)]="userEnrollment.username"/>
                 </div>
 
                 <div class="form-group">
@@ -14,17 +14,23 @@
                     <input pInputText id="password" [(ngModel)]="userEnrollment.password"/>
                 </div>
 
-                <div class="form-group-roles">
-                    <label>Roles</label>
-                    <div *ngFor="let role of rolesOptions" class="flex items-center c-group">
-                        <p-checkbox 
-                            [inputId]="role.key" 
-                            name="rolesGroup" 
-                            [value]="role.key" 
-                            [(ngModel)]="userEnrollment.userRoles">
-                        </p-checkbox>
-                        <label [for]="'role_' + role.key" class="ml-2"> {{ role.name }} </label>
-                    </div>  
+                <div class="form-group">
+                    <label >Roles</label>
+                    <div class="roles-container">
+                        <div *ngFor="let role of rolesOptions" >
+                            <p-tag [severity]="getRoleSeverity(role.name)">
+                                <p-checkbox 
+                                    [inputId]="role.key" 
+                                    name="rolesGroup" 
+                                    [value]="role.key" 
+                                    [(ngModel)]="userEnrollment.userRoles"
+                                    id="role"
+                                    >
+                                </p-checkbox>
+                                {{ role.name }}
+                            </p-tag>
+                        </div> 
+                    </div> 
                 </div>
             </div>
         </div>
@@ -57,6 +63,8 @@
                               placeholder="Select a Company"
                               (click)="fetchCompanies()"
                               [loading]="loadingCompanies"
+                              [showClear]="true"
+                                
                             >
                     </p-select>
                 </div>

@@ -11,6 +11,7 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { Table } from 'primeng/table';
 import { CompanyManagement } from '../../_models/companyManagement';
+import { finalize } from 'rxjs';
 @Component({
   selector: 'app-manage-companies',
   imports: [IconField,InputIcon,CommonModule, FormsModule, TableModule, ToastModule, ButtonModule, InputTextModule],
@@ -23,6 +24,7 @@ export class ManageCompaniesComponent implements OnInit {
   private notificationService = inject(NotificationService);
 
   @ViewChild('dtCompanies') dt!: Table; // Reference to PrimeNG Table
+  loadingCompanies: boolean = false;
   companies: CompanyManagement[] = [];
   clonedCompanies: { [name: string]: CompanyManagement} = {};
   deletingCompanies: { [name: string]: boolean } = {};
@@ -31,7 +33,7 @@ export class ManageCompaniesComponent implements OnInit {
   newCompanyName = '';
 
   ngOnInit() {
-    this.fetchCompanies();
+    this.loadCompanies();
   }
 
   addCompanyInit() {
@@ -44,7 +46,7 @@ export class ManageCompaniesComponent implements OnInit {
       
       this.adminService.createCompany(newCompany).subscribe({
         next: (createdCompany) => {
-          this.fetchCompanies();
+          this.loadCompanies();
           this.notificationService.showSuccess(`Company ${createdCompany.name} added successfully!`);
           this.newCompanyName = '';
           this.addingCompany = false;
@@ -62,14 +64,19 @@ export class ManageCompaniesComponent implements OnInit {
   }
 
 
-  fetchCompanies() {
-    this.adminService.getCompanies().subscribe({
+  loadCompanies() {
+    this.loadingCompanies = true;
+    this.adminService.getCompanies()
+    .pipe(finalize(() => setTimeout(() => this.loadingCompanies = false, 1000)))
+    .subscribe({
       next: (companies) => this.companies = companies.map(company => ({
         name: company.name,
-        employees: company.employees ?? 0
+        employees: company.employees ?? 0,
+        
       })),
-      error: () => this.notificationService.showError("Failed to fetch companies.")
+      error: () => this.notificationService.showError("Failed to load companies.")
     });
+    
   }
 
   filterGlobal() {

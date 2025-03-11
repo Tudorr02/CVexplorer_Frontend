@@ -29,11 +29,11 @@
     height: 100%;
     margin-top: 1vh;
     padding-inline: 1vw;
-  
 }
 ::ng-deep .p-splitter {
     height: var(--menu-height); /* Sets the height of the splitter */
     margin-inline: 1vw;
+    overflow: hidden;
 }
 
 ::ng-deep .p-splitter-gutter {
@@ -50,7 +50,6 @@
     justify-content: center;
     padding: 0%;
     
-   
 }
 
 /* 📌 Media Query: Adjust height for smaller screens */
@@ -59,3 +58,5 @@
         height: 87%;
     }
 }
+
+

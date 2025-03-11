@@ -3,11 +3,12 @@
     <p-table #dtCompanies 
         [value]="companies"  
         [scrollable]="true"
-        scrollHeight="flex"  
+        scrollHeight="flex"
+        [loading]="loadingCompanies"  
         [style]="{'width': '100%'}"
         [globalFilterFields]="['name']"
         editMode="row"
-        >
+    >
         
         <ng-template #caption >
 

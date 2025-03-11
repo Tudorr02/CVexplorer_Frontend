@@ -7,13 +7,13 @@
     @if(!isLoginRoute){
         <ul class="topbar-items">
             <li class="nav-item ">
-                <p-button label="{{username()}}" variant="text" styleClass="nav-username" (onClick)="showDetails()" />
+                <p-button label="{{username()}}" [size]="isLargeScreen() ? 'large' : 'small'"  [variant]="'text'" [styleClass]="isDarkMode ? 'nav-username-dark' : 'nav-username-light'"  (onClick)="showDetails()" />
             </li>
             <li>
-                <p-button label="{{ buttonText }}" [size]="'small'"  icon="{{iconClass}}" class="topbar-item" [style]="{ 'width':'7.8rem'}"    [outlined]="true" (click)="toggleTheme()"/>
+                <p-button label="{{buttonText}}" [size]="isLargeScreen() ? 'large' : 'small'"   icon="{{iconClass}}" class="topbar-item" [style]="{'width': '6.5vw'}" [variant]="'outlined'"  (click)="toggleTheme()"/>
             </li>
             <li>
-                <p-button label="Sign Out" [size]="'small'" severity="danger" icon="pi pi-sign-out"  [outlined]="true" (onClick)="signOut()"/>
+                <p-button label="Sign Out" [size]="isLargeScreen() ? 'large' : 'small'" severity="danger" icon="pi pi-sign-out"  [variant]="'outlined'"  (onClick)="signOut()"/>
             </li>
         </ul>
     }

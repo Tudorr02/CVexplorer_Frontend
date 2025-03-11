@@ -15,6 +15,8 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { Table } from 'primeng/table';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { waitForAsync } from '@angular/core/testing';
+import { finalize } from 'rxjs';
 @Component({ 
   selector: 'app-manage-users',
   imports: [ScrollPanelModule,InputIcon,IconField,MultiSelectModule,FormsModule,TableModule, ToastModule, CommonModule, TagModule, SelectModule, ButtonModule, InputTextModule],
@@ -28,7 +30,7 @@ export class ManageUsersComponent implements OnInit{
   users: UserManagement[] = [];
   rolesOptions: string[] = [];
   companies: string[] = [];
-  loadingCompanies: boolean = false; // Control loading state
+  loadingUsers: boolean = false; // Control loading state
   globalFilter: string = '';
   clonedUsers: { [username: string]: UserManagement } = {};
   deletingUsers: { [username: string]: boolean } = {}; // ✅ Track rows in delete mode
@@ -38,18 +40,24 @@ export class ManageUsersComponent implements OnInit{
 
   ngOnInit() {
     this.loadUsers();
-    this.loadRoles();
   }
 
   private loadUsers() {
-    this.adminService.getUsers().subscribe(
+    this.loadingUsers = true;
+    this.adminService.getUsers()
+    .pipe(finalize(() => setTimeout(() => this.loadingUsers = false, 1000)))
+    .subscribe(
       (data) => {
         this.users = data;
+        if(this.companies.length === 0) this.loadCompanies();
+        if(this.rolesOptions.length === 0) this.loadRoles();
       },
       (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load users' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load users' });  
       }
     );
+     // Wait for 1 second before hiding the loading indicator
+     
   }
 
   private loadRoles() {
@@ -60,20 +68,16 @@ export class ManageUsersComponent implements OnInit{
     });
   }
 
-  fetchCompanies() {
+  loadCompanies() {
 
     if (this.companies.length > 0) return; // Prevent multiple requests
-
-    this.loadingCompanies = true; // Show loading indicator
 
     this.adminService.getCompanies().subscribe({
       next: (companies) => {
         this.companies = companies.map(company => company.name); // Format company names
-        this.loadingCompanies = false; // Hide loading indicator
     }, // Format company names
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch companies' });
-        this.loadingCompanies = false; // Hide loading indicator
       }
     });
   }
@@ -85,16 +89,23 @@ export class ManageUsersComponent implements OnInit{
 
   // ✅ Save user after edit
   onRowEditSave(user: UserManagement) {
+    this.loadingUsers = true; // Show loading indicator
     this.adminService.updateUser(user.username, user).subscribe(
       () => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User updated successfully' });
         delete this.clonedUsers[user.username]; // Remove backup
+        this.loadUsers(); // Refresh users
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update user' });
-        this.onRowEditCancel(user); // Rollback
+        this.onRowEditCancel(user); // Rollback 
       }
     );
+
+     // Wait for 1 second before hiding the loading indicator
+     setTimeout(() => {
+      this.loadingUsers = false;
+    }, 1000);
   }
 
   // ✅ Cancel edit and restore backup

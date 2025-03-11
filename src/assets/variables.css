@@ -7,15 +7,18 @@
     
     --card-border-radius: 40px;
     --footer-height: 5%;
-
+    
 }
 
 /* Background colors */
 .my-app-light{
-  --light-background-color: #e2ffe9;
+  --light-background-color: rgb(47, 105, 80);
 }
 
 .my-app-dark{
   --dark-background-color: #222222;
 }
 
+html {
+  transition: background-color 0.5s ease, color 0.5s ease, opacity 0.5s ease;
+}

@@ -34,25 +34,46 @@
     justify-content: center;
     align-items: center;
     gap: 2rem;
+    
 }
 
 .form-group{
     display: flex;
-    align-items: center ;
+    align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: 90%;
+    label{
+        font-size: 1.2rem;
+    }
+}
+
+.roles-container {
+    display: inline-flex; 
+    gap: 0.5rem;
+    width: 70%;
+}
+
+.roles-container p-tag {
+    font-size: 1rem; /* ✅ Make text slightly smaller */
+    
+}
+
+
+@media (min-width: 1921px) {
+    .form-group{
+        display: flex;
+        align-items: center ;
+        justify-content: space-between;
+        width: 70%;
+
+        label{
+            font-size: 1.2rem;
+        }
+    }
 }
 
 #companyName{
-    width: 70%;
-
-}
-.form-group-roles{
-    
-    display: flex;
-    flex: column;
-    
-    gap: 1.5rem;
+    width: 60%;
 }
 
 
@@ -63,3 +84,4 @@
     justify-content: center;
     align-items: center;
 }
+
