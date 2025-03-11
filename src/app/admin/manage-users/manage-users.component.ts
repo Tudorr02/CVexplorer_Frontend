@@ -17,6 +17,7 @@ import { Table } from 'primeng/table';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { waitForAsync } from '@angular/core/testing';
 import { finalize } from 'rxjs';
+import { UserService } from '../../_services/user.service';
 @Component({ 
   selector: 'app-manage-users',
   imports: [ScrollPanelModule,InputIcon,IconField,MultiSelectModule,FormsModule,TableModule, ToastModule, CommonModule, TagModule, SelectModule, ButtonModule, InputTextModule],
@@ -28,18 +29,25 @@ export class ManageUsersComponent implements OnInit{
 
   @ViewChild('dtUsers') dt!: Table; // Reference to PrimeNG Table
   users: UserManagement[] = [];
-  rolesOptions: string[] = [];
+  rolesOptions: { name: string ; disabled?: boolean }[] = [];
   companies: string[] = [];
   loadingUsers: boolean = false; // Control loading state
   globalFilter: string = '';
   clonedUsers: { [username: string]: UserManagement } = {};
   deletingUsers: { [username: string]: boolean } = {}; // ✅ Track rows in delete mode
-
+  isModerator: boolean = false;
   private adminService = inject(AdminService);
   private messageService = inject(MessageService);
+  private userService = inject(UserService);
 
   ngOnInit() {
     this.loadUsers();
+    this.checkIfModerator();
+  }
+
+  private checkIfModerator() {
+    const userRoles =  this.userService.currentUser()?.roles || [];
+    this.isModerator = userRoles.includes('Moderator') && !userRoles.includes('Admin');
   }
 
   private loadUsers() {
@@ -56,15 +64,15 @@ export class ManageUsersComponent implements OnInit{
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load users' });  
       }
     );
-     // Wait for 1 second before hiding the loading indicator
-     
   }
 
   private loadRoles() {
     this.adminService.getRoles().subscribe({
-      next: (roles) => this.rolesOptions = roles,
+      next: (roles) => this.rolesOptions = roles.map(role => ({
+        name: role,
+        disabled: this.isModerator && role === 'Admin' // ✅ Disable only "Admin" for moderators
+    })),
       error: (err) => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load roles' })
-
     });
   }
 
@@ -89,7 +97,6 @@ export class ManageUsersComponent implements OnInit{
 
   // ✅ Save user after edit
   onRowEditSave(user: UserManagement) {
-    this.loadingUsers = true; // Show loading indicator
     this.adminService.updateUser(user.username, user).subscribe(
       () => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User updated successfully' });
@@ -97,15 +104,22 @@ export class ManageUsersComponent implements OnInit{
         this.loadUsers(); // Refresh users
       },
       (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update user' });
+        if (error.status === 403) {  // ✅ Handle Forbidden error
+          this.messageService.add({ 
+            severity: 'warn', 
+            summary: 'Forbidden', 
+            detail: `You are not allowed to edit the user '${user.username}'` 
+          });
+        } else { // ✅ Handle other errors
+          this.messageService.add({ 
+            severity: 'error', 
+            summary: 'Error', 
+            detail: `Failed to edit user '${user.username}'` 
+          });
+        }
         this.onRowEditCancel(user); // Rollback 
       }
     );
-
-     // Wait for 1 second before hiding the loading indicator
-     setTimeout(() => {
-      this.loadingUsers = false;
-    }, 1000);
   }
 
   // ✅ Cancel edit and restore backup
@@ -144,10 +158,23 @@ export class ManageUsersComponent implements OnInit{
       () => {
         this.users = this.users.filter(user => user.username !== username); // ✅ Remove user from UI
         this.messageService.add({ severity: 'success', summary: 'Success', detail: `User '${username}' deleted successfully` }); 
+        this.loadUsers();
         delete this.deletingUsers[username];
       },
       (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: `Failed to delete user '${username}'` });
+        if (error.status === 403) {  // ✅ Handle Forbidden error
+          this.messageService.add({ 
+            severity: 'warn', 
+            summary: 'Forbidden', 
+            detail: `You are not allowed to delete the user '${username}'` 
+          });
+        } else { // ✅ Handle other errors
+          this.messageService.add({ 
+            severity: 'error', 
+            summary: 'Error', 
+            detail: `Failed to delete user '${username}'` 
+          });
+        }
         delete this.deletingUsers[username];
       });
   }

@@ -11,7 +11,7 @@ import { SplitterModule } from 'primeng/splitter';
 import { Checkbox } from 'primeng/checkbox';
 import { CompanyManagement } from '../../_models/companyManagement';
 import { SelectModule } from 'primeng/select';
-
+import { UserService } from '../../_services/user.service';
 
 @Component({
   selector: 'app-enroll-user',
@@ -24,6 +24,8 @@ export class EnrollUserComponent implements OnInit {
 
   private adminService = inject(AdminService);
   private notificationService = inject(NotificationService);
+  private userService = inject(UserService);
+  isModerator: boolean = false;
 
   userEnrollment = {
     username: '',
@@ -35,19 +37,29 @@ export class EnrollUserComponent implements OnInit {
     userRoles: []
   };
 
-  rolesOptions: { key: string; name: string }[] = [];
+  rolesOptions: { key: string; name: string ; disabled: boolean }[] = [];
   companies:string[] = [];
   loadingCompanies: boolean = false; // Control loading state
 
 
   ngOnInit() {
     this.loadRoles();
+    this.checkIfModerator();
   }
+
+  private checkIfModerator() {
+
+   const userRoles =  this.userService.currentUser()?.roles || [];
+   this.isModerator = userRoles.includes('Moderator') && !userRoles.includes('Admin');
+ }
 
   loadRoles() {
     this.adminService.getRoles().subscribe({
       next: (roles) => {
-        this.rolesOptions = roles.map(role => ({ key: role, name: role })); // Format role names
+        this.rolesOptions = roles.map(role => ({ 
+          key: role, 
+          name: role,
+          disabled: this.isModerator && role === 'Admin' })); // Format role names
       },
       error: () => this.notificationService.showError("Failed to load roles.")
     });
