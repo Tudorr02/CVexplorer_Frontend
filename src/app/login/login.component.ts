@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NavComponent } from "../nav/nav.component";
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { UserService } from '../_services/user.service';
+import { AccountService } from '../_services/account.service';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
@@ -19,7 +19,7 @@ export class LoginComponent {
 
   @ViewChild('vantaBackground', { static: true }) vantaRef!: ElementRef;
 
-  UserServices = inject(UserService);
+  AccountServices = inject(AccountService);
   Router = inject(Router);
 
   model = { username: '', password: '' };
@@ -65,7 +65,7 @@ export class LoginComponent {
       return;
     }
 
-    this.UserServices.login(this.model).subscribe({
+    this.AccountServices.login(this.model).subscribe({
       next: () => {
         console.log('Login successful');
         this.Router.navigate(['/dashboard']);

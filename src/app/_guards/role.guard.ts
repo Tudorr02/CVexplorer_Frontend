@@ -1,14 +1,14 @@
 import { CanActivateFn } from '@angular/router';
 import { inject } from '@angular/core';
-import { UserService } from '../_services/user.service';
+import { AccountService } from '../_services/account.service';
 import { Router } from '@angular/router';
 
 export const roleGuard = (requiredRoles: string[]) => {
   return (): boolean => {
-    const userService = inject(UserService);
+    const accountService = inject(AccountService);
     const router = inject(Router);
     
-    const userRoles = userService.currentUser()?.roles || [];
+    const userRoles = accountService.currentUser()?.roles || [];
 
     // Check if user has at least one required role
     if (!requiredRoles.some(role => userRoles.includes(role))) {

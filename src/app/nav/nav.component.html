@@ -9,6 +9,11 @@
             <li class="nav-item ">
                 <p-button label="{{username()}}" [size]="isLargeScreen() ? 'large' : 'small'"  [variant]="'text'" [styleClass]="isDarkMode ? 'nav-username-dark' : 'nav-username-light'"  (onClick)="showDetails()" />
             </li>
+            <li *appHasRole="['HRLeader']">
+                <p-button label="Enroll a User" icon="pi pi-user-plus" 
+                    variant="outlined" [size]="isLargeScreen() ? 'large' : 'small'" 
+                    (onClick)="openEnrollUserDialog()"/>
+            </li>
             <li>
                 <p-button label="{{buttonText}}" [size]="isLargeScreen() ? 'large' : 'small'"   icon="{{iconClass}}" class="topbar-item" [style]="{'width': '6.5vw'}" [variant]="'outlined'"  (click)="toggleTheme()"/>
             </li>
@@ -79,3 +84,44 @@
 </p-dialog>
 
 
+<!-- ✅ Enroll User Dialog -->
+<p-dialog header="Enroll a New User" 
+    [(visible)]="visibleEnrollUser" [modal]="true" 
+    [style]="{ width: '30rem', border: 'None' }"
+    (onHide)="closeEnrollUserDialog()"
+>
+    <div class="content">
+        <div class="field">
+            <label for="username" class="font-semibold w-24">Username</label>
+            <input pInputText id="username" [(ngModel)]="userEnrollment.username" autocomplete="off"/>
+        </div>
+        
+        <div class="field">
+            <label for="password" class="font-semibold w-24">Password</label>
+            <input pInputText id="password" [(ngModel)]="userEnrollment.password" type="password" autocomplete="off"/>
+        </div>
+
+        <div class="field">
+            <label>Roles</label>
+            <p-multiSelect 
+                [options]="rolesOptions" 
+                [(ngModel)]="userEnrollment.userRoles"
+                appendTo="body"
+                [filter]="false"
+                [showToggleAll]="false"
+                [style]="{'width':'100%'}"
+                placeholder="Select roles">
+            </p-multiSelect>
+        </div>
+
+    </div>
+
+    <!-- ✅ Dialog Actions -->
+    <div class="dialog-actions">
+        @if(loading){
+            <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
+        }
+        <p-button label="Cancel" severity="secondary" (click)="closeEnrollUserDialog()" />
+        <p-button label="Enroll" (click)="enrollUser()" />
+    </div>
+</p-dialog>

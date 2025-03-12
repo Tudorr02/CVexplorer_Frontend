@@ -11,7 +11,7 @@ import { SplitterModule } from 'primeng/splitter';
 import { Checkbox } from 'primeng/checkbox';
 import { CompanyManagement } from '../../_models/companyManagement';
 import { SelectModule } from 'primeng/select';
-import { UserService } from '../../_services/user.service';
+import { AccountService } from '../../_services/account.service';
 
 @Component({
   selector: 'app-enroll-user',
@@ -24,7 +24,7 @@ export class EnrollUserComponent implements OnInit {
 
   private adminService = inject(AdminService);
   private notificationService = inject(NotificationService);
-  private userService = inject(UserService);
+  private accountService = inject(AccountService);
   isModerator: boolean = false;
 
   userEnrollment = {
@@ -49,7 +49,7 @@ export class EnrollUserComponent implements OnInit {
 
   private checkIfModerator() {
 
-   const userRoles =  this.userService.currentUser()?.roles || [];
+   const userRoles =  this.accountService.currentUser()?.roles || [];
    this.isModerator = userRoles.includes('Moderator') && !userRoles.includes('Admin');
  }
 

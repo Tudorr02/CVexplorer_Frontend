@@ -1,6 +1,6 @@
 import { Component , OnInit,Input , inject, HostListener} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { UserService } from '../_services/user.service';
+import { AccountService } from '../_services/account.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Dialog } from 'primeng/dialog';
@@ -11,24 +11,33 @@ import { computed } from '@angular/core';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { NotificationService } from '../_services/notification.service';
 import { ScreenSizeService } from '../_services/screen-size.service';
+import { HasRoleDirective } from '../_directives/has-role.directive';
+import { UserEnrollment } from '../_models/userEnrollment';
+import { RoleService } from '../_services/role.service';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { UserService } from '../_services/user.service';
 @Component({
   selector: 'app-nav',
-  imports: [ProgressSpinner,FormsModule,CommonModule,ButtonModule,Dialog,InputTextModule],
+  imports: [MultiSelectModule,HasRoleDirective,ProgressSpinner,FormsModule,CommonModule,ButtonModule,Dialog,InputTextModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
 export class NavComponent implements OnInit {
 
   visibleDetails: boolean = false;
+  visibleEnrollUser: boolean = false; // ✅ Control Enroll User Dialog visibility
+
   isLoginRoute: boolean = false; // Default route
   Router = inject(Router);
-  UserService = inject(UserService);
+  AccountService = inject(AccountService);
   NotificationService = inject(NotificationService);
   ScreenSizeService = inject(ScreenSizeService);
+  RoleService = inject(RoleService);
+  UserService = inject(UserService);
   isDarkMode: boolean = true; // Default theme mode
   buttonText: string = 'Dark Mode'; // Default button text
   logoPath: string = 'logos/CVexplorerDark.svg'; // Path to the logo image
-  username = computed(() => this.UserService.currentUser()?.username || '');
+  username = computed(() => this.AccountService.currentUser()?.username || '');
   iconClass: string = 'pi pi-moon'; // Default icon class
   isEditing: boolean = false;
   userDetails: UserDetails = {
@@ -37,6 +46,14 @@ export class NavComponent implements OnInit {
     companyName: 'not available',
     email: 'not available',
   };
+  userEnrollment = {
+    username: '',
+    password: '',
+    userRoles: []
+  };
+  usr : UserEnrollment = {} as UserEnrollment;
+  rolesOptions: string[] = [];
+
   loading: boolean = false; // Flag to control the loading spinner visibility
   userDetailsBackup: UserDetails = { ...this.userDetails }; // Create a backup
   isLargeScreen = computed(() => this.ScreenSizeService.isLargeScreen());
@@ -120,7 +137,7 @@ export class NavComponent implements OnInit {
   }
 
   signOut(){
-    this.UserService.logout();
+    this.AccountService.logout();
     this.Router.navigate(['/login']);
   }
 
@@ -134,10 +151,11 @@ export class NavComponent implements OnInit {
     this.UserService.getUserDetails().subscribe(
       (response: UserDetails) => {
         this.userDetails = {
-          firstName: response.firstName ?? 'Not Available',
-          lastName: response.lastName ?? 'Not Available',
-          companyName: response.companyName ?? 'Not Available',
-          email: response.email ?? 'Not Available'
+          firstName: response.firstName && response.firstName.trim() !== '' ? response.firstName : 'Not Available',
+          lastName: response.lastName && response.lastName.trim() !== '' ? response.lastName : 'Not Available',
+          companyName: response.companyName && response.companyName.trim() !== '' ? response.companyName : 'Not Available',
+          email: response.email && response.email.trim() !== '' ? response.email : 'Not Available',
+
         };
         this.userDetailsBackup = { ...this.userDetails }; // Store a backup before editing
         this.visibleDetails = true;  // Open the dialog
@@ -148,5 +166,24 @@ export class NavComponent implements OnInit {
     );
    
 
+  }
+
+  openEnrollUserDialog() {
+
+    this.visibleEnrollUser = true; 
+    this.RoleService.getRoles().subscribe({
+      next: (roles) => {
+        this.rolesOptions = roles;
+      },
+      error: () => this.NotificationService.showError('Failed to load roles.')
+    });
+  }
+
+  closeEnrollUserDialog() {
+    this.visibleEnrollUser = false; // ✅ Close dialog when cancelled
+  }
+
+  enrollUser() {
+  
   }
 }

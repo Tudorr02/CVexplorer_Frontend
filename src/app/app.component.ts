@@ -7,7 +7,7 @@ import { LeftMenuComponent } from './left-menu/left-menu.component';
 import { CommonModule } from '@angular/common';
 import { TabsModule } from 'primeng/tabs';
 import { Router, RouterModule } from '@angular/router';
-import { UserService } from './_services/user.service';
+import { AccountService } from './_services/account.service';
 import { HasRoleDirective } from './_directives/has-role.directive';
 @Component({
   selector: 'app-root',
@@ -21,14 +21,14 @@ import { HasRoleDirective } from './_directives/has-role.directive';
 export class AppComponent  {
 
 
-  UserService = inject(UserService);
+  UserService = inject(AccountService);
   Router = inject(Router);
 
   title(title: any) {
     throw new Error('Method not implemented.');
   }
 
-  private userService = inject(UserService);
+  private userService = inject(AccountService);
 
   constructor(private router: Router) {
     if (this.userService.isTokenExpired()) {

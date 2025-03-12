@@ -5,7 +5,7 @@ import { SplitterModule } from 'primeng/splitter';
 import { CommonModule } from '@angular/common';
 import { TabsModule } from 'primeng/tabs';
 import { Router, RouterModule } from '@angular/router';
-import { UserService } from '../_services/user.service';
+import { AccountService } from '../_services/account.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +15,7 @@ import { UserService } from '../_services/user.service';
 })
 export class DashboardComponent implements OnInit {
 
-  UserService = inject(UserService);
+  AccountService = inject(AccountService);
   Router = inject(Router);
  
   ngOnInit(): void {

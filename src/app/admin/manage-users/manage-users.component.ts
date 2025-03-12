@@ -17,7 +17,7 @@ import { Table } from 'primeng/table';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { waitForAsync } from '@angular/core/testing';
 import { finalize } from 'rxjs';
-import { UserService } from '../../_services/user.service';
+import { AccountService } from '../../_services/account.service';
 @Component({ 
   selector: 'app-manage-users',
   imports: [ScrollPanelModule,InputIcon,IconField,MultiSelectModule,FormsModule,TableModule, ToastModule, CommonModule, TagModule, SelectModule, ButtonModule, InputTextModule],
@@ -38,7 +38,7 @@ export class ManageUsersComponent implements OnInit{
   isModerator: boolean = false;
   private adminService = inject(AdminService);
   private messageService = inject(MessageService);
-  private userService = inject(UserService);
+  private accountService = inject(AccountService);
 
   ngOnInit() {
     this.loadUsers();
@@ -46,7 +46,7 @@ export class ManageUsersComponent implements OnInit{
   }
 
   private checkIfModerator() {
-    const userRoles =  this.userService.currentUser()?.roles || [];
+    const userRoles =  this.accountService.currentUser()?.roles || [];
     this.isModerator = userRoles.includes('Moderator') && !userRoles.includes('Admin');
   }
 
