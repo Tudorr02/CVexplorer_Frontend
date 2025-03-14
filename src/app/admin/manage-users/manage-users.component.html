@@ -1,9 +1,10 @@
 <div class="card">
     
     <p-table #dtUsers 
-    [value]="users" dataKey="username"  
+    [value]="users" 
     [scrollable]="true"
     scrollHeight="flex"  
+    dataKey="id"  
     editMode="row"  
     [loading]="loadingUsers"
     [style]="{'width': '100%'}"
@@ -156,18 +157,18 @@
             </td>
             <td>
                 <!-- Default Mode: Show Trash Icon -->
-                <button *ngIf="!deletingUsers[user.username]" pButton pRipple type="button" 
-                    icon="pi pi-trash" (click)="onRowDeleteInit(user.username)" text rounded severity="danger">
+                <button *ngIf="!deletingUsers[user.id]" pButton pRipple type="button" 
+                    icon="pi pi-trash" (click)="onRowDeleteInit(user.id)" text rounded severity="danger">
                 </button>
 
                 <!-- Delete Mode: Show Confirm & Cancel -->
-                <ng-container *ngIf="deletingUsers[user.username]">
+                <ng-container *ngIf="deletingUsers[user.id]">
                     <button pButton pRipple type="button" pSaveEditableRow 
-                        icon="pi pi-check" (click)="onRowDeleteConfirm(user.username)" 
+                        icon="pi pi-check" (click)="onRowDeleteConfirm(user.id,user.username)" 
                         text rounded severity="secondary">
                     </button>
                     <button pButton pRipple type="button" pCancelEditableRow 
-                        icon="pi pi-times" (click)="onRowDeleteCancel(user.username)" 
+                        icon="pi pi-times" (click)="onRowDeleteCancel(user.id)" 
                         text rounded severity="secondary">
                     </button>
                 </ng-container>

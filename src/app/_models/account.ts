@@ -1,4 +1,4 @@
-export interface User{
+export interface Account{
     username: string;
     token: string;
     roles : string[];

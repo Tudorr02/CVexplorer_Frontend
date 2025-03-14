@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { User } from '../_models/user';
+import { Account } from '../_models/account';
 import { Observable, tap , interval, Subscription } from 'rxjs';
 import { UserDetails } from '../_models/userDetails';
 import { jwtDecode } from 'jwt-decode';
@@ -14,7 +14,7 @@ import { NotificationService } from './notification.service';
 export class AccountService {
   private http =  inject(HttpClient);
   private apiUrl = `${environment.apiBaseUrl}/Account`;
-  currentUser = signal<User | null>(null);
+  currentUser = signal<Account | null>(null);
   private tokenCheckInterval: Subscription | null = null;
   Router = inject(Router);
   NotificationService = inject(NotificationService);
@@ -44,7 +44,7 @@ export class AccountService {
   private loadUserData() {
     const userData = localStorage.getItem('userData');
     if (userData) {
-      let user: User = JSON.parse(userData);
+      let user: Account = JSON.parse(userData);
 
       // ✅ Decode the token to extract roles & expirationTime
       try {
@@ -61,8 +61,8 @@ export class AccountService {
     }
   }
 
-  login(model: any) : Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/Login`, model).pipe(
+  login(model: any) : Observable<Account> {
+    return this.http.post<Account>(`${this.apiUrl}/Login`, model).pipe(
       tap(user => { 
         if (user) {
           localStorage.setItem('userData', JSON.stringify(user)); //  Store user in localStorage

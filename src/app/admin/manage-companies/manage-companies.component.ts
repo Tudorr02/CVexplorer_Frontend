@@ -26,8 +26,8 @@ export class ManageCompaniesComponent implements OnInit {
   @ViewChild('dtCompanies') dt!: Table; // Reference to PrimeNG Table
   loadingCompanies: boolean = false;
   companies: CompanyManagement[] = [];
-  clonedCompanies: { [name: string]: CompanyManagement} = {};
-  deletingCompanies: { [name: string]: boolean } = {};
+  clonedCompanies: { [companyId: number]: CompanyManagement} = {};
+  deletingCompanies: { [companyId: number]: boolean } = {};
   globalFilter: string = '';
   addingCompany = false;
   newCompanyName = '';
@@ -42,7 +42,7 @@ export class ManageCompaniesComponent implements OnInit {
 
   confirmAddCompany() {
     if (this.newCompanyName.trim()) {
-      const newCompany: CompanyManagement = { name: this.newCompanyName, employees: 0 };
+      const newCompany: CompanyManagement = { name: this.newCompanyName , id: 0, employees: 0 };
       
       this.adminService.createCompany(newCompany).subscribe({
         next: (createdCompany) => {
@@ -70,9 +70,9 @@ export class ManageCompaniesComponent implements OnInit {
     .pipe(finalize(() => setTimeout(() => this.loadingCompanies = false, 1000)))
     .subscribe({
       next: (companies) => this.companies = companies.map(company => ({
+        id: company.id,
         name: company.name,
-        employees: company.employees ?? 0,
-        
+        employees: company.employees ?? 0
       })),
       error: () => this.notificationService.showError("Failed to load companies.")
     });
@@ -83,51 +83,51 @@ export class ManageCompaniesComponent implements OnInit {
     this.dt.filterGlobal(this.globalFilter, 'contains');
   }
 
-  onRowEditInit(company: CompanyManagement, index: number) {
-    this.clonedCompanies[index] = { ...company };
+  onRowEditInit(company: CompanyManagement) {
+    this.clonedCompanies[company.id] = { ...company };
   }
 
-  onRowEditSave(company: CompanyManagement, index: number) {
-    const originalCompany = this.clonedCompanies[index];
-    this.adminService.updateCompany(originalCompany.name, company).subscribe({
+  onRowEditSave(company: CompanyManagement) {
+    this.adminService.updateCompany(company.id, company).subscribe({
       next: (updatedCompany) => {
         this.notificationService.showSuccess(`Company ${updatedCompany.name} updated successfully!`);
-        delete this.clonedCompanies[company.name];
+        delete this.clonedCompanies[company.id];
+        this.loadCompanies();
       },
       error: (err) => {
         this.notificationService.showError("Failed to update company. "+ err.error.error);
-        this.onRowEditCancel(company, index);
+        this.onRowEditCancel(company);
       }
     });
   }
 
-  onRowEditCancel(company: CompanyManagement , index: number) {
-    const originalCompany = this.clonedCompanies[index];
+  onRowEditCancel(company: CompanyManagement ) {
+    const originalCompany = this.clonedCompanies[company.id];
     if (originalCompany) {
       Object.assign(company, originalCompany);
-      delete this.clonedCompanies[index];
+      delete this.clonedCompanies[company.id];
     }
   }
 
-  onRowDeleteInit(companyName: string) {
-    this.deletingCompanies[companyName] = true;
+  onRowDeleteInit(companyId: number) {
+    this.deletingCompanies[companyId] = true;
   }
 
-  onRowDeleteConfirm(companyName: string) {
-    this.adminService.deleteCompany(companyName).subscribe({
+  onRowDeleteConfirm(companyId: number, companyName: string) {
+    this.adminService.deleteCompany(companyId).subscribe({
       next: () => {
         this.notificationService.showSuccess(`Company ${companyName} deleted successfully!`);
-        this.companies = this.companies.filter(c => c.name !== companyName);
-        delete this.deletingCompanies[companyName];
+        this.loadCompanies();
+        delete this.deletingCompanies[companyId];
       },
       error: () => {
         this.notificationService.showError("Failed to delete company.")
-        delete this.deletingCompanies[companyName];
+        delete this.deletingCompanies[companyId];
       }
     });
   }
 
-  onRowDeleteCancel(companyName: string) {
-    delete this.deletingCompanies[companyName];
+  onRowDeleteCancel(companyId: number) {
+    delete this.deletingCompanies[companyId];
   }
 }

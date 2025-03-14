@@ -17,16 +17,12 @@ export class AdminService {
     return this.http.get<UserManagement[]>(`${this.apiUrl}/Users`);
   }
 
-  getUser(username: string): Observable<UserManagement> {
-    return this.http.get<UserManagement>(`${this.apiUrl}/Users/${username}`);
-  }
-
-  updateUser(username: string, dto: UserManagement): Observable<UserManagement> {
-    return this.http.put<UserManagement>(`${this.apiUrl}/Users/${username}`, dto);
+  updateUser(userId: number, dto: UserManagement): Observable<UserManagement> {
+    return this.http.put<UserManagement>(`${this.apiUrl}/Users/${userId}`, dto);
   }
  
-  deleteUser(username: string): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiUrl}/Users/${username}`);
+  deleteUser(userId : number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/Users/${userId}`);
   }
 
   enrollUser(dto: UserEnrollment): Observable<{ username: string; token: string }> {
@@ -42,20 +38,16 @@ export class AdminService {
     return this.http.get<CompanyManagement[]>(`${this.apiUrl}/Companies`);
   }
 
-  getCompany(companyName: string): Observable<CompanyManagement> {
-    return this.http.get<CompanyManagement>(`${this.apiUrl}/Companies/${companyName}`);
-  }
-
   createCompany(dto: CompanyManagement): Observable<CompanyManagement> {
     return this.http.post<CompanyManagement>(`${this.apiUrl}/Companies`, dto);
   }
 
-  updateCompany(companyName: string, dto: CompanyManagement): Observable<CompanyManagement> {
-    return this.http.put<CompanyManagement>(`${this.apiUrl}/Companies/${companyName}`, dto);
+  updateCompany(companyId : number, dto: CompanyManagement): Observable<CompanyManagement> {
+    return this.http.put<CompanyManagement>(`${this.apiUrl}/Companies/${companyId}`, dto);
   }
 
-  deleteCompany(companyName: string): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiUrl}/Companies/${companyName}`);
+  deleteCompany(companyId : number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/Companies/${companyId}`);
   }
   
 }

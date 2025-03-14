@@ -4,6 +4,7 @@
         [value]="companies"  
         [scrollable]="true"
         scrollHeight="flex"
+        dataKey="id"
         [loading]="loadingCompanies"  
         [style]="{'width': '100%'}"
         [globalFilterFields]="['name']"
@@ -74,29 +75,29 @@
                 <td>
                     <div class="flex items-center justify-center gap-2">
                         <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
-                            icon="pi pi-pencil" (click)="onRowEditInit(company,ri)" text rounded severity="secondary"></button>
+                            icon="pi pi-pencil" (click)="onRowEditInit(company)" text rounded severity="secondary"></button>
                         <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
-                            icon="pi pi-check" (click)="onRowEditSave(company,ri)" text rounded severity="secondary"></button>
+                            icon="pi pi-check" (click)="onRowEditSave(company)" text rounded severity="secondary"></button>
                         <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
-                            icon="pi pi-times" (click)="onRowEditCancel(company,ri)" text rounded severity="secondary"></button>
+                            icon="pi pi-times" (click)="onRowEditCancel(company)" text rounded severity="secondary"></button>
                     </div>
                 </td>
 
                 <!-- Delete Confirmation -->
                 <td>
                     <!-- Default Mode: Show Trash Icon -->
-                    <button *ngIf="!deletingCompanies[company.name]" pButton pRipple type="button" 
-                        icon="pi pi-trash" (click)="onRowDeleteInit(company.name)" text rounded severity="danger">
+                    <button *ngIf="!deletingCompanies[company.id]" pButton pRipple type="button" 
+                        icon="pi pi-trash" (click)="onRowDeleteInit(company.id)" text rounded severity="danger">
                     </button>
 
                     <!-- Delete Mode: Show Confirm & Cancel -->
-                    <ng-container *ngIf="deletingCompanies[company.name]">
+                    <ng-container *ngIf="deletingCompanies[company.id]">
                         <button pButton pRipple type="button" pSaveEditableRow 
-                            icon="pi pi-check" (click)="onRowDeleteConfirm(company.name)" 
+                            icon="pi pi-check" (click)="onRowDeleteConfirm(company.id,company.name)" 
                             text rounded severity="secondary">
                         </button>
                         <button pButton pRipple type="button" pCancelEditableRow 
-                            icon="pi pi-times" (click)="onRowDeleteCancel(company.name)" 
+                            icon="pi pi-times" (click)="onRowDeleteCancel(company.id)" 
                             text rounded severity="secondary">
                         </button>
                     </ng-container>

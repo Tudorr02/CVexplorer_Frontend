@@ -3,5 +3,4 @@ export interface UserDetails{
     lastName: string;
     companyName: string;
     email: string;
-
 }

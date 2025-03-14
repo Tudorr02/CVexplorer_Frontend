@@ -34,7 +34,7 @@ export class ManageUsersComponent implements OnInit{
   loadingUsers: boolean = false; // Control loading state
   globalFilter: string = '';
   clonedUsers: { [username: string]: UserManagement } = {};
-  deletingUsers: { [username: string]: boolean } = {}; // ✅ Track rows in delete mode
+  deletingUsers: { [userId: number]: boolean } = {}; // ✅ Track rows in delete mode
   isModerator: boolean = false;
   private adminService = inject(AdminService);
   private messageService = inject(MessageService);
@@ -97,7 +97,16 @@ export class ManageUsersComponent implements OnInit{
 
   // ✅ Save user after edit
   onRowEditSave(user: UserManagement) {
-    this.adminService.updateUser(user.username, user).subscribe(
+    if (user.id === undefined) {
+      this.messageService.add({ 
+        severity: 'error', 
+        summary: 'Error', 
+        detail: 'User ID is missing, update failed.' 
+      });
+      return;
+    }
+    
+    this.adminService.updateUser(user.id , user).subscribe(
       () => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User updated successfully' });
         delete this.clonedUsers[user.username]; // Remove backup
@@ -143,23 +152,24 @@ export class ManageUsersComponent implements OnInit{
   }
 
   // ✅ Enable Delete Mode
-  onRowDeleteInit(username: string) {
-    this.deletingUsers[username] = true; 
+  onRowDeleteInit(userId: number) {
+    this.deletingUsers[userId] = true; 
   }
 
   // ✅ Cancel Delete
-  onRowDeleteCancel(username: string) {
-    delete this.deletingUsers[username];
+  onRowDeleteCancel(userId: number) {
+    delete this.deletingUsers[userId];
   }
 
   // ✅ Confirm Deletion
-  onRowDeleteConfirm(username: string) {
-    this.adminService.deleteUser(username).subscribe(
+  onRowDeleteConfirm(userId: number, username: string) {
+    
+    this.adminService.deleteUser(userId).subscribe(
       () => {
         this.users = this.users.filter(user => user.username !== username); // ✅ Remove user from UI
         this.messageService.add({ severity: 'success', summary: 'Success', detail: `User '${username}' deleted successfully` }); 
         this.loadUsers();
-        delete this.deletingUsers[username];
+        delete this.deletingUsers[userId];
       },
       (error) => {
         if (error.status === 403) {  // ✅ Handle Forbidden error
@@ -175,7 +185,7 @@ export class ManageUsersComponent implements OnInit{
             detail: `Failed to delete user '${username}'` 
           });
         }
-        delete this.deletingUsers[username];
+        delete this.deletingUsers[userId];
       });
   }
 

@@ -100,7 +100,7 @@ export class EnrollUserComponent implements OnInit {
         this.resetForm();
       },
       error: (err) => { 
-        const errorMessage = 'Failed to enroll user. '+ err?.error;
+        const errorMessage = 'Failed to enroll user. '+ err?.error.error;
         this.notificationService.showError(errorMessage);}
     });
   }
