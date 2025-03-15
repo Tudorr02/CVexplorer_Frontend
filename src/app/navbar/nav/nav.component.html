@@ -1,0 +1,286 @@
+
+<nav class="navbar" [ngClass]="{'navbar-login': isLogin()}">
+    <a aria-label="CVexplorer Logo" href="/dashboard" class="logo-container">
+        <img [src]="logoPath" alt="Logo" width="10%"/>
+    </a>
+
+    @if(!isLoginRoute){
+        <ul class="topbar-items">
+            <li class="nav-item ">
+                <p-button label="{{username()}}" [size]="isLargeScreen() ? 'large' : 'small'"  [variant]="'text'" [styleClass]="isDarkMode ? 'nav-username-dark' : 'nav-username-light'"  (onClick)="showDetails()" />
+            </li>
+            <li *appHasRole="['HRLeader']">
+                <p-button label="Manage Users" icon="pi pi-building" 
+                    variant="outlined" [size]="isLargeScreen() ? 'large' : 'small'" 
+                    (onClick)="openManageUsersDialog()"/>
+            </li>
+            <li *appHasRole="['HRLeader']">
+                <p-button label="Enroll a User" icon="pi pi-user-plus" 
+                    variant="outlined" [size]="isLargeScreen() ? 'large' : 'small'" 
+                    (onClick)="openEnrollUserDialog()"/>
+            </li>
+            <li>
+                <p-button label="{{buttonText}}" [size]="isLargeScreen() ? 'large' : 'small'"   icon="{{iconClass}}" class="topbar-item" [style]="{'width': '6.5vw'}" [variant]="'outlined'"  (click)="toggleTheme()"/>
+            </li>
+            <li>
+                <p-button label="Sign Out" [size]="isLargeScreen() ? 'large' : 'small'" severity="danger" icon="pi pi-sign-out"  [variant]="'outlined'"  (onClick)="signOut()"/>
+            </li>
+        </ul>
+    }
+    
+    
+    
+</nav>
+
+
+<p-dialog header="Enroll a New User" 
+    [(visible)]="visibleEnrollUser" [modal]="true" 
+    [style]="{ width: '25rem', border: 'None' }"
+    (onHide)="closeEnrollUserDialog()"
+>
+    <div class="content">
+        <div class="field">
+            <label for="username" class="font-semibold w-24">Username</label>
+            <input pInputText id="username" [(ngModel)]="userEnrollment.username" autocomplete="off"/>
+        </div>
+        
+        <div class="field">
+            <label for="password" class="font-semibold w-24">Password</label>
+            <input pInputText id="password" [(ngModel)]="userEnrollment.password" type="password" autocomplete="off"/>
+        </div>
+
+        <div class="field">
+            <label class="font-semibold w-24">Roles</label>
+            <p-multiSelect 
+                [options]="rolesOptions" 
+                [(ngModel)]="userEnrollment.userRoles"
+                appendTo="body"
+                [filter]="false"
+                [showToggleAll]="false"
+                placeholder="Select roles">
+                <!-- <ng-template let-role pTemplate="selectedItem">
+                    <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
+                </ng-template> -->
+            
+                <ng-template let-role pTemplate="item">
+                    <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
+                </ng-template>
+            </p-multiSelect>
+        </div>
+
+    </div>
+
+    <!-- ✅ Dialog Actions -->
+    <div class="dialog-actions">
+        @if(loading){
+            <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
+        }
+        <p-button label="Cancel" severity="secondary" (click)="closeEnrollUserDialog()" />
+        <p-button label="Enroll" (click)="enrollUser()" />
+    </div>
+</p-dialog>
+
+
+
+<p-dialog header="Account Details" 
+[modal]="true" [(visible)]="visibleDetails" 
+[style]="{ width: '25rem' , border: 'None' }"
+(onHide)="cancelEdit()"
+>     
+    
+    <div class="content">
+        <div class="field">
+            <label for="companyName" class="font-semibold w-24">Company</label>
+            <input pInputText id="companyName" [(ngModel)]="userDetails.companyName" [readOnly]="true" variant="filled" autocomplete="off" />
+        </div>
+        <div class="field">
+            <label for="firstName" class="font-semibold w-24">First Name</label>
+            <input pInputText id="firstName" 
+            [(ngModel)]="userDetails.firstName" 
+            [readOnly]="!isEditing" 
+            autocomplete="off"
+            [variant]="!isEditing ? 'filled' : 'outlined'" 
+            />
+        </div>
+        <div class="field">
+            <label for="lastName" class="font-semibold w-24">Last Name</label>
+            <input pInputText id="lastName" 
+            [(ngModel)]="userDetails.lastName" 
+            [variant]="!isEditing ? 'filled' : 'outlined'"  
+            [readOnly]="!isEditing"
+            autocomplete="off" />
+            
+        </div>
+        <div class="field">
+            <label for="email" class="font-semibold w-24">Email</label>
+            <input pInputText id="email"
+            [(ngModel)]="userDetails.email" 
+            [variant]="!isEditing ? 'filled' : 'outlined'" 
+            [readOnly]="!isEditing" 
+            autocomplete="off" />
+        </div>
+    </div>
+    
+    <div class="dialog-actions">
+         @if(loading){
+            <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
+        }
+        @if(isEditing){
+            <p-button  label="Cancel" severity="secondary" (click)="cancelEdit()" />
+            <p-button label="Save" (click)="updateDetails()" />
+        }
+        @else {
+            <p-button  label="Edit" severity="secondary" (click)="editFields()" />  
+        } 
+    </div>
+</p-dialog>
+
+
+
+<p-dialog header="Manage Users" 
+    [(visible)]="visibleManageUsers" [modal]="true" 
+    [style]="{ width: '100rem', height:'90rem' , border: 'None' }"
+    (onHide)="closeManageUsersDialog()"
+>
+    <p-table #dtUsers 
+        [value]="users" 
+        [scrollable]="true"
+        scrollHeight="flex"  
+        dataKey="id"  
+        editMode="row" 
+        [style]="{'width': '100%'}"
+        [globalFilterFields]="['username', 'firstName', 'lastName', 'email', 'userRoles']"
+    >
+        <ng-template #caption>
+            <p-iconfield iconPosition="left">
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" [(ngModel)]="globalFilter" (input)="filterGlobal()" placeholder="Search users..." />
+            </p-iconfield>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th style="width: 15%;">Username</th>
+                <th style="width: 15%;">First Name</th>
+                <th style="width: 15%;">Last Name</th>
+                <th style="width: 20%;">Email</th>
+                <th style="width: 15%;">Roles</th>
+                <th style="width: 7%;"></th>
+                <th style="width: 7%;"></th>
+            </tr>
+        </ng-template>
+        
+        <ng-template #body let-user let-editing="editing" let-ri="rowIndex">
+            
+            <tr [pEditableRow]="user">
+
+            <!-- Username (Read-Only) -->
+            <td>{{ user.username }}</td>
+
+            <!-- First Name (Editable) -->
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="user.firstName" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        <span [ngClass]="{'grey-text': !user.firstName}">{{ user.firstName || 'Not Available' }}</span>
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+
+            <!-- Last Name (Editable) -->
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="user.lastName" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        <span [ngClass]="{'grey-text': !user.lastName}">{{ user.lastName || 'Not Available' }}</span>
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+
+            <!-- Email (Editable) -->
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="email" [(ngModel)]="user.email" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        <span [ngClass]="{'grey-text': !user.email}">{{ user.email || 'Not Available' }}</span>
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+
+            <!-- Roles (Editable Dropdown) -->
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-multiSelect 
+                            [options]="rolesOptions" 
+                            [(ngModel)]="user.userRoles"
+                            appendTo="body"
+                            [filter]="false"
+                            [showToggleAll]="false"
+                            [style]="{'width':'70%'}"
+                            placeholder="Select roles">
+                            <ng-template let-role pTemplate="item">
+                                <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
+                            </ng-template>
+                        </p-multiSelect>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        <div class="flex flex-wrap gap-1">
+                            @if(user.userRoles.length === 0) {
+                                <p-tag [severity]="getRoleSeverity('')">No roles assigned</p-tag>
+                            }
+                            @else {
+                                <ng-container *ngFor="let role of user.userRoles">
+                                    <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
+                                </ng-container>
+                            }
+                        </div>
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            
+            <!-- Actions -->
+            <td>
+                <div class="flex items-center justify-center gap-2">
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
+                        icon="pi pi-pencil" (click)="onRowEditInit(user)" text rounded severity="secondary"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
+                        icon="pi pi-check" (click)="onRowEditSave(user)" text rounded severity="secondary"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
+                        icon="pi pi-times" (click)="onRowEditCancel(user)" text rounded severity="secondary"></button>
+                </div>
+            </td>
+
+            <!-- Delete Actions -->
+            <td>
+                <button *ngIf="!deletingUsers[user.id]" pButton pRipple type="button" 
+                    icon="pi pi-trash" (click)="onRowDeleteInit(user.id)" text rounded severity="danger">
+                </button>
+
+                <ng-container *ngIf="deletingUsers[user.id]">
+                    <button pButton pRipple type="button" pSaveEditableRow 
+                        icon="pi pi-check" (click)="onRowDeleteConfirm(user.id, user.username)" 
+                        text rounded severity="secondary">
+                    </button>
+                    <button pButton pRipple type="button" pCancelEditableRow 
+                        icon="pi pi-times" (click)="onRowDeleteCancel(user.id)" 
+                        text rounded severity="secondary">
+                    </button>
+                </ng-container>
+            </td>
+            
+            </tr>
+            
+        </ng-template>
+    
+    </p-table>
+
+</p-dialog>

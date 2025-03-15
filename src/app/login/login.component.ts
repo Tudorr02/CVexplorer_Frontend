@@ -2,7 +2,7 @@ import { Component, AfterViewInit, ElementRef, ViewChild, inject } from '@angula
 declare var VANTA: any;
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
-import { NavComponent } from "../nav/nav.component";
+// import { NavComponent } from "../../nav/nav.component";
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { AccountService } from '../_services/account.service';

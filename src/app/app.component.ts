@@ -1,6 +1,6 @@
 import { Component, inject , computed} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavComponent } from './nav/nav.component';
+import { NavComponent } from './navbar/nav/nav.component'; // Ensure this path is correct and the file exists
 import { Toast } from 'primeng/toast';
 import { SplitterModule } from 'primeng/splitter';
 import { LeftMenuComponent } from './left-menu/left-menu.component';
