@@ -7,6 +7,7 @@ import { UserDetails } from '../_models/userDetails';
 import { Router } from '@angular/router';
 import { NotificationService } from './notification.service';
 import { User } from '../_models/user';
+import { UserEnrollmentCompany } from '../_models/userEnrollmentCompany';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,5 +40,9 @@ export class UserService {
   // ✅ Delete a specific user (HR Leaders only)
   deleteUser(userId: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${userId}`);
+  }
+
+  enrollUser(dto: UserEnrollmentCompany): Observable<UserEnrollmentCompany> {
+    return this.http.post<UserEnrollmentCompany>(`${this.apiUrl}`, dto);
   }
 }

@@ -5,7 +5,7 @@ import { RoleService } from '../../_services/role.service';
 import { NotificationService } from '../../_services/notification.service';
 import { MessageService } from 'primeng/api';
 import { User } from '../../_models/user';
-
+import { finalize } from 'rxjs/operators';
 // PrimeNG Modules
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -42,10 +42,12 @@ export class NavManageUsersComponent implements OnInit {
 
   // ✅ Data
   users: User[] = [];
+  loadingUsers: boolean = false;
   rolesOptions: string[] = [];
   globalFilter: string = '';
   clonedUsers: { [userId: number]: User } = {};
   deletingUsers: { [userId: number]: boolean } = {};
+
 
   ngOnInit(): void {
     this.loadUsers();
@@ -54,7 +56,10 @@ export class NavManageUsersComponent implements OnInit {
 
   // ✅ Load Users & Roles
   loadUsers(): void {
-    this.UserService.getUsers().subscribe({
+    this.loadingUsers = true;
+    this.UserService.getUsers()
+    .pipe(finalize(() => setTimeout(() => this.loadingUsers = false, 1000)))
+    .subscribe({
       next: (users) => (this.users = users),
       error: () => this.NotificationService.showError('Failed to load users.')
     });

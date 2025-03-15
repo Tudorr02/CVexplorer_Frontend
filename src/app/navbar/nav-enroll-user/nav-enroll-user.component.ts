@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { UserService } from '../../_services/user.service';
 import { NotificationService } from '../../_services/notification.service';
 import { RoleService } from '../../_services/role.service';
+import { UserEnrollmentCompany } from '../../_models/userEnrollmentCompany';
 
 // PrimeNG UI Components
 import { CommonModule } from '@angular/common';
@@ -12,6 +13,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { TagModule } from 'primeng/tag';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-nav-enroll-user',
@@ -34,7 +36,7 @@ export class NavEnrollUserComponent implements OnInit {
 
   // ✅ User Enrollment Data
   rolesOptions: string[] = [];
-  userEnrollment = {
+  userEnrollment: UserEnrollmentCompany = {
     username: '',
     password: '',
     userRoles: []
@@ -50,12 +52,6 @@ export class NavEnrollUserComponent implements OnInit {
       next: (roles) => this.rolesOptions = roles,
       error: () => this.NotificationService.showError('Failed to load roles.')
     });
-  }
-
-  // ✅ Open/Close Dialog
-  openEnrollUserDialog(): void {
-    this.visibleEnrollUser = true;
-    this.loadRoles();
   }
 
   closeEnrollUserDialog(): void {
@@ -76,14 +72,15 @@ export class NavEnrollUserComponent implements OnInit {
     }
 
     this.loading = true;
-    // this.UserService.enrollUser(this.userEnrollment).subscribe({
-    //   next: () => {
-    //     this.NotificationService.showSuccess('User enrolled successfully!');
-    //     this.closeEnrollUserDialog();
-    //   },
-    //   error: () => this.NotificationService.showError('Failed to enroll user.'),
-    //   complete: () => this.loading = false
-    // });
+    this.UserService.enrollUser(this.userEnrollment)
+    .pipe(finalize(() => setTimeout(() => this.loading = false, 1000)))
+    .subscribe({
+      next: () => {
+        this.NotificationService.showSuccess('User enrolled successfully!');
+        this.closeEnrollUserDialog();
+      },
+      error: () => this.NotificationService.showError('Failed to enroll user.'),
+    });
   }
 
    // ✅ Role badge color based on role

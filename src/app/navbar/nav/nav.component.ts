@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, computed } from '@angular/core';
+import { Component, OnInit, inject, computed, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 import { NotificationService } from '../../_services/notification.service';
@@ -33,6 +33,9 @@ import { HasRoleDirective } from '../../_directives/has-role.directive';
 })
 export class NavComponent implements OnInit {
 
+  @ViewChild(NavManageUsersComponent) manageUsersComponent!: NavManageUsersComponent; // Reference to child component
+  @ViewChild(NavUserDetailsComponent) userDetailsComponent!: NavUserDetailsComponent; // Reference to child component
+  @ViewChild(NavEnrollUserComponent) enrollUserComponent!: NavEnrollUserComponent; // Reference to child component
   // ✅ Dialog visibility
   visibleDetails: boolean = false;
   visibleEnrollUser: boolean = false;
@@ -93,6 +96,7 @@ export class NavComponent implements OnInit {
   }
 
   openAccountDetailsDialog(): void {
+    this.userDetailsComponent.ngOnInit();
     this.visibleDetails = true;
   }
 
@@ -100,9 +104,12 @@ export class NavComponent implements OnInit {
     this.visibleDetails = false;
   }
 
+
   // ✅ Manage Users Dialog
   openManageUsersDialog(): void {
+    this.manageUsersComponent.ngOnInit();
     this.visibleManageUsers = true;
+    
   }
 
   closeManageUsersDialog(): void {
@@ -111,6 +118,7 @@ export class NavComponent implements OnInit {
 
   // ✅ User Enrollment Dialog
   openEnrollUserDialog(): void {
+    this.enrollUserComponent.ngOnInit();
     this.visibleEnrollUser = true;
   }
 
