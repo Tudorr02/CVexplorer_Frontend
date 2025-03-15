@@ -1,0 +1,40 @@
+<div class="content">
+    <div class="field">
+        <label for="username" class="font-semibold w-24">Username</label>
+        <input pInputText id="username" [(ngModel)]="userEnrollment.username" autocomplete="off"/>
+    </div>
+    
+    <div class="field">
+        <label for="password" class="font-semibold w-24">Password</label>
+        <input pInputText id="password" [(ngModel)]="userEnrollment.password" type="password" autocomplete="off"/>
+    </div>
+
+    <div class="field">
+        <label class="font-semibold w-24">Roles</label>
+        <p-multiSelect 
+            [options]="rolesOptions" 
+            [(ngModel)]="userEnrollment.userRoles"
+            appendTo="body"
+            [filter]="false"
+            [showToggleAll]="false"
+            placeholder="Select roles">
+            <!-- <ng-template let-role pTemplate="selectedItem">
+                <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
+            </ng-template> -->
+        
+            <ng-template let-role pTemplate="item">
+                <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
+            </ng-template>
+        </p-multiSelect>
+    </div>
+
+</div>
+
+<!-- ✅ Dialog Actions -->
+<div class="dialog-actions">
+    @if(loading){
+        <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
+    }
+    <p-button label="Cancel" severity="secondary" (click)="closeEnrollUserDialog()" />
+    <p-button label="Enroll" (click)="enrollUser()" />
+</div>
