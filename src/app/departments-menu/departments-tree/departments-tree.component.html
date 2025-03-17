@@ -1,0 +1,91 @@
+
+<p-tabs class="tree-header">
+  <p-tablist>
+      <p-tab value="" disabled>My Departments</p-tab>
+      <p-button 
+      *appHasRole="['HRLeader']" 
+      icon="pi pi-folder-plus" 
+      [text]="true" size="small" 
+      label="Add Department" 
+      (click)="openAddDepartmentDialog()" />
+  </p-tablist>
+  
+</p-tabs>
+
+
+<p-tree 
+  
+  scrollHeight="95%"
+  [filter]="true" 
+  filterPlaceholder="Search.." 
+  [value]="treeData"
+  [style]="{fontSize:'1.25rem'}"
+  selectionMode="single"
+  [(selection)]="selectedNode"
+  [metaKeySelection]="true"
+  (onNodeSelect)="onNodeSelect($event)"
+  >
+  
+  <ng-template let-node pTemplate="default">
+    <div class="node-content">
+        <span>{{ node.label }}</span>
+        <p-button 
+            icon="pi pi-ellipsis-v" 
+            (click)="openNodeOptions($event, node)" 
+            rounded="true" 
+            [text]="true" 
+            severity="secondary" />
+    </div>
+  </ng-template>
+  
+</p-tree>
+
+<!-- ✅ Menu for Parent Departments -->
+<p-menu #parentMenu [model]="parentNodeActions" [popup]="true" />
+
+<!-- ✅ Menu for Leaf Items -->
+<p-menu #leafMenu [model]="leafNodeActions" [popup]="true" />
+
+
+<p-dialog 
+header = "Add Department" 
+[(visible)]="visibleAddDepartmentDialog" 
+[modal]="true" 
+[style]="{ width: '30rem', border: 'None' }" 
+(onHide)="closeAddDepartmentDialog()">
+
+  <app-add-department 
+  (departmentAdded)="onDepartmentAdded()" >
+</app-add-department>
+
+</p-dialog>
+
+<p-dialog 
+header = "Rename Department" 
+[(visible)]="visibleRenameDepartmentDialog" 
+[modal]="true" 
+[style]="{ width: '30rem', border: 'None' }" 
+(onHide)="closeRenameDepartmentDialog()">
+
+  <app-rename-department 
+  *ngIf="selectedNode" 
+  [departmentNode]="selectedNode" 
+  (departmentRenamed)="onDepartmentRenamed()" >
+</app-rename-department>
+
+</p-dialog>
+
+<p-dialog 
+  header="Delete Department" 
+  [(visible)]="visibleDeleteDepartmentDialog" 
+  [modal]="true" 
+  [style]="{ width: '35rem', border: 'None' }" 
+  (onHide)="closeDeleteDepartmentDialog()">
+
+  <app-delete-department 
+    *ngIf="selectedNode" 
+    [departmentNode]="selectedNode"
+    (departmentDeleted)="onDepartmentDeleted()">
+  </app-delete-department>
+
+</p-dialog>

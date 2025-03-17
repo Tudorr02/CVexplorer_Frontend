@@ -19,9 +19,11 @@
 
 .left-menu-container{
     width: 100%;
-    height: 100%;
-    margin-top: 0.5vh;
+    height: 98%;
+    margin-top: 1vh;
+    border-right: 1px solid var(--p-tabs-tablist-border-color);
     
+
 }
 
 .component-container{
@@ -38,7 +40,7 @@
 
 ::ng-deep .p-splitter-gutter {
     background: transparent; /* Makes the gutter invisible */
-    border: none;            /* Removes any gutter border */
+    border: none;/* Removes any gutter border */
 }
 
 .p-tabpanels{

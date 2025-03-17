@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { NavComponent } from './navbar/nav/nav.component'; // Ensure this path is correct and the file exists
 import { Toast } from 'primeng/toast';
 import { SplitterModule } from 'primeng/splitter';
-import { LeftMenuComponent } from './left-menu/left-menu.component';
+import { LeftMenuComponent } from './departments-menu/departments-tree/departments-tree.component';
 import { CommonModule } from '@angular/common';
 import { TabsModule } from 'primeng/tabs';
 import { Router, RouterModule } from '@angular/router';
@@ -21,7 +21,7 @@ import { HasRoleDirective } from './_directives/has-role.directive';
 export class AppComponent  {
 
 
-  UserService = inject(AccountService);
+  AccountService = inject(AccountService);
   Router = inject(Router);
 
   title(title: any) {
@@ -38,7 +38,7 @@ export class AppComponent  {
   }
 
   isUserAdmin(): boolean {
-    return (this.UserService.currentUser()?.roles.includes('Admin') || this.UserService.currentUser()?.roles.includes('Moderator') ? true : false);
+    return (this.AccountService.currentUser()?.roles.includes('Admin') || this.AccountService.currentUser()?.roles.includes('Moderator') ? true : false);
   }
 
   isDashboard(): boolean {
@@ -66,6 +66,6 @@ export class AppComponent  {
 
   // ✅ Compute tabs dynamically based on user role
   tabs = computed(() => {
-    return (this.UserService.currentUser()?.roles.includes('Admin') || this.UserService.currentUser()?.roles.includes('Moderator') ) ? this.adminTabs : this.userTabs;
+    return (this.AccountService.currentUser()?.roles.includes('Admin') || this.AccountService.currentUser()?.roles.includes('Moderator') ) ? this.adminTabs : this.userTabs;
   });
 }

@@ -1,0 +1,25 @@
+.content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-block: 5vh;
+    margin-inline: 1vw;
+}
+  
+.field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    input, p-multiselect {
+        width: 60%;
+    }
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end; /* ✅ Aligns buttons to the right */
+    align-items: center; /* ✅ Ensures vertical alignment */
+    gap: 1rem; /* ✅ Adds spacing between elements */
+    
+}
