@@ -107,7 +107,7 @@ export class NavComponent implements OnInit {
 
   // ✅ Manage Users Dialog
   openManageUsersDialog(): void {
-    this.manageUsersComponent.ngOnInit();
+    this.manageUsersComponent.init();
     this.visibleManageUsers = true;
     
   }
@@ -118,7 +118,7 @@ export class NavComponent implements OnInit {
 
   // ✅ User Enrollment Dialog
   openEnrollUserDialog(): void {
-    this.enrollUserComponent.ngOnInit();
+    this.enrollUserComponent.init();
     this.visibleEnrollUser = true;
   }
 

@@ -1,5 +1,48 @@
 
 ::ng-deep .p-tree {
-    background-color: transparent !important; /* Makes the tree's background transparent */
-   
+    background-color: transparent !important; /* Makes the tree's background transparent */ 
+    height: 100%;
+}
+
+
+::ng-deep .node-content {
+    display: flex; /* ✅ Enables horizontal alignment */
+    align-items: center; /* ✅ Centers items vertically */
+    justify-content: space-between; /* ✅ Pushes button to the right */
+    width: 13.5vw; /* ✅ Ensures it takes the full width */
+    margin-left: 2%;
+}
+
+
+::ng-deep .node-content p-button {
+    opacity: 0; /* ✅ Hide button by default */
+    visibility: hidden; /* ✅ Ensures it's not clickable when hidden */
+    transition: opacity 0.2s ease-in-out, visibility 0.2s;
+}
+
+/* ✅ Show the button when hovering over the node */
+::ng-deep .node-content:hover p-button {
+    opacity: 1; /* ✅ Makes button visible */
+    visibility: visible;
+}
+
+/* ✅ Adjust `.node-content` width for child nodes */
+::ng-deep .p-tree .p-tree-node-leaf .node-content {
+    width: calc(13.5vw - 13%); /* ✅ Make leaf nodes slightly smaller */
+}
+
+@keyframes clickEffect {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); } /* Slightly grow */
+    100% { transform: scale(1); } /* Return to normal */
+}
+
+/* ✅ Default Button-Node Style */
+::ng-deep .button-node {
+    transition: transform 0.3s ease-in-out;
+}
+
+/* ✅ Apply Animation on Click */
+::ng-deep .button-node.animate-click {
+    animation: clickEffect 0.3s ease-out;
 }

@@ -40,14 +40,16 @@
     [style]="{ width: '25rem', border: 'None' }"
     (onHide)="closeEnrollUserDialog()"
 >
+  
     <app-nav-enroll-user></app-nav-enroll-user>
+    
 </p-dialog>
 
 
 
 <p-dialog header="Account Details" 
 [modal]="true"
- [(visible)]="visibleDetails" 
+[(visible)]="visibleDetails" 
 [style]="{ width: '25rem' , border: 'None' }"
 (onHide)="closeAccountDetailsDialog()"
 >     
@@ -62,4 +64,5 @@
     (onHide)="closeManageUsersDialog()"
 >
     <app-nav-manage-users></app-nav-manage-users>
+   
 </p-dialog>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { Table } from 'primeng/table';
 import { UserService } from '../../_services/user.service';
 import { RoleService } from '../../_services/role.service';
@@ -10,25 +10,23 @@ import { finalize } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { ProgressSpinner } from 'primeng/progressspinner';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-nav-manage-users',
   imports: [ CommonModule, FormsModule,
-    TableModule, ButtonModule, Dialog, InputTextModule,
-    MultiSelectModule, TagModule, ProgressSpinner,
+    TableModule, ButtonModule, InputTextModule,
+    MultiSelectModule, TagModule,
     IconField, InputIcon],
   templateUrl: './nav-manage-users.component.html',
   styleUrl: './nav-manage-users.component.css'
 })
-export class NavManageUsersComponent implements OnInit {
+export class NavManageUsersComponent  {
   @ViewChild('dtUsers') dt!: Table;
 
   // ✅ Dialog visibility
@@ -49,7 +47,7 @@ export class NavManageUsersComponent implements OnInit {
   deletingUsers: { [userId: number]: boolean } = {};
 
 
-  ngOnInit(): void {
+  init(): void {
     this.loadUsers();
     this.loadRoles();
   }

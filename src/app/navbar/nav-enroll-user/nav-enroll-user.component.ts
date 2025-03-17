@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component,  inject } from '@angular/core';
 import { UserService } from '../../_services/user.service';
 import { NotificationService } from '../../_services/notification.service';
 import { RoleService } from '../../_services/role.service';
@@ -8,7 +8,6 @@ import { UserEnrollmentCompany } from '../../_models/userEnrollmentCompany';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressSpinner } from 'primeng/progressspinner';
@@ -19,12 +18,12 @@ import { finalize } from 'rxjs';
   selector: 'app-nav-enroll-user',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, ButtonModule, Dialog, InputTextModule, MultiSelectModule, ProgressSpinner, TagModule
+    CommonModule, FormsModule, ButtonModule,InputTextModule, MultiSelectModule, ProgressSpinner, TagModule
   ],
   templateUrl: './nav-enroll-user.component.html',
   styleUrl: './nav-enroll-user.component.css'
 })
-export class NavEnrollUserComponent implements OnInit {
+export class NavEnrollUserComponent  {
   // ✅ Dialog visibility
   visibleEnrollUser: boolean = false;
   loading: boolean = false;
@@ -42,7 +41,7 @@ export class NavEnrollUserComponent implements OnInit {
     userRoles: []
   };
 
-  ngOnInit(): void {
+  init(): void {
     this.loadRoles();
   }
 

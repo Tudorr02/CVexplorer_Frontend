@@ -8,7 +8,6 @@ import { finalize } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinner } from 'primeng/progressspinner';
 
@@ -16,7 +15,7 @@ import { ProgressSpinner } from 'primeng/progressspinner';
   selector: 'app-nav-user-details',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, ButtonModule, Dialog, InputTextModule, ProgressSpinner
+    CommonModule, FormsModule, ButtonModule, InputTextModule, ProgressSpinner
   ],
   templateUrl: './nav-user-details.component.html',
   styleUrl: './nav-user-details.component.css'
