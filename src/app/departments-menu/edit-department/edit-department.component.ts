@@ -11,15 +11,15 @@ import { Department } from '../../_models/department';
 import { Position } from '../../_models/position';
 
 @Component({
-  selector: 'app-rename-department',
+  selector: 'app-edit-department',
   imports: [InputTextModule,ButtonModule,FormsModule,ProgressSpinner],
-  templateUrl: './rename-department.component.html',
-  styleUrl: './rename-department.component.css'
+  templateUrl: './edit-department.component.html',
+  styleUrl: './edit-department.component.css'
 })
-export class RenameDepartmentComponent {
+export class EditDepartmentComponent {
 
-  @Input() departmentNode!: TreeNode; // ✅ Input: Selected department to rename
-  @Output() departmentRenamed = new EventEmitter<void>(); // ✅ Output: Notify parent when renamed
+  @Input() departmentNode!: TreeNode; // ✅ Input: Selected department to edit
+  @Output() departmentEdited = new EventEmitter<void>(); // ✅ Output: Notify parent when Edit is done
 
   notificationService = inject(NotificationService);
   departmentService = inject(DepartmentService);
@@ -31,7 +31,7 @@ export class RenameDepartmentComponent {
     this.updatedDepartmentName = this.departmentNode.label || '';
   }
 
-  renameDepartment(updatedDepartmentName: string) {
+  editDepartment(updatedDepartmentName: string) {
     if(!updatedDepartmentName.trim()) {
       this.notificationService.showWarning('Department name is required');
       return;
@@ -47,12 +47,12 @@ export class RenameDepartmentComponent {
     .pipe(finalize(() => setTimeout(() => {this.loading = false }, 1000)))
     .subscribe({
       next: () => {
-        this.departmentRenamed.emit();
-        this.notificationService.showSuccess('Department renamed successfully');
+        this.departmentEdited.emit();
+        this.notificationService.showSuccess('Department Updated successfully');
         
       },
       error: (err) => {
-        this.notificationService.showError('Failed to rename department. '+ err.error.message);
+        this.notificationService.showError('Failed to update department. '+ err.error.message);
       }
     });
 

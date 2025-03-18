@@ -3,12 +3,16 @@
       <label for="departmentName" class="font-semibold w-24">Department Name</label>
       <input pInputText id="departmentName" [(ngModel)]="updatedDepartmentName" autocomplete="off" />
     </div>
+    <div class="field">
+      <label for="departmentAcess" class="font-semibold w-24">Grant Access</label>
+      <input pInputText id="departmentAcess" [(ngModel)]="updatedDepartmentName" autocomplete="off" />
+    </div>
   </div>
 
   <div class="dialog-actions">
     @if(loading){
         <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
     }
-    <p-button label="Rename" (click)="renameDepartment(updatedDepartmentName)" ></p-button>
+    <p-button label="Rename" (click)="editDepartment(updatedDepartmentName)" ></p-button>
     
 </div>

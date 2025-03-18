@@ -14,14 +14,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../_services/notification.service';
 import { AddDepartmentComponent } from "../add-department/add-department.component";
-import { RenameDepartmentComponent } from '../rename-department/rename-department.component';
+import { EditDepartmentComponent } from '../edit-department/edit-department.component';
 import { DeleteDepartmentComponent } from '../delete-department/delete-department.component';
 import { AccountService } from '../../_services/account.service';
 import { Skeleton } from 'primeng/skeleton';
 import { finalize, timeout } from 'rxjs';
 @Component({
   selector: 'app-left-menu',
-  imports: [Skeleton,DeleteDepartmentComponent,RenameDepartmentComponent,FormsModule, InputTextModule, Dialog, HasRoleDirective, TabsModule, ButtonModule, Tree, TreeModule, CommonModule, Menu, AddDepartmentComponent],
+  imports: [Skeleton,DeleteDepartmentComponent,EditDepartmentComponent,FormsModule, InputTextModule, Dialog, HasRoleDirective, TabsModule, ButtonModule, Tree, TreeModule, CommonModule, Menu, AddDepartmentComponent],
   templateUrl: './departments-tree.component.html',
   styleUrl: './departments-tree.component.css',
   
@@ -37,7 +37,7 @@ export class LeftMenuComponent implements OnInit {
 
 
   visibleAddDepartmentDialog: boolean = false;
-  visibleRenameDepartmentDialog: boolean = false;
+  visibleEditDepartmentDialog: boolean = false;
   visibleDeleteDepartmentDialog: boolean = false;
   
   selectedNode!: TreeNode;
@@ -70,8 +70,8 @@ setupContextMenu() {
   // ✅ Add "Rename" and "Delete" only if user has 'HRLeader' role
   if (userRoles.includes("HRLeader")) {
     this.parentNodeActions.push(
-      { label: 'Rename Department', icon: 'pi pi-pencil', command: () => this.openRenameDepartmentDialog(this.selectedNode) },
-      { label: 'Delete Department', icon: 'pi pi-trash', command: () => this.openDeleteDepartmentDialog(this.selectedNode) }
+      { label: 'Edit Department', icon: 'pi pi-pencil', command: () => this.openEditDepartmentDialog(this.selectedNode) },
+      { label: 'Delete Department', icon: 'pi pi-trash', command: () => this.openDeleteDepartmentDialog(this.selectedNode) },
     );
   }
 }
@@ -152,20 +152,20 @@ setupContextMenu() {
     this.closeAddDepartmentDialog(); // ✅ Close dialog after successful addition
   }
 
-  // Rename Department
+  // Edit Department
 
-  openRenameDepartmentDialog(node: TreeNode) {
+  openEditDepartmentDialog(node: TreeNode) {
     this.selectedNode = node;
-    this.visibleRenameDepartmentDialog = true;
+    this.visibleEditDepartmentDialog = true;
   }
 
-  closeRenameDepartmentDialog() {
-    this.visibleRenameDepartmentDialog = false;
+  closeEditDepartmentDialog() {
+    this.visibleEditDepartmentDialog = false;
   }
 
-  onDepartmentRenamed() {
+  onDepartmentEdit() {
     this.loadTree(); // ✅ Refresh tree when department is added
-    this.closeRenameDepartmentDialog(); // ✅ Close dialog after successful addition
+    this.closeEditDepartmentDialog(); // ✅ Close dialog after successful addition
   }
 
 

@@ -85,17 +85,17 @@ header = "Add Department"
 </p-dialog>
 
 <p-dialog 
-header = "Rename Department" 
-[(visible)]="visibleRenameDepartmentDialog" 
+header = "Edit Department" 
+[(visible)]="visibleEditDepartmentDialog" 
 [modal]="true" 
 [style]="{ width: '30rem', border: 'None' }" 
-(onHide)="closeRenameDepartmentDialog()">
+(onHide)="closeEditDepartmentDialog()">
 
-  <app-rename-department 
+  <app-edit-department 
   *ngIf="selectedNode" 
   [departmentNode]="selectedNode" 
-  (departmentRenamed)="onDepartmentRenamed()" >
-</app-rename-department>
+  (departmentEdited)="onDepartmentEdit()" >
+</app-edit-department>
 
 </p-dialog>
 
