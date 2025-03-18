@@ -17,9 +17,11 @@ import { AddDepartmentComponent } from "../add-department/add-department.compone
 import { RenameDepartmentComponent } from '../rename-department/rename-department.component';
 import { DeleteDepartmentComponent } from '../delete-department/delete-department.component';
 import { AccountService } from '../../_services/account.service';
+import { Skeleton } from 'primeng/skeleton';
+import { finalize, timeout } from 'rxjs';
 @Component({
   selector: 'app-left-menu',
-  imports: [DeleteDepartmentComponent,RenameDepartmentComponent,FormsModule, InputTextModule, Dialog, HasRoleDirective, TabsModule, ButtonModule, Tree, TreeModule, CommonModule, Menu, AddDepartmentComponent],
+  imports: [Skeleton,DeleteDepartmentComponent,RenameDepartmentComponent,FormsModule, InputTextModule, Dialog, HasRoleDirective, TabsModule, ButtonModule, Tree, TreeModule, CommonModule, Menu, AddDepartmentComponent],
   templateUrl: './departments-tree.component.html',
   styleUrl: './departments-tree.component.css',
   
@@ -28,7 +30,11 @@ export class LeftMenuComponent implements OnInit {
 
   @ViewChild('parentMenu') parentMenu!: Menu; 
   @ViewChild('leafMenu') leafMenu!: Menu;  
+
   treeData: TreeNode[] = []
+  loading: boolean = true; 
+  loadingItems: Array<any> = []; 
+
 
   visibleAddDepartmentDialog: boolean = false;
   visibleRenameDepartmentDialog: boolean = false;
@@ -46,9 +52,10 @@ export class LeftMenuComponent implements OnInit {
   departmentService = inject(DepartmentService);
   notificationService = inject(NotificationService);
   accountService = inject(AccountService);  
+by: any;
 
   ngOnInit() {
-    this.loadTree();
+    this.fetchTreeData();
     this.setupContextMenu();
   }
 
@@ -69,23 +76,49 @@ setupContextMenu() {
   }
 }
 
+  fetchTreeData() {
+    this.loading = true;
+    this.departmentService.getDepartmentsTree()
+    .pipe(finalize(() => setTimeout(() => {this.loading = false }, 1000)))
+      .subscribe( {
+        next: (departments) => {
+          this.loadingItems = Array.from({ length: departments.length }, (_, i) => i + 1);
+          this.treeData = departments.map(department => ({
+            key: department.id.toString(),
+            label: department.name,  
+            icon: 'pi pi-folder',
+            children: department.positions.map(position => ({
+                label: position.name,  
+                icon: 'pi pi-inbox'
+            }))
+          }));
+        },
+        error: () => {
+          this.notificationService.showError('Failed to load departments');
+        }
+    });
+  }
+
   loadTree(){
     this.departmentService.getDepartmentsTree()
-      .subscribe(departments => {
-      this.treeData = departments.map(department => ({
-        key: department.id.toString(),
-        label: department.name,  
-        icon: 'pi pi-folder',
-        children: department.positions.map(position => ({
-            label: position.name,  
-            icon: 'pi pi-inbox'
-        }))
-      }));
-
-
-    });
-    
+      .subscribe( {
+        next: (departments) => {
+          this.treeData = departments.map(department => ({
+            key: department.id.toString(),
+            label: department.name,  
+            icon: 'pi pi-folder',
+            children: department.positions.map(position => ({
+                label: position.name,  
+                icon: 'pi pi-inbox'
+            }))
+          }));
+        },
+        error: () => {
+          this.notificationService.showError('Failed to load departments');
+        }
+    }); 
   }
+
   openNodeOptions(event: Event, node: TreeNode) {
     this.selectedNode = node;  
 

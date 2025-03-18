@@ -13,7 +13,28 @@
 </p-tabs>
 
 
-<p-tree 
+@if(loading)
+{
+  
+  <div class="loading-content">
+    <div class="loading-searchbar">
+      <p-skeleton height="2.4rem" width="18vw" />
+    </div>
+    <ng-container *ngFor="let i of loadingItems; let index = index">
+        <div class="loading-department">
+          <i class="pi pi-chevron-right" style="font-size: 0.9rem; color: grey"></i>
+          <p-skeleton 
+            height="3rem" 
+            [width]="'15vw'" 
+            styleClass="mt-1" 
+          />
+          </div>
+    </ng-container>
+  </div>
+}
+@else {
+
+  <p-tree 
   
   scrollHeight="95%"
   [filter]="true" 
@@ -24,21 +45,24 @@
   [(selection)]="selectedNode"
   [metaKeySelection]="true"
   (onNodeSelect)="onNodeSelect($event)"
+  emptyMessage="-"
   >
-  
-  <ng-template let-node pTemplate="default">
-    <div class="node-content">
-        <span>{{ node.label }}</span>
-        <p-button 
-            icon="pi pi-ellipsis-v" 
-            (click)="openNodeOptions($event, node)" 
-            rounded="true" 
-            [text]="true" 
-            severity="secondary" />
-    </div>
-  </ng-template>
-  
+    <ng-template let-node pTemplate="default">
+      <div class="node-content">
+          <span>{{ node.label }}</span>
+          <p-button 
+              icon="pi pi-ellipsis-v" 
+              (click)="openNodeOptions($event, node)" 
+              rounded="true" 
+              [text]="true" 
+              severity="secondary" />
+      </div>
+    </ng-template>
+ 
 </p-tree>
+
+}
+
 
 <!-- ✅ Menu for Parent Departments -->
 <p-menu #parentMenu [model]="parentNodeActions" [popup]="true" />

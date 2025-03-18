@@ -32,3 +32,24 @@
     visibility: visible;
 }
 
+::ng-deep .loading-content{
+    margin-top: 1.8vh;
+    width: 100%;
+    
+}
+
+.loading-department {
+    display: flex;
+    justify-content: space-between  ;
+    align-items: center;
+    width: 94%;
+    margin-left: 0.5vw;
+    padding-inline: 1vw;
+}
+
+.loading-searchbar{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
