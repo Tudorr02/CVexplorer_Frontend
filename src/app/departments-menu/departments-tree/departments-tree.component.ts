@@ -63,14 +63,14 @@ by: any;
 
   // ✅ Function to build context menu based on user role
 setupContextMenu() {
-  const userRoles = this.accountService.currentUser()?.roles || [];
+  const userRole = this.accountService.currentUser()?.role || '';
 
   this.parentNodeActions = [
     { label: 'Add Position', icon: 'pi pi-plus', command: () => console.log('Add Position') }
   ];
 
   // ✅ Add "Rename" and "Delete" only if user has 'HRLeader' role
-  if (userRoles.includes("HRLeader")) {
+  if (userRole === "HRLeader") {
     this.parentNodeActions.push(
       { label: 'Edit Department', icon: 'pi pi-pencil', command: () => this.openEditDepartmentDialog(this.selectedNode!) },
       { label: 'Delete Department', icon: 'pi pi-trash', command: () => this.openDeleteDepartmentDialog(this.selectedNode) },

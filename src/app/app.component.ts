@@ -38,7 +38,7 @@ export class AppComponent  {
   }
 
   isUserAdmin(): boolean {
-    return (this.AccountService.currentUser()?.roles.includes('Admin') || this.AccountService.currentUser()?.roles.includes('Moderator') ? true : false);
+    return (this.AccountService.currentUser()?.role === 'Admin' || this.AccountService.currentUser()?.role === 'Moderator' ? true : false);
   }
 
   isDashboard(): boolean {
@@ -66,6 +66,6 @@ export class AppComponent  {
 
   // ✅ Compute tabs dynamically based on user role
   tabs = computed(() => {
-    return (this.AccountService.currentUser()?.roles.includes('Admin') || this.AccountService.currentUser()?.roles.includes('Moderator') ) ? this.adminTabs : this.userTabs;
+    return (this.AccountService.currentUser()?.role === 'Admin' || this.AccountService.currentUser()?.role === 'Moderator' ) ? this.adminTabs : this.userTabs;
   });
 }

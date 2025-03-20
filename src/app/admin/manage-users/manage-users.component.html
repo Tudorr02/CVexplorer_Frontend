@@ -8,7 +8,7 @@
     editMode="row"  
     [loading]="loadingUsers"
     [style]="{'width': '100%'}"
-    [globalFilterFields]="['username', 'companyName', 'firstName', 'lastName', 'email','userRoles']"
+    [globalFilterFields]="['username', 'companyName', 'firstName', 'lastName', 'email','userRole']"
     >
         <ng-template #caption>
             <p-iconfield iconPosition="left">
@@ -26,7 +26,7 @@
                 <th style="width: 10%;">First Name</th>
                 <th style="width: 10%;">Last Name</th>
                 <th style="width: 15%;">Email</th>
-                <th style="width: 20%;">Roles</th>
+                <th style="width: 20%;">Role</th>
                 <th style="width: 7%;"></th>
                 <th style="width: 7%;"></th>
             </tr>
@@ -109,33 +109,32 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-multiSelect 
-                            [options]="rolesOptions" 
-                            [(ngModel)]="user.userRoles"
+                        <p-select 
+                            [options]="roles" 
+                            [(ngModel)]="user.userRole"
                             appendTo="body"
                             [filter]="false"
                             [optionLabel]="'name'"
                             [optionValue]="'name'" 
-                            [showToggleAll]="false"
                             [optionDisabled]="'disabled'" 
                             [style]="{'width':'70%'}"
-                            placeholder="Select roles">
+                            placeholder="Select role">
                             <!-- <ng-template let-role pTemplate="selectedItem">
                                 <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
                             </ng-template> -->
                             <ng-template let-role pTemplate="item">
                                 <p-tag [severity]="getRoleSeverity(role.name)">{{ role.name }}</p-tag>
                             </ng-template>
-                        </p-multiSelect>
+                        </p-select>
                     </ng-template>
                     <ng-template pTemplate="output">
                         <div class="flex flex-wrap gap-1">
-                            @if(user.userRoles.length === 0) {
+                            @if(user.userRole === '') {
                                 <p-tag [severity]="getRoleSeverity('')">No roles assigned</p-tag>
                             }
                             @else {
-                                <ng-container *ngFor="let role of user.userRoles">
-                                    <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
+                                <ng-container >
+                                    <p-tag [severity]="getRoleSeverity(user.userRole)">{{ user.userRole }}</p-tag>
                                 </ng-container>
                             }
                         </div>

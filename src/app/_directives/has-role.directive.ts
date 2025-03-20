@@ -11,10 +11,10 @@ export class HasRoleDirective {
   constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef) {}
 
   @Input() set appHasRole(allowedRoles: string[]) {
-    const userRoles = this.accountService.currentUser()?.roles || [];
+    const userRole = this.accountService.currentUser()?.role || '';
 
     //  Check if user has any of the allowed roles
-    if (allowedRoles.some(role => userRoles.includes(role))) {
+    if (allowedRoles.some(role => userRole === role)) {
       this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainer.clear();

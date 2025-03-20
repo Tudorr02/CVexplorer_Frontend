@@ -34,10 +34,10 @@ export class EnrollUserComponent implements OnInit {
     email: '',
     password: '',
     companyName: '',
-    userRoles: []
+    userRole: ''
   };
 
-  rolesOptions: { key: string; name: string ; disabled: boolean }[] = [];
+  roles: { key: string; name: string ; disabled: boolean }[] = [];
   companies:string[] = [];
   loadingCompanies: boolean = false; // Control loading state
 
@@ -48,15 +48,14 @@ export class EnrollUserComponent implements OnInit {
   }
 
   private checkIfModerator() {
-
-   const userRoles =  this.accountService.currentUser()?.roles || [];
-   this.isModerator = userRoles.includes('Moderator') && !userRoles.includes('Admin');
+   const userRole =  this.accountService.currentUser()?.role || '';
+   this.isModerator = userRole === 'Moderator';
  }
 
   loadRoles() {
     this.adminService.getRoles().subscribe({
       next: (roles) => {
-        this.rolesOptions = roles.map(role => ({ 
+        this.roles = roles.map(role => ({ 
           key: role, 
           name: role,
           disabled: this.isModerator && role === 'Admin' })); // Format role names
@@ -89,7 +88,7 @@ export class EnrollUserComponent implements OnInit {
       return;
     }
 
-    if (this.userEnrollment.userRoles.length === 0) {
+    if (this.userEnrollment.userRole.length === 0) {
       this.notificationService.showWarning("At least one role is required!");
       return;
     }
@@ -113,7 +112,7 @@ export class EnrollUserComponent implements OnInit {
       email: '',
       password: '',
       companyName: '',
-      userRoles: []
+      userRole: ''
     };
   }
 

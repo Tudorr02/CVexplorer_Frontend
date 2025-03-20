@@ -1,6 +1,6 @@
 export interface Account{
     username: string;
     token: string;
-    roles : string[];
+    role : string;
     expirationTime: number; 
 }

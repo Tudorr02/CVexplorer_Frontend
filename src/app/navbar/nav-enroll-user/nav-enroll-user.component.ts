@@ -3,7 +3,7 @@ import { UserService } from '../../_services/user.service';
 import { NotificationService } from '../../_services/notification.service';
 import { RoleService } from '../../_services/role.service';
 import { UserEnrollmentCompany } from '../../_models/userEnrollmentCompany';
-
+import { Select } from 'primeng/select';
 // PrimeNG UI Components
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +18,7 @@ import { finalize } from 'rxjs';
   selector: 'app-nav-enroll-user',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, ButtonModule,InputTextModule, MultiSelectModule, ProgressSpinner, TagModule
+    Select,CommonModule, FormsModule, ButtonModule,InputTextModule, MultiSelectModule, ProgressSpinner, TagModule
   ],
   templateUrl: './nav-enroll-user.component.html',
   styleUrl: './nav-enroll-user.component.css'
@@ -34,11 +34,11 @@ export class NavEnrollUserComponent  {
   NotificationService = inject(NotificationService);
 
   // ✅ User Enrollment Data
-  rolesOptions: string[] = [];
+  roles: string[] = [];
   userEnrollment: UserEnrollmentCompany = {
     username: '',
     password: '',
-    userRoles: []
+    userRole: ''
   };
 
   init(): void {
@@ -48,7 +48,7 @@ export class NavEnrollUserComponent  {
   // ✅ Load Available Roles
   loadRoles(): void {
     this.RoleService.getRoles().subscribe({
-      next: (roles) => this.rolesOptions = roles,
+      next: (roles) => this.roles = roles,
       error: () => this.NotificationService.showError('Failed to load roles.')
     });
   }
@@ -60,12 +60,12 @@ export class NavEnrollUserComponent  {
 
   // ✅ Reset Form
   private resetForm(): void {
-    this.userEnrollment = { username: '', password: '', userRoles: [] };
+    this.userEnrollment = { username: '', password: '', userRole: '' };
   }
 
   // ✅ Enroll User
   enrollUser(): void {
-    if (!this.userEnrollment.username || !this.userEnrollment.password || this.userEnrollment.userRoles.length === 0) {
+    if (!this.userEnrollment.username || !this.userEnrollment.password || this.userEnrollment.userRole === '') {
       this.NotificationService.showError('All fields are required.');
       return;
     }

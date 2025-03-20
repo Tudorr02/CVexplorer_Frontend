@@ -4,5 +4,5 @@ export interface User{
     firstName: string;
     lastName: string;
     email: string;
-    userRoles: string[];
+    userRole: string;
 }

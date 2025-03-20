@@ -49,11 +49,11 @@ export class AccountService {
       // ✅ Decode the token to extract roles & expirationTime
       try {
         const decoded: any = jwtDecode(user.token);
-        user.roles = decoded.role || [];
+        user.role = decoded.role || '';
         user.expirationTime = decoded.exp * 1000; // ✅ Convert UNIX timestamp to ms
       } catch (error) {
         console.error('Error decoding JWT on load:', error);
-        user.roles = [];
+        user.role = '';
         user.expirationTime = 0;
       }
 
@@ -68,11 +68,11 @@ export class AccountService {
           localStorage.setItem('userData', JSON.stringify(user)); //  Store user in localStorage
           try{
             const decodedToken: any = jwtDecode(user.token);
-            user.roles = decodedToken.role;
+            user.role = decodedToken.role;
             user.expirationTime = decodedToken.exp *1000;
           }catch(error){
             console.error('Error decoding JWT:', error);
-            user.roles = [];
+            user.role = '';
             user.expirationTime = 0;
           }
           this.currentUser.set(user); //  Update currentUser

@@ -5,6 +5,6 @@ export interface UserManagement{
     lastName: string;
     companyName: string;
     email: string;
-    userRoles: string[];
+    userRole: string;
   }
   

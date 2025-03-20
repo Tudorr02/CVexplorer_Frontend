@@ -4,6 +4,6 @@ export interface UserEnrollment{
     lastName: string;
     email: string;
     password: string;
-    userRoles: string[];
+    userRole: string;
     companyName?: string;
   }

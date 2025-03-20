@@ -8,10 +8,10 @@ export const roleGuard = (requiredRoles: string[]) => {
     const accountService = inject(AccountService);
     const router = inject(Router);
     
-    const userRoles = accountService.currentUser()?.roles || [];
+    const userRole = accountService.currentUser()?.role || '';
 
     // Check if user has at least one required role
-    if (!requiredRoles.some(role => userRoles.includes(role))) {
+    if (!requiredRoles.some(role => userRole === role)) {
       router.navigate(['/dashboard']); //Redirect unauthorized users
       return false;
     }

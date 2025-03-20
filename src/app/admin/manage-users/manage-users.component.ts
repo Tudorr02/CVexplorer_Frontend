@@ -29,7 +29,7 @@ export class ManageUsersComponent implements OnInit{
 
   @ViewChild('dtUsers') dt!: Table; // Reference to PrimeNG Table
   users: UserManagement[] = [];
-  rolesOptions: { name: string ; disabled?: boolean }[] = [];
+  roles: { name: string ; disabled?: boolean }[] = [];
   companies: string[] = [];
   loadingUsers: boolean = false; // Control loading state
   globalFilter: string = '';
@@ -46,8 +46,8 @@ export class ManageUsersComponent implements OnInit{
   }
 
   private checkIfModerator() {
-    const userRoles =  this.accountService.currentUser()?.roles || [];
-    this.isModerator = userRoles.includes('Moderator') && !userRoles.includes('Admin');
+    const userRole =  this.accountService.currentUser()?.role || '';
+    this.isModerator = userRole==='Moderator';
   }
 
   private loadUsers() {
@@ -58,7 +58,7 @@ export class ManageUsersComponent implements OnInit{
       (data) => {
         this.users = data;
         if(this.companies.length === 0) this.loadCompanies();
-        if(this.rolesOptions.length === 0) this.loadRoles();
+        if(this.roles.length === 0) this.loadRoles();
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load users' });  
@@ -68,7 +68,7 @@ export class ManageUsersComponent implements OnInit{
 
   private loadRoles() {
     this.adminService.getRoles().subscribe({
-      next: (roles) => this.rolesOptions = roles.map(role => ({
+      next: (roles) => this.roles= roles.map(role => ({
         name: role,
         disabled: this.isModerator && role === 'Admin' // ✅ Disable only "Admin" for moderators
     })),

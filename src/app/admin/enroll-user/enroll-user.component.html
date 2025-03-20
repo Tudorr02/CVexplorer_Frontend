@@ -17,13 +17,13 @@
                 <div class="form-group">
                     <label >Roles</label>
                     <div class="roles-container">
-                        <div *ngFor="let role of rolesOptions" >
+                        <div *ngFor="let role of roles" >
                             <p-tag [severity]="getRoleSeverity(role.name)">
                                 <p-checkbox 
                                     [inputId]="role.key" 
                                     name="rolesGroup" 
                                     [value]="role.key" 
-                                    [(ngModel)]="userEnrollment.userRoles"
+                                    [(ngModel)]="userEnrollment.userRole"
                                     [disabled]="role.disabled"
                                     id="role"
                                     >
