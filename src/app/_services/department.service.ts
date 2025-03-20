@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { DepartmentTreeNode } from '../_models/departmentTreeNode';
 import { Department } from '../_models/department';
+import { DepartmentAccess } from '../_models/department-access';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +25,8 @@ export class DepartmentService {
   }
 
   /** ✅ Create a new department */
-  createDepartment(departmentName: string): Observable<Department> {
-    return this.http.post<Department>(`${this.apiUrl}?departmentName=${departmentName}`, {});
+  createDepartment(dto : Department): Observable<Department> {
+    return this.http.post<Department>(`${this.apiUrl}`, dto);
   }
 
   /** ✅ Update an existing department */
@@ -36,6 +37,14 @@ export class DepartmentService {
   /** ✅ Delete a department */
   deleteDepartment(departmentId: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${departmentId}`);
+  }
+
+  getDepartment(departmentId: number): Observable<Department> {
+    return this.http.get<Department>(`${this.apiUrl}/${departmentId}`);
+  }
+
+  getDepartmentAccessTemplate(): Observable<DepartmentAccess[]> {
+    return this.http.get<DepartmentAccess[]>(`${this.apiUrl}/DepartmentAccessTemplate`);
   }
   
 }

@@ -16,13 +16,14 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-nav-manage-users',
   imports: [ CommonModule, FormsModule,
     TableModule, ButtonModule, InputTextModule,
     MultiSelectModule, TagModule,
-    IconField, InputIcon],
+    IconField, InputIcon, Select],
   templateUrl: './nav-manage-users.component.html',
   styleUrl: './nav-manage-users.component.css'
 })

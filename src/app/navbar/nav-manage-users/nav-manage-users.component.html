@@ -76,18 +76,18 @@ editMode="row"
     <td>
         <p-cellEditor>
             <ng-template pTemplate="input">
-                <p-multiSelect 
+                <p-select 
                     [options]="rolesOptions" 
                     [(ngModel)]="user.userRoles"
                     appendTo="body"
                     [filter]="false"
-                    [showToggleAll]="false"
+                    
                     [style]="{'width':'70%'}"
                     placeholder="Select roles">
                     <ng-template let-role pTemplate="item">
                         <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
                     </ng-template>
-                </p-multiSelect>
+                </p-select>
             </ng-template>
             <ng-template pTemplate="output">
                 <div class="flex flex-wrap gap-1">

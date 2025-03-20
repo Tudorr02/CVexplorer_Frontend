@@ -79,6 +79,7 @@ header = "Add Department"
 (onHide)="closeAddDepartmentDialog()">
 
   <app-add-department 
+  #addDepartmentComponent
   (departmentAdded)="onDepartmentAdded()" >
 </app-add-department>
 
@@ -92,6 +93,7 @@ header = "Edit Department"
 (onHide)="closeEditDepartmentDialog()">
 
   <app-edit-department 
+  #editDepartmentComponent
   *ngIf="selectedNode" 
   [departmentNode]="selectedNode" 
   (departmentEdited)="onDepartmentEdit()" >

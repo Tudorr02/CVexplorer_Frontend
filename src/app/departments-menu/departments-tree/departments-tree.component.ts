@@ -30,6 +30,8 @@ export class LeftMenuComponent implements OnInit {
 
   @ViewChild('parentMenu') parentMenu!: Menu; 
   @ViewChild('leafMenu') leafMenu!: Menu;  
+  @ViewChild('editDepartmentComponent') editDepartmentComponent!: EditDepartmentComponent;
+  @ViewChild('addDepartmentComponent') addDepartmentComponent!: AddDepartmentComponent;
 
   treeData: TreeNode[] = []
   loading: boolean = true; 
@@ -70,7 +72,7 @@ setupContextMenu() {
   // ✅ Add "Rename" and "Delete" only if user has 'HRLeader' role
   if (userRoles.includes("HRLeader")) {
     this.parentNodeActions.push(
-      { label: 'Edit Department', icon: 'pi pi-pencil', command: () => this.openEditDepartmentDialog(this.selectedNode) },
+      { label: 'Edit Department', icon: 'pi pi-pencil', command: () => this.openEditDepartmentDialog(this.selectedNode!) },
       { label: 'Delete Department', icon: 'pi pi-trash', command: () => this.openDeleteDepartmentDialog(this.selectedNode) },
     );
   }
@@ -140,6 +142,7 @@ setupContextMenu() {
   //Features for Department Actions
 
   openAddDepartmentDialog() {
+    this.addDepartmentComponent.init();
     this.visibleAddDepartmentDialog = true;
   }
 
@@ -156,7 +159,9 @@ setupContextMenu() {
 
   openEditDepartmentDialog(node: TreeNode) {
     this.selectedNode = node;
+    this.editDepartmentComponent.init();
     this.visibleEditDepartmentDialog = true;
+     
   }
 
   closeEditDepartmentDialog() {

@@ -1,11 +1,14 @@
 <div class="content">
     <div class="field">
       <label for="departmentName" class="font-semibold w-24">Department Name</label>
-      <input pInputText id="departmentName" [(ngModel)]="updatedDepartmentName" autocomplete="off" />
+      <input pInputText id="departmentName" [(ngModel)]="department.name" autocomplete="off" />
     </div>
     <div class="field">
       <label for="departmentAcess" class="font-semibold w-24">Grant Access</label>
-      <input pInputText id="departmentAcess" [(ngModel)]="updatedDepartmentName" autocomplete="off" />
+      <p-multiselect [options]="this.department.departmentAccesses" 
+      [(ngModel)]="selectedUsers" 
+      optionLabel="userName"
+      optionValue="userId" placeholder="Select Users" appendTo="body" />
     </div>
   </div>
 
@@ -13,6 +16,7 @@
     @if(loading){
         <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
     }
-    <p-button label="Rename" (click)="editDepartment(updatedDepartmentName)" ></p-button>
+    <p-button label="Cancel" (click)="departmentEdited.emit()" [severity]="'secondary'"></p-button>
+    <p-button label="Update" (click)="editDepartment(this.department)" ></p-button>
     
 </div>

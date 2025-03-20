@@ -6,10 +6,13 @@ import { DepartmentService } from '../../_services/department.service';
 import { finalize } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { Department } from '../../_models/department';
+import { DepartmentAccess } from '../../_models/department-access';
+import { MultiSelect } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-add-department',
-  imports: [InputTextModule,ButtonModule,FormsModule,ProgressSpinner],
+  imports: [MultiSelect,InputTextModule,ButtonModule,FormsModule,ProgressSpinner],
   templateUrl: './add-department.component.html',
   styleUrl: './add-department.component.css'
 })
@@ -18,31 +21,58 @@ export class AddDepartmentComponent {
   notificationService = inject(NotificationService);
   departmentService = inject(DepartmentService);
   loading: boolean = false;
+  selectedUsers: number[] = []; // ✅ Stores only selected users by ID
 
+  department:Department = { name: '', departmentAccesses: [] };
   @Output() departmentAdded = new EventEmitter<void>();
 
-  newDepartmentName: string = '';
-  addDepartment(newDepartmentName: string) {
+
+  init() {
+    this.department = { name: '', departmentAccesses: [] };
+    this.selectedUsers = [];
+    this.loadDepartmentAccessTemplate();
+  }
+
+  addDepartment(newDepartment : Department) {
   
-      if(!newDepartmentName.trim()) {
-        this.notificationService.showWarning('Department name is required');
-        return;
+    if(!newDepartment.name.trim()) {
+      this.notificationService.showWarning('Department name is required');
+      return;
+    }
+
+    // ✅ Assign selected users to departmentAccesses
+    this.department.departmentAccesses = this.department.departmentAccesses?.map(user => ({
+      userId: user.userId,
+      userName: user.userName,
+      hasAccess: this.selectedUsers.includes(user.userId) // ✅ True if in selectedUsers
+    }));
+
+    
+    this.loading = true;
+    this.departmentService.createDepartment(newDepartment)
+    .pipe(finalize(() => setTimeout(() => {this.loading = false }, 1000)))
+    .subscribe({
+      next: () => {
+        this.departmentAdded.emit();
+        this.notificationService.showSuccess('Department created successfully'); 
+      },
+      error: (err) => {
+        this.notificationService.showError('Failed to create department. '+ err.error.message);
       }
+    });
   
-      this.loading = true;
-      this.departmentService.createDepartment(newDepartmentName)
-      .pipe(finalize(() => setTimeout(() => {this.loading = false }, 1000)))
-      .subscribe({
-        next: () => {
-          this.departmentAdded.emit();
-          this.notificationService.showSuccess('Department created successfully'); 
-        },
-        error: (err) => {
-          this.notificationService.showError('Failed to create department. '+ err.error.message);
-        }
-      });
-  
-      this.newDepartmentName = '';
+  }
+
+  loadDepartmentAccessTemplate() {
+    this.departmentService.getDepartmentAccessTemplate()
+    .subscribe({
+      next: (departmentAccesses) => {
+        this.department.departmentAccesses = departmentAccesses;
+      },
+      error: (err) => {
+        this.notificationService.showError('Failed to get department access template. '+ err.error.message);
+      }
+    });
   }
   
 }
