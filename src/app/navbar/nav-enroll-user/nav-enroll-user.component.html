@@ -11,21 +11,18 @@
 
     <div class="field">
         <label class="font-semibold w-24">Roles</label>
-        <p-select 
+        <p-selectbutton 
             [options]="roles" 
             [(ngModel)]="userEnrollment.userRole"
-            appendTo="body"
-            [filter]="false"
-           
             placeholder="Select role">
             <!-- <ng-template let-role pTemplate="selectedItem">
                 <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
             </ng-template> -->
         
-            <ng-template let-role pTemplate="item">
+            <!-- <ng-template let-role pTemplate="item">
                 <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
-            </ng-template>
-        </p-select>
+            </ng-template> -->
+        </p-selectbutton>
     </div>
 
 </div>

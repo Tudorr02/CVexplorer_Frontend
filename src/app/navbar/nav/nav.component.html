@@ -41,7 +41,7 @@
     (onHide)="closeEnrollUserDialog()"
 >
   
-    <app-nav-enroll-user></app-nav-enroll-user>
+    <app-nav-enroll-user (userEnrolled)="closeEnrollUserDialog()"></app-nav-enroll-user>
     
 </p-dialog>
 

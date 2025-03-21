@@ -8,7 +8,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { SplitterModule } from 'primeng/splitter';
-import { Checkbox } from 'primeng/checkbox';
 import { CompanyManagement } from '../../_models/companyManagement';
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../_services/account.service';
@@ -17,7 +16,7 @@ import { SelectButton } from 'primeng/selectbutton';
 @Component({
   selector: 'app-enroll-user',
   standalone: true, // ✅ Allows the component to be used without a module
-  imports: [SelectButton,SelectModule,Checkbox,SplitterModule,TagModule,CommonModule, FormsModule, MultiSelectModule, InputTextModule, ButtonModule],
+  imports: [SelectButton,SelectModule,SplitterModule,TagModule,CommonModule, FormsModule, MultiSelectModule, InputTextModule, ButtonModule],
   templateUrl: './enroll-user.component.html',
   styleUrl: './enroll-user.component.css'
 })

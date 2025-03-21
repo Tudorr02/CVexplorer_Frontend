@@ -42,7 +42,7 @@ export class NavManageUsersComponent  {
   // ✅ Data
   users: User[] = [];
   loadingUsers: boolean = false;
-  rolesOptions: string[] = [];
+  roles: string[] = [];
   globalFilter: string = '';
   clonedUsers: { [userId: number]: User } = {};
   deletingUsers: { [userId: number]: boolean } = {};
@@ -66,7 +66,7 @@ export class NavManageUsersComponent  {
 
   loadRoles(): void {
     this.RoleService.getRoles().subscribe({
-      next: (roles) => (this.rolesOptions = roles),
+      next: (roles) => (this.roles = roles),
       error: () => this.NotificationService.showError('Failed to load roles.')
     });
   }

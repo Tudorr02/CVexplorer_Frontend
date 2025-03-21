@@ -1,9 +1,8 @@
-import { Component,  inject } from '@angular/core';
+import { Component,  EventEmitter,  inject, Output } from '@angular/core';
 import { UserService } from '../../_services/user.service';
 import { NotificationService } from '../../_services/notification.service';
 import { RoleService } from '../../_services/role.service';
 import { UserEnrollmentCompany } from '../../_models/userEnrollmentCompany';
-import { Select } from 'primeng/select';
 // PrimeNG UI Components
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,18 +12,22 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { TagModule } from 'primeng/tag';
 import { finalize } from 'rxjs';
+import { SelectButton } from 'primeng/selectbutton';
 
 @Component({
   selector: 'app-nav-enroll-user',
   standalone: true,
   imports: [
-    Select,CommonModule, FormsModule, ButtonModule,InputTextModule, MultiSelectModule, ProgressSpinner, TagModule
+    SelectButton,CommonModule, FormsModule, ButtonModule,InputTextModule, MultiSelectModule, ProgressSpinner, TagModule
   ],
   templateUrl: './nav-enroll-user.component.html',
   styleUrl: './nav-enroll-user.component.css'
 })
 export class NavEnrollUserComponent  {
   // ✅ Dialog visibility
+
+  @Output() userEnrolled: EventEmitter<void> = new EventEmitter();
+  
   visibleEnrollUser: boolean = false;
   loading: boolean = false;
 
@@ -43,6 +46,7 @@ export class NavEnrollUserComponent  {
 
   init(): void {
     this.loadRoles();
+    this.resetForm();
   }
 
   // ✅ Load Available Roles
@@ -53,10 +57,7 @@ export class NavEnrollUserComponent  {
     });
   }
 
-  closeEnrollUserDialog(): void {
-    this.visibleEnrollUser = false;
-    this.resetForm();
-  }
+
 
   // ✅ Reset Form
   private resetForm(): void {
@@ -76,9 +77,10 @@ export class NavEnrollUserComponent  {
     .subscribe({
       next: () => {
         this.NotificationService.showSuccess('User enrolled successfully!');
-        this.closeEnrollUserDialog();
+        this.resetForm();
+        this.userEnrolled.emit();
       },
-      error: () => this.NotificationService.showError('Failed to enroll user.'),
+      error: (err) => this.NotificationService.showError('Failed to enroll user.'+err.error.error),
     });
   }
 
