@@ -28,14 +28,19 @@ import { AccountService } from '../../_services/account.service';
 export class ManageUsersComponent implements OnInit{
 
   @ViewChild('dtUsers') dt!: Table; // Reference to PrimeNG Table
+
   users: UserManagement[] = [];
   roles: { name: string ; disabled?: boolean }[] = [];
   companies: string[] = [];
+ 
+  
   loadingUsers: boolean = false; // Control loading state
   globalFilter: string = '';
   clonedUsers: { [username: string]: UserManagement } = {};
   deletingUsers: { [userId: number]: boolean } = {}; // ✅ Track rows in delete mode
   isModerator: boolean = false;
+
+  
   private adminService = inject(AdminService);
   private messageService = inject(MessageService);
   private accountService = inject(AccountService);
@@ -47,7 +52,7 @@ export class ManageUsersComponent implements OnInit{
 
   private checkIfModerator() {
     const userRole =  this.accountService.currentUser()?.role || '';
-    this.isModerator = userRole==='Moderator';
+    this.isModerator = ( userRole === 'Moderator' );
   }
 
   private loadUsers() {

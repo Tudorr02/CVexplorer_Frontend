@@ -17,7 +17,7 @@
                 <div class="form-group">
                     <label >Roles</label>
                     <div class="roles-container">
-                        <div *ngFor="let role of roles" >
+                        <!-- <div *ngFor="let role of roles" >
                             <p-tag [severity]="getRoleSeverity(role.name)">
                                 <p-checkbox 
                                     [inputId]="role.key" 
@@ -30,7 +30,15 @@
                                 </p-checkbox>
                                 {{ role.name }}
                             </p-tag>
-                        </div> 
+                        </div>  -->
+                        <p-selectbutton 
+                        [options]="roles" 
+                        [(ngModel)]="userEnrollment.userRole" 
+                        optionLabel="name" 
+                        optionValue="key" 
+                        aria-labelledby="basic" 
+                        [ngStyle]="{'background-color': getRoleSeverity(userEnrollment.userRole)}"
+                        />
                     </div> 
                 </div>
             </div>
