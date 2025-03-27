@@ -1,0 +1,80 @@
+<p-card header="Create New Position" styleClass="mb-3">
+    <form [formGroup]="postitionForm" (ngSubmit)="onSubmit()" class="p-fluid">
+  
+      <!-- Name -->
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" type="text" pInputText formControlName="name" />
+        <small *ngIf="postitionForm.get('name')?.invalid && postitionForm.get('name')?.touched" class="p-error">
+          Name is required.
+        </small>
+      </div>
+  
+      <!-- Minimum Experience -->
+      <div class="field">
+        <label for="minimumExperienceMonths">Minimum Experience (months)</label>
+        <p-inputNumber
+          inputId="minimumExperienceMonths"
+          formControlName="minimumExperienceMonths"
+          [min]="0"
+          [showButtons]="true"
+        ></p-inputNumber>
+      </div>
+  
+      <!-- Position Level -->
+      <div class="field">
+        <label for="level">Position Level</label>
+        <p-dropdown
+          inputId="level"
+          formControlName="level"
+          [options]="positionLevels"
+          [placeholder]="'Select Level'"
+          optionLabel=""
+        ></p-dropdown>
+      </div>
+  
+      <!-- Education Level -->
+      <div class="field">
+        <label for="minimumEducationLevel">Minimum Education Level</label>
+        <p-dropdown
+          inputId="minimumEducationLevel"
+          formControlName="minimumEducationLevel"
+          [options]="educationLevels"
+          [placeholder]="'Select Education'"
+          optionLabel=""
+        ></p-dropdown>
+      </div>
+  
+      <!-- Skills and Others -->
+      <div class="field">
+        <label for="requiredSkills">Required Skills</label>
+        <p-chips formControlName="requiredSkills"></p-chips>
+      </div>
+  
+      <div class="field">
+        <label for="niceToHave">Nice To Have</label>
+        <p-chips formControlName="niceToHave"></p-chips>
+      </div>
+  
+      <div class="field">
+        <label for="languages">Languages</label>
+        <p-chips formControlName="languages"></p-chips>
+      </div>
+  
+      <div class="field">
+        <label for="certifications">Certifications</label>
+        <p-chips formControlName="certifications"></p-chips>
+      </div>
+  
+      <div class="field">
+        <label for="responsibilities">Responsibilities</label>
+        <p-chips formControlName="responsibilities"></p-chips>
+      </div>
+  
+      <!-- Submit -->
+      <div class="field">
+        <p-button type="submit" label="Create Position" icon="pi pi-check" [disabled]="postitionForm.invalid" />
+      </div>
+    </form>
+</p-card>
+  
