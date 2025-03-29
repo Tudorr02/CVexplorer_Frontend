@@ -59,7 +59,7 @@
   align-items: center;
   justify-items: center;
   display: grid;
-  grid-template-rows: repeat(3, 1fr); /* One row per field */
+  grid-template-rows: repeat(3, 1fr); 
   
 }
 
@@ -110,10 +110,13 @@ p-password{
 ::ng-deep .text-red {
   color: rgba(255, 0, 0, 0.893) !important;
 }
+
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-10px); }
   50% { transform: translateX(10px); }
   75% { transform: translateX(-10px); }
 }
+
+
 

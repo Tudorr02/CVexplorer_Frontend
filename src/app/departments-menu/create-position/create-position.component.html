@@ -1,80 +1,178 @@
-<p-card header="Create New Position" styleClass="mb-3">
-    <form [formGroup]="postitionForm" (ngSubmit)="onSubmit()" class="p-fluid">
-  
-      <!-- Name -->
-      <div class="field">
-        <label for="name">Name</label>
-        <input id="name" type="text" pInputText formControlName="name" />
-        <small *ngIf="postitionForm.get('name')?.invalid && postitionForm.get('name')?.touched" class="p-error">
-          Name is required.
-        </small>
-      </div>
-  
-      <!-- Minimum Experience -->
-      <div class="field">
-        <label for="minimumExperienceMonths">Minimum Experience (months)</label>
-        <p-inputNumber
-          inputId="minimumExperienceMonths"
-          formControlName="minimumExperienceMonths"
-          [min]="0"
-          [showButtons]="true"
-        ></p-inputNumber>
-      </div>
-  
-      <!-- Position Level -->
-      <div class="field">
-        <label for="level">Position Level</label>
-        <p-dropdown
-          inputId="level"
-          formControlName="level"
-          [options]="positionLevels"
-          [placeholder]="'Select Level'"
-          optionLabel=""
-        ></p-dropdown>
-      </div>
-  
-      <!-- Education Level -->
-      <div class="field">
-        <label for="minimumEducationLevel">Minimum Education Level</label>
-        <p-dropdown
-          inputId="minimumEducationLevel"
-          formControlName="minimumEducationLevel"
-          [options]="educationLevels"
-          [placeholder]="'Select Education'"
-          optionLabel=""
-        ></p-dropdown>
-      </div>
-  
-      <!-- Skills and Others -->
-      <div class="field">
-        <label for="requiredSkills">Required Skills</label>
-        <p-chips formControlName="requiredSkills"></p-chips>
-      </div>
-  
-      <div class="field">
-        <label for="niceToHave">Nice To Have</label>
-        <p-chips formControlName="niceToHave"></p-chips>
-      </div>
-  
-      <div class="field">
-        <label for="languages">Languages</label>
-        <p-chips formControlName="languages"></p-chips>
-      </div>
-  
-      <div class="field">
-        <label for="certifications">Certifications</label>
-        <p-chips formControlName="certifications"></p-chips>
-      </div>
-  
-      <div class="field">
-        <label for="responsibilities">Responsibilities</label>
-        <p-chips formControlName="responsibilities"></p-chips>
-      </div>
-  
-      <!-- Submit -->
-      <div class="field">
-        <p-button type="submit" label="Create Position" icon="pi pi-check" [disabled]="postitionForm.invalid" />
-      </div>
+<div class="card flex justify-center items-center w-full h-full">
+  <p-stepper [value]="1" class="w-[100%] h-[100%] flex flex-col mt-4 items-center"  [linear]="true">
+    <p-step-list  class="w-[80%] h-[10%]">
+        <p-step [value]="1">General Details</p-step>
+        <p-step [value]="2">Requirements</p-step>
+        <p-step [value]="3">Nice To Have</p-step>
+    </p-step-list>
+
+    <form [formGroup]="positionForm" class=" flex flex-col justify-center items-center w-full h-[80%]">
+      <p-step-panels class="w-[100%] h-[100%] flex flex-col  items-center">
+          <p-step-panel [value]="1">
+              <ng-template #content let-activateCallback="activateCallback" >
+                
+                <div class="flex flex-row h-[50vh] w-[60vw] py-4  divide-x divide-surface-700 border-2 border-dashed border-surface-700 rounded-xl">
+
+                  <!-- Bloc 1: Name + Level -->
+                  <div class="flex flex-col gap-4 w-1/2  px-4">
+                    <!-- Position Name -->
+                    <div class="field">
+                      <label for="positionName" class="font-medium">Position Name</label>
+                      <input
+                        id="positionName"
+                        class="w-8"
+                        type="text"
+                        pInputText
+                        formControlName="name"
+                        pInputText
+                        placeholder="e.g. Frontend Developer"
+                        [ngClass]="{ 'p-invalid': positionForm.get('name')?.invalid && positionForm.get('name')?.touched }"
+
+                      />
+                    </div>
+                    
+
+                    <!-- Level (select button) -->
+                    <div class="field">
+                      <label class="font-medium">Level</label>
+                      <p-selectButton
+                        
+                        formControlName="level"
+                        [options]="positionLevels"
+                        optionLabel="label"
+                        optionValue="value"
+                      />
+                    </div>
+                  </div>
+                
+                  <!-- Bloc 2: Responsibilities -->
+                  <div class="flex flex-col gap-4 w-1/2   px-4">
+                    <div class="field">
+                      <label class="font-medium">Responsibilities</label>
+                      
+                      <div class="flex items-center gap-2">
+                        <p-button 
+                          icon="pi pi-plus" 
+                          label="Add" 
+                          size="small" 
+                          (onClick)="addResponsibility()"
+                          [text]="true"
+                        />
+                        <p-button 
+                          icon="pi pi-minus" 
+                          label="Remove" 
+                          size="small" 
+                          (onClick)="removeResponsibility()"
+                          [text]="true"
+                        />
+                      </div>
+                      
+                      <div formArrayName="responsibilities" class="max-h-[32vh] overflow-y-auto">
+                        <div *ngFor="let control of responsibilities.controls; let i = index" class="field">
+                          <input
+                            type="text"
+                            pInputText
+                            [formControlName]="i"
+                            placeholder="e.g. Build features, Attend meetings"
+                          />
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                
+                </div>
+                <div class="flex justify-end pt-4">
+                  <p-button
+                    label="Next"
+                    icon="pi pi-arrow-right"
+                    iconPos="right"
+                    (onClick)="goToStep(2, activateCallback)"
+                  />
+                </div>
+              </ng-template>
+          </p-step-panel>
+
+          <p-step-panel [value]="2">
+            <ng-template #content let-activateCallback="activateCallback">
+              <div class="flex flex-row h-[50vh] w-[60vw] py-4  border-2 border-dashed border-surface-700 rounded-xl">
+                
+                <div class="flex flex-col justify-center items-center w-full gap-4 px-10" >
+                  <div class="field">
+                    <label class="font-medium">Required Skills (comma-separated)</label>
+                    <input
+                      type="text"
+                      pInputText
+                      
+                      (blur)="onListInput('requiredSkills', $event)"
+                      placeholder="e.g. TypeScript, Angular, Git"
+                    />
+                  </div>
+                  <div class="field">
+                    <label class="font-medium">Minimum Experience (months)</label>
+                    <p-inputNumber
+                      formControlName="minimumExperienceMonths"
+
+                      [min]="0"
+                      [showButtons]="true"
+                      [style]="{'width': '30%'}"
+                      [buttonLayout]="'horizontal'"
+                      [ngClass]="{
+                        'p-invalid': positionForm.get('minimumExperienceMonths')?.invalid && positionForm.get('minimumExperienceMonths')?.touched
+                      }"
+                    />
+                  </div>
+          
+                  <div class="field">
+                    <label class="font-medium">Minimum Education Level</label>
+                    <p-selectButton
+                      formControlName="minimumEducationLevel"
+                      [options]="educationLevels"
+                      optionLabel="label"
+                      optionValue="value"
+                    />
+                  </div>
+                </div>
+          
+              </div>
+          
+              <div class="flex justify-between pt-4">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  (onClick)="activateCallback(1)"
+                  severity="secondary"
+                />
+                <p-button
+                  label="Next"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  (onClick)="goToStep(3, activateCallback)"
+                />
+              </div>
+            </ng-template>
+          </p-step-panel>
+          
+
+          <p-step-panel [value]="3">
+            <ng-template #content let-activateCallback="activateCallback">
+              <div class="flex flex-col h-[60vh]">
+                    <div
+                        class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium"
+                    >
+                        Content III
+                    </div>
+                    <div class="flex pt-6 justify-start">
+                      <p-button label="Back" icon="pi pi-arrow-left" iconPos="right" (onClick)="activateCallback(2)" />
+                  </div>
+                </div>
+                
+            </ng-template>
+        </p-step-panel>
+
+      </p-step-panels>
+      
     </form>
-</p-card>
-  
+      
+  </p-stepper>
+</div>

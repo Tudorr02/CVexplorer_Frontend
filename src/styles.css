@@ -1,8 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
- 
+
 @import "primeflex/primeflex.css"; 
 @import "primeicons/primeicons.css";
 @import "./assets/variables.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
@@ -18,6 +21,7 @@ body{
  height: 100vh;
  width: 100vw;
 }
+
 
 .my-app-light{
   background: var(--light-background-color);

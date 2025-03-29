@@ -31,6 +31,7 @@
     height: 100%;
     margin-top: 1vh;
     padding-inline: 1vw;
+    
 }
 ::ng-deep .p-splitter {
     height: var(--menu-height); /* Sets the height of the splitter */
@@ -51,6 +52,7 @@
     align-items: center;
     justify-content: center;
     padding: 0%;
+    
     
 }
 
