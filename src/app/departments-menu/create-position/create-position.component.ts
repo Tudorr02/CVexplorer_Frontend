@@ -81,13 +81,13 @@ export class CreatePositionComponent implements OnInit {
     this.positionForm = this.fb.group({
           // Step 1
       name: ['', Validators.required],
-      level: ['Intern'],
+      level: [PositionLevel.Intern],
       responsibilities: this.fb.array([this.fb.control('')]),
 
       // Step 2
       requiredSkills: [[]],
       minimumExperienceMonths: [0, [Validators.required, Validators.min(0)]],
-      minimumEducationLevel: ['High School'],
+      minimumEducationLevel: [EducationLevel.HighSchool],
       // Step 3
       niceToHave: [[]],
       languages: [[]],
@@ -122,7 +122,21 @@ export class CreatePositionComponent implements OnInit {
 
 
   goToStep(step: number, activate: (step: number) => void) {
-    const fields = ['name', 'level', 'responsibilities'];
+    let fields: string[] = [];
+  
+    switch (step) {
+      case 2:
+        // Venim din step 1
+        fields = ['name', 'level', 'responsibilities'];
+        break;
+      case 3:
+        // Venim din step 2
+        fields = ['requiredSkills', 'minimumExperienceMonths', 'minimumEducationLevel'];
+        break;
+      default:
+        break;
+    }
+  
     fields.forEach(f => this.positionForm.get(f)?.markAsTouched());
   
     const isValid = fields.every(f => this.positionForm.get(f)?.valid);
@@ -130,6 +144,7 @@ export class CreatePositionComponent implements OnInit {
       activate(step);
     }
   }
+  
 
 
   onListInput(fieldName: keyof Position, event: FocusEvent) {

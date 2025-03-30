@@ -29,6 +29,10 @@
                         [ngClass]="{ 'p-invalid': positionForm.get('name')?.invalid && positionForm.get('name')?.touched }"
 
                       />
+
+                      <small class="p-error" *ngIf="positionForm.get('name')?.touched && positionForm.get('name')?.hasError('required')">
+                        Position name is required.
+                      </small>
                     </div>
                     
 
@@ -215,7 +219,7 @@
                   label="Submit"
                   icon="pi pi-check"
                   iconPos="right"
-                  (onClick)="''"
+                  (onClick)="onSubmit()"
                 />
               </div>
                 
