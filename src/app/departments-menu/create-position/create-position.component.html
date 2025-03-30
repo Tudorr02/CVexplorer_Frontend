@@ -1,20 +1,20 @@
 <div class="card flex justify-center items-center w-full h-full">
   <p-stepper [value]="1" class="w-[100%] h-[100%] flex flex-col mt-4 items-center"  [linear]="true">
-    <p-step-list  class="w-[80%] h-[10%]">
+    <p-step-list  class="w-[60%] h-[10%]">
         <p-step [value]="1">General Details</p-step>
         <p-step [value]="2">Requirements</p-step>
         <p-step [value]="3">Nice To Have</p-step>
     </p-step-list>
 
-    <form [formGroup]="positionForm" class=" flex flex-col justify-center items-center w-full h-[80%]">
-      <p-step-panels class="w-[100%] h-[100%] flex flex-col  items-center">
+    <form [formGroup]="positionForm" class=" flex flex-col justify-center items-center">
+      <p-step-panels class="flex flex-col  items-center">
           <p-step-panel [value]="1">
               <ng-template #content let-activateCallback="activateCallback" >
                 
-                <div class="flex flex-row h-[50vh] w-[60vw] py-4  divide-x divide-surface-700 border-2 border-dashed border-surface-700 rounded-xl">
+                <div class="flex flex-row h-[50vh] w-[50vw] py-4  divide-x divide-surface-700 border-2 border-dashed border-surface-700 rounded-xl">
 
                   <!-- Bloc 1: Name + Level -->
-                  <div class="flex flex-col gap-4 w-1/2  px-4">
+                  <div class="flex flex-col  gap-4 w-1/2  px-4">
                     <!-- Position Name -->
                     <div class="field">
                       <label for="positionName" class="font-medium">Position Name</label>
@@ -95,27 +95,28 @@
 
           <p-step-panel [value]="2">
             <ng-template #content let-activateCallback="activateCallback">
-              <div class="flex flex-row h-[50vh] w-[60vw] py-4  border-2 border-dashed border-surface-700 rounded-xl">
+              <div class="flex justify-center items-center h-[50vh] w-[50vw] py-4  border-2 border-dashed border-surface-700 rounded-xl">
                 
-                <div class="flex flex-col justify-center items-center w-full gap-4 px-10" >
+                <div class="flex flex-col gap-4 px-4 ">
                   <div class="field">
                     <label class="font-medium">Required Skills (comma-separated)</label>
-                    <input
+                    <!-- <input
                       type="text"
                       pInputText
-                      
+                      class="w-[20vw] h-[10vh]"
+                      style="border: 1px solid green;"
                       (blur)="onListInput('requiredSkills', $event)"
                       placeholder="e.g. TypeScript, Angular, Git"
-                    />
+                    /> -->
+                    <textarea  rows="3" class="resize-none" [autoResize]="false" 
+                    [placeholder]="'e.g. TypeScript, Angular, Git'" pTextarea formControlName="requiredSkills"></textarea>
                   </div>
                   <div class="field">
                     <label class="font-medium">Minimum Experience (months)</label>
                     <p-inputNumber
                       formControlName="minimumExperienceMonths"
-
                       [min]="0"
                       [showButtons]="true"
-                      [style]="{'width': '30%'}"
                       [buttonLayout]="'horizontal'"
                       [ngClass]="{
                         'p-invalid': positionForm.get('minimumExperienceMonths')?.invalid && positionForm.get('minimumExperienceMonths')?.touched
@@ -136,7 +137,7 @@
           
               </div>
           
-              <div class="flex justify-between pt-4">
+              <div class="flex justify-end gap-4 pt-4">
                 <p-button
                   label="Back"
                   icon="pi pi-arrow-left"
@@ -156,16 +157,67 @@
 
           <p-step-panel [value]="3">
             <ng-template #content let-activateCallback="activateCallback">
-              <div class="flex flex-col h-[60vh]">
-                    <div
-                        class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium"
-                    >
-                        Content III
-                    </div>
-                    <div class="flex pt-6 justify-start">
-                      <p-button label="Back" icon="pi pi-arrow-left" iconPos="right" (onClick)="activateCallback(2)" />
+              <div class="flex justify-center items-center h-[50vh] w-[50vw] py-4 border-2 border-dashed border-surface-700 rounded-xl">
+                <div class="flex flex-col gap-4 px-4">
+                  
+                  <!-- Nice To Have (textarea) -->
+                  <div class="field">
+                    <label class="font-medium">Nice to Have Skills (comma-separated)</label>
+                    <textarea
+                      rows="3"
+                      placeholder="e.g. Unit Testing, Docker, TailwindCSS"
+                      pTextarea
+                      [autoResize]="false"
+                      class="resize-none"
+                      formControlName="niceToHave"
+                    ></textarea>
                   </div>
+          
+                  <!-- Languages (multi-select) -->
+                  <div class="field">
+                    <label class="font-medium">Languages</label>
+                    <p-multiSelect
+                      [options]="languages"
+                      optionLabel="label"
+                      optionValue="value"
+                      display="chip"
+                      [showToggleAll]="false"
+                      formControlName="languages"
+                      placeholder="Select languages"
+                    ></p-multiSelect>
+                  </div>
+          
+                  <!-- Certifications (multi-select) -->
+                  <div class="field">
+                    <label class="font-medium">Certifications (comma-separated)</label>
+                    <textarea
+                      rows="3"
+                      placeholder="e.g. AWS Certified Developer, Scrum Master"
+                      pTextarea
+                      [autoResize]="false"
+                      class="resize-none"
+                      formControlName="certifications"
+                    ></textarea>
+                  </div>
+          
                 </div>
+              </div>
+          
+              <!-- Navigation Buttons -->
+              <div class="flex justify-end gap-4 pt-4">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  (onClick)="activateCallback(2)"
+                  severity="secondary"
+                />
+                <p-button
+                  label="Submit"
+                  icon="pi pi-check"
+                  iconPos="right"
+                  (onClick)="''"
+                />
+              </div>
                 
             </ng-template>
         </p-step-panel>

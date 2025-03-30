@@ -15,7 +15,9 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { SelectButton } from 'primeng/selectbutton';
 import { FormArray, FormControl } from '@angular/forms';
-
+import { TextareaModule } from 'primeng/textarea';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { LanguageService } from '../../_services/language.service';
 @Component({
   selector: 'app-create-position',
   imports: [
@@ -28,6 +30,8 @@ import { FormArray, FormControl } from '@angular/forms';
     ButtonModule,
     CardModule,
     SelectButton,
+    TextareaModule,
+    MultiSelectModule
   ],
   templateUrl: './create-position.component.html',
   styleUrl: './create-position.component.css'
@@ -39,8 +43,10 @@ export class CreatePositionComponent implements OnInit {
   departmentId!: number;
   positionLevels = this.mapEnumToOptions(PositionLevel);
   educationLevels =  this.mapEnumToOptions(EducationLevel);
+  languages: { label: string; value: string }[] = [];
 
   step = 1;
+  private languageService = inject(LanguageService);
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -50,8 +56,20 @@ export class CreatePositionComponent implements OnInit {
   ngOnInit(): void {
     this.departmentId = Number(this.route.snapshot.paramMap.get('publicId'));
     this.initForm();
+    this.loadLanguages();
   }
 
+  loadLanguages() {
+    this.languageService.getLanguages().subscribe({
+      next: (languages) => {
+        this.languages = languages;
+      },
+      error: () => {
+        this.notificationService.showError('Failed to load languages');
+        console.error('Failed to load languages');
+      }
+    });
+  }
   mapEnumToOptions(enumObj: any): { label: string, value: string }[] {
     return Object.values(enumObj).map(value => ({
       label: value as string,
