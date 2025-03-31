@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { TreeNode } from 'primeng/api';
-import { Tree } from 'primeng/tree';
+import { Tree, TreeNodeCollapseEvent, TreeNodeExpandEvent } from 'primeng/tree';
 import { TreeModule } from 'primeng/tree';
 import { CommonModule } from '@angular/common';
 import { DepartmentService } from '../../_services/department.service';
@@ -19,14 +19,20 @@ import { DeleteDepartmentComponent } from '../delete-department/delete-departmen
 import { AccountService } from '../../_services/account.service';
 import { Skeleton } from 'primeng/skeleton';
 import { finalize, timeout } from 'rxjs';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { DepartmentTreeEventService } from '../../_services/department-tree-event.service';
+import { Position } from '../../_models/position';
+import { PositionTreeNode } from '../../_models/positionTreeNode';
+import { DeletePositionComponent } from '../delete-position/delete-position.component';
 @Component({
   selector: 'app-left-menu',
-  imports: [Skeleton,DeleteDepartmentComponent,EditDepartmentComponent,FormsModule, InputTextModule, Dialog, HasRoleDirective, TabsModule, ButtonModule, Tree, TreeModule, CommonModule, Menu, AddDepartmentComponent],
+  imports: [Skeleton,DeletePositionComponent,DeleteDepartmentComponent,EditDepartmentComponent,FormsModule, InputTextModule, Dialog, HasRoleDirective, TabsModule, ButtonModule, Tree, TreeModule, CommonModule, Menu, AddDepartmentComponent],
   templateUrl: './departments-tree.component.html',
   styleUrl: './departments-tree.component.css',
   
 })
-export class LeftMenuComponent implements OnInit {
+export class DepartmentsTreeComponent implements OnInit {
 
   @ViewChild('parentMenu') parentMenu!: Menu; 
   @ViewChild('leafMenu') leafMenu!: Menu;  
@@ -36,29 +42,53 @@ export class LeftMenuComponent implements OnInit {
   treeData: TreeNode[] = []
   loading: boolean = true; 
   loadingItems: Array<any> = []; 
-
+  expandedNodesKey: { [key: string]: boolean } = {};
 
   visibleAddDepartmentDialog: boolean = false;
   visibleEditDepartmentDialog: boolean = false;
   visibleDeleteDepartmentDialog: boolean = false;
-  
+  visibleDeletePositionDialog: boolean = false;
+
   selectedNode!: TreeNode;
   parentNodeActions: MenuItem[] = [];
 
 // ✅ Actions for Leaf Positions
   leafNodeActions: MenuItem[] = [
       {label: 'Edit Position', icon: 'pi pi-pencil'},
-      {label: 'Delete Position', icon: 'pi pi-trash'}
+      {label: 'Delete Position', icon: 'pi pi-trash', command: () => this.openDeletePositionDialog(this.selectedNode)}
   ];
 
   departmentService = inject(DepartmentService);
   notificationService = inject(NotificationService);
-  accountService = inject(AccountService);  
-by: any;
+  accountService = inject(AccountService);
+  router = inject(Router);    
+  location = inject(Location);
+  treeEventService = inject(DepartmentTreeEventService);
+
 
   ngOnInit() {
     this.fetchTreeData();
     this.setupContextMenu();
+    this.subscribeToPositionAdditions(); // Subscribe to position additions
+  
+  }
+
+  subscribeToPositionAdditions() {
+    this.treeEventService.addPosition$.subscribe(({ departmentId, position }) => {
+      const departmentNode = this.treeData.find(dep => dep.key === departmentId.toString());
+  
+      if (departmentNode) {
+        if (!departmentNode.children) {
+          departmentNode.children = [];
+        }
+  
+        departmentNode.children.push({
+          label: position.name,
+          icon: 'pi pi-inbox',
+          data: { publicId: position.publicId, type: 'position' }
+        });
+      }
+    });
   }
 
   // ✅ Function to build context menu based on user role
@@ -66,7 +96,7 @@ setupContextMenu() {
   const userRole = this.accountService.currentUser()?.role || '';
 
   this.parentNodeActions = [
-    { label: 'Add Position', icon: 'pi pi-plus', command: () => console.log('Add Position') }
+    { label: 'Add Position', icon: 'pi pi-plus', command: () => this.addPosition(this.selectedNode)  }
   ];
 
   // ✅ Add "Rename" and "Delete" only if user has 'HRLeader' role
@@ -89,9 +119,11 @@ setupContextMenu() {
             key: department.id.toString(),
             label: department.name,  
             icon: 'pi pi-folder',
+            data: {id : department.id, type: 'department'},
             children: department.positions.map(position => ({
                 label: position.name,  
-                icon: 'pi pi-inbox'
+                icon: 'pi pi-inbox',
+                data: { publicId: position.publicId, type: 'position' }
             }))
           }));
         },
@@ -109,11 +141,15 @@ setupContextMenu() {
             key: department.id.toString(),
             label: department.name,  
             icon: 'pi pi-folder',
+            data: {id : department.id, type: 'department'},
+            expanded: !!this.expandedNodesKey[department.id.toString()], // ✅ aici e magia
             children: department.positions.map(position => ({
                 label: position.name,  
-                icon: 'pi pi-inbox'
+                icon: 'pi pi-inbox',
+                data: { publicId: position.publicId, type: 'position' }
             }))
           }));
+
         },
         error: () => {
           this.notificationService.showError('Failed to load departments');
@@ -135,6 +171,15 @@ setupContextMenu() {
 
   onNodeSelect(event: { node: TreeNode }) {
     console.log('Selected node:', event.node.label);
+    const node = event.node;
+    if (node.data?.type === 'department') {
+      const departmentId = node.data.id;
+      this.router.navigate(['/Departments', departmentId]);
+    } else if (node.data?.type === 'position') {
+      const publicId = node.data.publicId;
+      this.router.navigate(['/Positions', publicId]);
+    }
+
   }
 
 
@@ -188,6 +233,41 @@ setupContextMenu() {
   onDepartmentDeleted() {
     this.loadTree(); 
     this.closeDeleteDepartmentDialog();
+  }
+
+  addPosition(node: TreeNode) {
+    const departmentId = node.data?.id;
+    if (departmentId) {
+      this.router.navigate([`/Departments/${departmentId}/CreatePosition`]);
+    }
+  }
+
+  openDeletePositionDialog(node: TreeNode) {
+    this.selectedNode = node;
+    this.visibleDeletePositionDialog = true;
+  }
+
+  closeDeletePositionDialog() {
+    this.visibleDeletePositionDialog = false;
+  }
+  onPositionDeleted() {
+    this.loadTree(); // ✅ Refresh tree when position is deleted
+    this.closeDeletePositionDialog(); // ✅ Close dialog after successful deletion
+  }
+
+
+  onNodeExpand(event: TreeNodeExpandEvent) {
+    const node = event.node;
+    if (node?.key) {
+      this.expandedNodesKey[node.key] = true;
+    }
+  }
+  
+  onNodeCollapse(event: TreeNodeCollapseEvent) {
+    const node = event.node;
+    if (node?.key) {
+      delete this.expandedNodesKey[node.key];
+    }
   }
 
 }

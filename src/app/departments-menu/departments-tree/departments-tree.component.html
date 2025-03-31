@@ -35,7 +35,8 @@
 @else {
 
   <p-tree 
-  
+  (onNodeExpand)="onNodeExpand($event)"
+  (onNodeCollapse)="onNodeCollapse($event)"
   scrollHeight="95%"
   [filter]="true" 
   filterPlaceholder="Search.." 
@@ -113,5 +114,21 @@ header = "Edit Department"
     [departmentNode]="selectedNode"
     (departmentDeleted)="onDepartmentDeleted()">
   </app-delete-department>
+
+</p-dialog>
+
+
+<p-dialog 
+  header="Delete Position" 
+  [(visible)]="visibleDeletePositionDialog" 
+  [modal]="true" 
+  [style]="{ width: '30rem', border: 'none' }" 
+  (onHide)="visibleDeletePositionDialog = false">
+
+  <app-delete-position
+    *ngIf="selectedNode"
+    [positionNode]="selectedNode"
+    (positionDeleted)="onPositionDeleted()">
+  </app-delete-position>
 
 </p-dialog>

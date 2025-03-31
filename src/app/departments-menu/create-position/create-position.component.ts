@@ -1,4 +1,4 @@
-import { Component, OnInit , inject } from '@angular/core';
+import { Component, OnInit , ViewChild, inject } from '@angular/core';
 import { PositionLevel } from '../../enums/position-level.enum';
 import { EducationLevel } from '../../enums/education-level.enum';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -18,6 +18,9 @@ import { FormArray, FormControl } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { LanguageService } from '../../_services/language.service';
+import { DepartmentTreeEventService } from '../../_services/department-tree-event.service';
+import { PositionTreeNode } from '../../_models/positionTreeNode';
+
 @Component({
   selector: 'app-create-position',
   imports: [
@@ -38,6 +41,7 @@ import { LanguageService } from '../../_services/language.service';
 })
 export class CreatePositionComponent implements OnInit {
  
+  
 
   positionForm!: FormGroup;
   departmentId!: number;
@@ -52,9 +56,10 @@ export class CreatePositionComponent implements OnInit {
   private router = inject(Router);
   private positionService = inject(PositionService);
   private notificationService = inject(NotificationService);
+  private tree = inject(DepartmentTreeEventService);
 
   ngOnInit(): void {
-    this.departmentId = Number(this.route.snapshot.paramMap.get('publicId'));
+    this.departmentId = Number(this.route.snapshot.paramMap.get('departmentId'));
     this.initForm();
     this.loadLanguages();
   }
@@ -101,6 +106,7 @@ export class CreatePositionComponent implements OnInit {
   addResponsibility() {
     this.responsibilities.push(this.fb.control(''));
   }
+
   onSubmit() {
     if (this.positionForm.invalid) {
       this.positionForm.markAllAsTouched();
@@ -110,7 +116,12 @@ export class CreatePositionComponent implements OnInit {
     const dto: Position = this.positionForm.value;
 
     this.positionService.createPosition(this.departmentId, dto).subscribe({
-      next: () => {
+      next: (newPosition : Position) => {
+        
+        this.tree.addPositionToTree({
+          departmentId: this.departmentId,
+          position: {publicId : newPosition.publicId! , name : newPosition.name} as PositionTreeNode
+        });
         this.notificationService.showSuccess('Position created successfully');
         this.router.navigate(['/dashboard']); // sau oriunde vrei să redirecționezi
       },
@@ -123,7 +134,7 @@ export class CreatePositionComponent implements OnInit {
 
   goToStep(step: number, activate: (step: number) => void) {
     let fields: string[] = [];
-  
+    
     switch (step) {
       case 2:
         // Venim din step 1

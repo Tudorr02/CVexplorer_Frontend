@@ -25,7 +25,10 @@ export const routes: Routes = [
 
     },
     {path : 'dashboard', component: DashboardComponent, canActivate: [authGuard]},
-    {path: 'Departments/:publicId/CreatePosition', component: CreatePositionComponent , canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]},
+    { path: 'Departments/:id', component: DashboardComponent, canActivate: [authGuard] },
+    { path: 'Positions/:publicId', component: DashboardComponent, canActivate: [authGuard] },
+
+    {path: 'Departments/:departmentId/CreatePosition', component: CreatePositionComponent , canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]},
     {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
     { path: 'not-found', component: NotFoundComponent }, // ✅ Define a separate route for the 404 page
     {path: '**',redirectTo:'/not-found', pathMatch: 'full' } //  Catch-all route for 404 pages

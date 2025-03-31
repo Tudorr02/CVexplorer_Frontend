@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { NavComponent } from './navbar/nav/nav.component'; // Ensure this path is correct and the file exists
 import { Toast } from 'primeng/toast';
 import { SplitterModule } from 'primeng/splitter';
-import { LeftMenuComponent } from './departments-menu/departments-tree/departments-tree.component';
+import { DepartmentsTreeComponent } from './departments-menu/departments-tree/departments-tree.component';
 import { CommonModule } from '@angular/common';
 import { TabsModule } from 'primeng/tabs';
 import { Router, RouterModule } from '@angular/router';
@@ -12,7 +12,7 @@ import { HasRoleDirective } from './_directives/has-role.directive';
 @Component({
   selector: 'app-root',
   imports: [Toast,RouterOutlet, NavComponent,RouterModule,
-    HasRoleDirective, SplitterModule,LeftMenuComponent,CommonModule,TabsModule],
+    HasRoleDirective, SplitterModule,DepartmentsTreeComponent,CommonModule,TabsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   providers: []

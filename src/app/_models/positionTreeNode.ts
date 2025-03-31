@@ -1,4 +1,4 @@
 export interface PositionTreeNode {
-    id : number
-    name : string
+    publicId : string;
+    name : string;
 }

@@ -1,0 +1,18 @@
+<div class="content">
+    <p>
+      Are you sure you want to delete the position <b>{{ positionNode?.label }}</b>?
+    </p>
+  </div>
+  
+  <div class="dialog-actions">
+    @if(loading){
+      <p-progress-spinner
+        strokeWidth="8"
+        fill="transparent"
+        animationDuration=".5s"
+        [style]="{ width: '3vh', height: '3vh' }" />
+    }
+    <p-button label="Cancel" (click)="positionDeleted.emit()" severity="secondary"></p-button>
+    <p-button label="Delete" (click)="confirmDelete()" severity="danger" [disabled]="loading"></p-button>
+  </div>
+  
