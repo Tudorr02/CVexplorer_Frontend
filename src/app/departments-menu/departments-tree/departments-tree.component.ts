@@ -33,7 +33,7 @@ import { DeletePositionComponent } from '../delete-position/delete-position.comp
   
 })
 export class DepartmentsTreeComponent implements OnInit {
-
+  
   @ViewChild('parentMenu') parentMenu!: Menu; 
   @ViewChild('leafMenu') leafMenu!: Menu;  
   @ViewChild('editDepartmentComponent') editDepartmentComponent!: EditDepartmentComponent;
@@ -54,7 +54,7 @@ export class DepartmentsTreeComponent implements OnInit {
 
 // ✅ Actions for Leaf Positions
   leafNodeActions: MenuItem[] = [
-      {label: 'Edit Position', icon: 'pi pi-pencil'},
+      {label: 'Edit Position', icon: 'pi pi-pencil' , command: () => this.editPosition(this.selectedNode) },
       {label: 'Delete Position', icon: 'pi pi-trash', command: () => this.openDeletePositionDialog(this.selectedNode)}
   ];
 
@@ -269,5 +269,13 @@ setupContextMenu() {
       delete this.expandedNodesKey[node.key];
     }
   }
+
+  editPosition(node: TreeNode): void {
+    const positionId = node.data?.publicId;
+    if (positionId) {
+      this.router.navigate([`/Positions/${positionId}/Edit`]);
+    }
+  }
+
 
 }

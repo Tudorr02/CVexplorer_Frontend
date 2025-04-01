@@ -90,13 +90,13 @@ export class CreatePositionComponent implements OnInit {
       responsibilities: this.fb.array([this.fb.control('')]),
 
       // Step 2
-      requiredSkills: [[]],
+      requiredSkills: [''],
       minimumExperienceMonths: [0, [Validators.required, Validators.min(0)]],
       minimumEducationLevel: [EducationLevel.HighSchool],
       // Step 3
-      niceToHave: [[]],
+      niceToHave: [''],
       languages: [[]],
-      certifications: [[]],
+      certifications: [''],
     });
   }
 
@@ -113,7 +113,12 @@ export class CreatePositionComponent implements OnInit {
       return;
     }
 
-    const dto: Position = this.positionForm.value;
+    const dto: Position = {
+      ...this.positionForm.value,
+      requiredSkills: this.splitByComma(this.positionForm.value.requiredSkills),
+      niceToHave: this.splitByComma(this.positionForm.value.niceToHave),
+      certifications: this.splitByComma(this.positionForm.value.certifications)
+    };
 
     this.positionService.createPosition(this.departmentId, dto).subscribe({
       next: (newPosition : Position) => {
@@ -131,6 +136,9 @@ export class CreatePositionComponent implements OnInit {
     });
   }
 
+  splitByComma(value: string | null): string[] {
+    return value ? value.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
+  }
 
   goToStep(step: number, activate: (step: number) => void) {
     let fields: string[] = [];

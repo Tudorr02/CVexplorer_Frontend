@@ -11,6 +11,7 @@ import { EnrollUserComponent } from './admin/enroll-user/enroll-user.component';
 import { guestGuard } from './_guards/guest.guard';
 import { ManageCompaniesComponent } from './admin/manage-companies/manage-companies.component';
 import { CreatePositionComponent } from './departments-menu/create-position/create-position.component';
+import { EditPositionComponent } from './departments-menu/edit-position/edit-position.component';
 export const routes: Routes = [
 
     {path : 'login', component: LoginComponent, canActivate : [guestGuard]},
@@ -27,6 +28,7 @@ export const routes: Routes = [
     {path : 'dashboard', component: DashboardComponent, canActivate: [authGuard]},
     { path: 'Departments/:id', component: DashboardComponent, canActivate: [authGuard] },
     { path: 'Positions/:publicId', component: DashboardComponent, canActivate: [authGuard] },
+    { path: 'Positions/:publicId/Edit', component: EditPositionComponent, canActivate: [authGuard] },
 
     {path: 'Departments/:departmentId/CreatePosition', component: CreatePositionComponent , canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]},
     {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
