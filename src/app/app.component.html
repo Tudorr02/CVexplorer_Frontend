@@ -22,10 +22,14 @@
     
             <ng-template #panel>
                 <div class="component-container">
-                    <p-tabs value="/dashboard" >
+                    <p-tabs [value]="currentTab()">
                         <p-tablist> 
                             @for(tab of tabs(); track tab.route){
-                                <p-tab [value]="tab.route" [routerLink]="tab.route">
+                                
+                                <p-tab  [value]="tab.route"
+                                    [routerLink]="tab.route"
+                                    [disabled]="tab.disabled"
+                                 >
                                     <i [class]="tab.icon"></i>
                                     <span>{{ tab.label }}</span>
                                 </p-tab>

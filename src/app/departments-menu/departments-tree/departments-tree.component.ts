@@ -25,6 +25,7 @@ import { DepartmentTreeEventService } from '../../_services/department-tree-even
 import { Position } from '../../_models/position';
 import { PositionTreeNode } from '../../_models/positionTreeNode';
 import { DeletePositionComponent } from '../delete-position/delete-position.component';
+import { NodeSelectionService } from '../../_services/node-selection.service';
 @Component({
   selector: 'app-left-menu',
   imports: [Skeleton,DeletePositionComponent,DeleteDepartmentComponent,EditDepartmentComponent,FormsModule, InputTextModule, Dialog, HasRoleDirective, TabsModule, ButtonModule, Tree, TreeModule, CommonModule, Menu, AddDepartmentComponent],
@@ -64,6 +65,7 @@ export class DepartmentsTreeComponent implements OnInit {
   router = inject(Router);    
   location = inject(Location);
   treeEventService = inject(DepartmentTreeEventService);
+  departmentSelectionService = inject(NodeSelectionService);
 
 
   ngOnInit() {
@@ -172,12 +174,13 @@ setupContextMenu() {
   onNodeSelect(event: { node: TreeNode }) {
     console.log('Selected node:', event.node.label);
     const node = event.node;
+    this.departmentSelectionService.setSelectedNode(node);
     if (node.data?.type === 'department') {
       const departmentId = node.data.id;
-      this.router.navigate(['/Departments', departmentId]);
+      this.router.navigate(['/departments', departmentId]);
     } else if (node.data?.type === 'position') {
       const publicId = node.data.publicId;
-      this.router.navigate(['/Positions', publicId]);
+      this.router.navigate(['/positions', publicId]);
     }
 
   }
@@ -238,7 +241,7 @@ setupContextMenu() {
   addPosition(node: TreeNode) {
     const departmentId = node.data?.id;
     if (departmentId) {
-      this.router.navigate([`/Departments/${departmentId}/CreatePosition`]);
+      this.router.navigate([`/departments/${departmentId}/create-position`]);
     }
   }
 
@@ -273,7 +276,7 @@ setupContextMenu() {
   editPosition(node: TreeNode): void {
     const positionId = node.data?.publicId;
     if (positionId) {
-      this.router.navigate([`/Positions/${positionId}/Edit`]);
+      this.router.navigate([`/positions/${positionId}/edit`]);
     }
   }
 

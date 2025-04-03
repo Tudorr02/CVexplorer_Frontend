@@ -1,0 +1,12 @@
+<p-toast />
+<p-fileupload 
+#fu 
+mode="basic" 
+chooseLabel="Choose" 
+chooseIcon="pi pi-upload" 
+name="demo[]" 
+url="https://www.primefaces.org/cdn/api/upload.php" 
+accept=".rar,.zip,.pdf" 
+maxFileSize="1000000" 
+(onUpload)="onUpload($event)" />
+<p-button label="Upload" (click)="fu.upload()" severity="secondary" />

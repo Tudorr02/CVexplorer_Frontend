@@ -12,6 +12,8 @@ import { guestGuard } from './_guards/guest.guard';
 import { ManageCompaniesComponent } from './admin/manage-companies/manage-companies.component';
 import { CreatePositionComponent } from './departments-menu/create-position/create-position.component';
 import { EditPositionComponent } from './departments-menu/edit-position/edit-position.component';
+import { UploadCvComponent } from './upload-cv/upload-cv.component';
+import { tabGuard } from './_guards/tab.guard';
 export const routes: Routes = [
 
     {path : 'login', component: LoginComponent, canActivate : [guestGuard]},
@@ -26,13 +28,13 @@ export const routes: Routes = [
 
     },
     {path : 'dashboard', component: DashboardComponent, canActivate: [authGuard]},
-    { path: 'Departments/:id', component: DashboardComponent, canActivate: [authGuard] },
-    { path: 'Positions/:publicId', component: DashboardComponent, canActivate: [authGuard] },
-    { path: 'Positions/:publicId/Edit', component: EditPositionComponent, canActivate: [authGuard] },
-
-    {path: 'Departments/:departmentId/CreatePosition', component: CreatePositionComponent , canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]},
-    {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
+    { path: 'departments/:id', component: DashboardComponent, canActivate: [authGuard] },
+    { path: 'positions/:publicId', component: DashboardComponent, canActivate: [authGuard] },
+    { path: 'positions/:publicId/edit', component: EditPositionComponent, canActivate: [authGuard] },
+    { path: 'positions/:publicId/cv-upload', component: UploadCvComponent, canActivate: [authGuard,tabGuard] },
+    { path: 'departments/:departmentId/create-position', component: CreatePositionComponent , canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]},
+    { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
     { path: 'not-found', component: NotFoundComponent }, // ✅ Define a separate route for the 404 page
-    {path: '**',redirectTo:'/not-found', pathMatch: 'full' } //  Catch-all route for 404 pages
+    { path: '**',redirectTo:'/not-found', pathMatch: 'full' } //  Catch-all route for 404 pages
 
 ];
