@@ -1,12 +1,44 @@
-<p-toast />
-<p-fileupload 
-#fu 
-mode="basic" 
-chooseLabel="Choose" 
-chooseIcon="pi pi-upload" 
-name="demo[]" 
-url="https://www.primefaces.org/cdn/api/upload.php" 
-accept=".rar,.zip,.pdf" 
-maxFileSize="1000000" 
-(onUpload)="onUpload($event)" />
-<p-button label="Upload" (click)="fu.upload()" severity="secondary" />
+<p-fileUpload
+  #fu
+  name="file"
+  mode="advanced"
+  [customUpload]="true"
+  [auto]="false"
+  [multiple]="false"
+  accept=".pdf,.rar,.zip"
+  [maxFileSize]="1000000"
+  (uploadHandler)="onUpload($event)"
+  class="w-full"
+>
+  <!-- Custom header (hidden buttons if needed) -->
+  <ng-template #header></ng-template>
+
+  <!-- Custom content (drop zone + icon) -->
+  <ng-template #content let-files let-chooseCallback="chooseCallback">
+    <div
+      class="w-full h-40 border-2 border-dashed border-gray-400 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-blue-400 transition"
+      (click)="choose($event, chooseCallback)"
+    >
+      <i class="pi pi-upload text-4xl text-gray-500 mb-2"></i>
+      <p class="text-gray-500">Click or drag to upload .pdf, .rar, or .zip</p>
+    </div>
+
+    <!-- Show selected file below -->
+    <div *ngIf="files?.length > 0" class="mt-4 flex flex-col items-start gap-2">
+      <p class="font-semibold">Selected file:</p>
+      <span class="text-sm text-gray-700">{{ files[0].name }} ({{ formatSize(files[0].size) }})</span>
+    </div>
+  </ng-template>
+
+  <!-- Optional empty template -->
+  <ng-template #empty>
+    <p class="text-gray-400 text-center">No file selected</p>
+  </ng-template>
+</p-fileUpload>
+
+<p-button label="Upload" icon="pi pi-cloud-upload" (click)="fu.upload()" severity="success" class="mt-4" />
+
+
+
+
+

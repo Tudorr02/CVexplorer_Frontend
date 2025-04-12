@@ -14,7 +14,7 @@ export class LanguageService {
       map(languagesObj =>
         Object.entries(languagesObj).map(([code, lang]) => ({
           label: lang.name,
-          value: code
+          value: lang.name
         }))
       )
     );

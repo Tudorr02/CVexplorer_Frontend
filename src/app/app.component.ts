@@ -65,6 +65,7 @@ export class AppComponent  {
   private userTabs : Tab[]= [
     { label: 'Dashboard', route: '/dashboard', icon: 'pi pi-home' },
     { label: 'Upload CVs', route: '/cv-upload', icon: 'pi pi-file-arrow-up',disabled: true },
+    { label: 'Evaluation', route: '/evaluation', icon: 'pi pi-search',disabled: false },
   ];
 
   private adminTabs:Tab[]= [
