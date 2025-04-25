@@ -14,6 +14,7 @@ import { CreatePositionComponent } from './departments-menu/create-position/crea
 import { EditPositionComponent } from './departments-menu/edit-position/edit-position.component';
 import { UploadCvComponent } from './upload-cv/upload-cv.component';
 import { tabGuard } from './_guards/tab.guard';
+import { ExploreCvComponent } from './explore-cv/explore-cv.component';
 export const routes: Routes = [
 
     {path : 'login', component: LoginComponent, canActivate : [guestGuard]},
@@ -28,11 +29,48 @@ export const routes: Routes = [
 
     },
     {path : 'dashboard', component: DashboardComponent, canActivate: [authGuard]},
-    { path: 'departments/:id', component: DashboardComponent, canActivate: [authGuard] },
-    { path: 'positions/:publicId', component: DashboardComponent, canActivate: [authGuard] },
-    { path: 'positions/:publicId/edit', component: EditPositionComponent, canActivate: [authGuard] },
-    { path: 'positions/:publicId/cv-upload', component: UploadCvComponent, canActivate: [authGuard,tabGuard] },
-    { path: 'departments/:departmentId/create-position', component: CreatePositionComponent , canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]},
+
+    // { path: 'departments/:id', component: DashboardComponent, canActivate: [authGuard] },
+    // { path: 'positions/:publicId', component: DashboardComponent, canActivate: [authGuard] },
+    // { path: 'positions/:publicId/edit', component: EditPositionComponent, canActivate: [authGuard] },
+    // { path: 'positions/:publicId/cv-upload', component: UploadCvComponent, canActivate: [authGuard,tabGuard] },
+    //{ path: 'departments/:departmentId/create-position', component: CreatePositionComponent , canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]},
+    
+
+    { path: 'departments/:id',
+        canActivate: [authGuard],
+        children: [
+            { path: 'create-position', 
+                component: CreatePositionComponent , 
+                canActivate: [ authGuard, roleGuard(['HRUser', 'HRLeader'])]
+            },
+            {
+                path: 'cv-explore',
+                component: ExploreCvComponent,
+                canActivate: [authGuard]
+            }
+        ]
+    },
+    
+    {
+        path: 'positions/:publicId',
+        canActivate: [authGuard],
+        children: [
+          { path: 'edit',component: EditPositionComponent },
+          {
+            path: 'cv-upload',
+            component: UploadCvComponent,
+            canActivate: [authGuard, tabGuard]
+          },
+          {
+            path: 'cv-explore',
+            component: ExploreCvComponent,
+            canActivate: [authGuard]
+          }
+        ]
+    },
+    
+
     { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
     { path: 'not-found', component: NotFoundComponent }, // ✅ Define a separate route for the 404 page
     { path: '**',redirectTo:'/not-found', pathMatch: 'full' } //  Catch-all route for 404 pages

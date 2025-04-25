@@ -19,6 +19,7 @@
     "@angular/platform-browser-dynamic": "^19.1.0",
     "@angular/router": "^19.1.0",
     "@primeng/themes": "^19.0.5",
+    "@tailwindcss/vite": "^4.1.4",
     "bootstrap": "^5.3.3",
     "jwt-decode": "^4.0.0",
     "ng-particles": "^3.12.0",

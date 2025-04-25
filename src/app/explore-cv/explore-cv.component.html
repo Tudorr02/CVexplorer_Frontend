@@ -1,0 +1,107 @@
+
+<p-table #dtCVs 
+    [value]="cvs"
+    [scrollable]="true"
+    scrollHeight="flex"
+    dataKey="publicId" 
+    [style]="{'width': '100%'}"
+    [globalFilterFields]="['fileName','uploadedeBy']"
+    [sortOrder]="-1"
+    [(selection)]="selectedCVs"
+    >
+
+    <ng-template #caption >
+
+        <div class="flex justify-between items-center w-full">
+            <p-iconfield iconPosition="left">
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" [(ngModel)]="globalFilter" (input)="filterGlobal()" placeholder="Search companies..." />
+            </p-iconfield>
+
+            <div>
+                
+                <p-button 
+                    icon="pi pi-trash" 
+                    [rounded]="true" 
+                    [text]="true" 
+                    severity="danger" 
+                    [disabled]="!selectedCVs || selectedCVs.length === 0"
+                    (click)="deleteSelected()"
+                    size="large"
+                />
+
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- header -->
+    <ng-template #header>
+      <tr>
+        <th class="w-[5%]"><p-tableHeaderCheckbox /></th>
+        <th class="w-[30%]">File Name</th>
+        <th class="w-[20%]">
+            Uploaded At
+            <p-columnFilter type="date" field="uploadedAt" display="menu" class="ml-auto" />
+        </th>
+        <th class="w-[20%]">Uploaded By</th>
+        <th pSortableColumn="score" class="w-[10%]">
+            Score <p-sortIcon field="score" />
+        </th>
+        <th class="w-[15%]">Document</th>
+      </tr>
+    </ng-template>
+  
+    <!-- body -->
+    <ng-template #body let-cv>
+      <tr>
+        <td><p-tableCheckbox [value]="cv" /></td>
+        <td>{{ cv.fileName }}</td>
+        <td>{{ cv.uploadedAt | date:'dd/MM/yyyy , HH:mm:ss' }}</td>
+        <td>{{ cv.uploadedBy ?? 'Unknown' }}</td>
+        <td>{{ cv.score ?? 0 }}</td>
+        <td>
+            <p-button 
+            icon="pi pi-file-pdf" 
+            [rounded]="true" 
+            [text]="true" 
+            severity="danger" 
+            (click)="getCV(cv.publicId)"
+        />
+        </td>
+      </tr>
+    </ng-template>
+  
+    <!-- empty state -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center">No CVs found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+
+<p-dialog 
+    [modal]="true" 
+    [(visible)]="viewCV"
+    [style]="{'width': '60%', 'height': '100%'}"
+    (onHide)="onDialogHide()" 
+
+   >
+    <ng-template pTemplate="header">
+        <div class="flex justify-between items-center">
+            <h4>Inspect CV</h4>
+        </div>
+    </ng-template>
+
+    <div class="flex-1 w-full h-full" style="overflow:hidden">
+        <iframe 
+          *ngIf="pdfUrl"
+          [src]="pdfUrl"
+          class="w-full h-full"
+          style="border:none;"
+        ></iframe>
+    </div>
+
+</p-dialog>

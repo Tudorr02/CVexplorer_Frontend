@@ -65,6 +65,7 @@ export class AppComponent  {
   private userTabs : Tab[]= [
     { label: 'Dashboard', route: '/dashboard', icon: 'pi pi-home' },
     { label: 'Upload CVs', route: '/cv-upload', icon: 'pi pi-file-arrow-up',disabled: true },
+    { label: 'Explore CVs', route: '/cv-explore', icon: 'pi pi-file',disabled: false },
     { label: 'Evaluation', route: '/evaluation', icon: 'pi pi-search',disabled: false },
   ];
 
@@ -87,14 +88,36 @@ export class AppComponent  {
 
     if (isAdmin) return this.adminTabs;
 
+
+
+
     const selectedNode = this.NodeSelectionService.getSelectedNode(); // ← signal() version preferred
     const publicId = selectedNode?.data?.publicId;
+    const departmentId = selectedNode?.data?.type==="department"? selectedNode?.data?.id : null; // Get departmentId from selected node
     // Generate base tab list with optional Upload tab override
-    return this.userTabs.map(tab =>
-      tab.label === 'Upload CVs' && publicId
-        ? { ...tab, route: `/positions/${publicId}`+tab.route, disabled: false }
-        : tab
-    );
+    // return this.userTabs.map(tab =>
+    //   tab.label === 'Upload CVs' && publicId
+    //     ? { ...tab, route: `/positions/${publicId}`+tab.route, disabled: false }
+    //     : tab  
+      
+    // );
+
+    
+    return this.userTabs.map(tab => {
+      if (tab.label === 'Upload CVs' && publicId) {
+        return { ...tab, route: `/positions/${publicId}`+tab.route, disabled: false };
+      } else if (tab.label === 'Explore CVs') {
+        if (departmentId) {
+          return { ...tab, route: `/departments/${departmentId}`+tab.route, disabled: false };
+        }else
+        if (publicId) {
+          return { ...tab, route: `/positions/${publicId}`+tab.route, disabled: false };
+        }
+        
+      } 
+
+      return tab;
+     })
     
   });
     

@@ -59,7 +59,8 @@ export class CreatePositionComponent implements OnInit {
   private tree = inject(DepartmentTreeEventService);
 
   ngOnInit(): void {
-    this.departmentId = Number(this.route.snapshot.paramMap.get('departmentId'));
+    this.departmentId = Number(this.route.snapshot.paramMap.get('id'));
+    console.log(this.departmentId);
     this.initForm();
     this.loadLanguages();
   }

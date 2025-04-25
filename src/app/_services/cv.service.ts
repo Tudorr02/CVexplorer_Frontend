@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { CV } from '../_models/cv';
 
 @Injectable({
@@ -22,11 +22,27 @@ export class CvService {
   /**
    * Get all CVs for a specific position
    */
-  getAllCVs(positionPublicId: string): Observable<CV[]> {
-    return this.http.get<CV[]>(this.apiUrl, {
-      params: { positionPublicId }
-    });
+  getAllCVs(positionPublicId?: string, departmentId?: number): Observable<CV[]> {
+    let params = new HttpParams();
+
+    if (positionPublicId) {
+      params = params.set('positionPublicId', positionPublicId);
+    }
+    if (departmentId != null) {
+      params = params.set('departmentId', departmentId.toString());
+    }
+
+    return this.http.get<any[]>(`${this.apiUrl}`, { params }).pipe(
+      map(cvs =>
+        cvs.map(cv => ({
+          ...cv,
+          // parse the ISO string into a real Date
+          uploadedAt: new Date(cv.uploadedAt)
+        }))
+      )
+    );
   }
+
 
   /**
    * Get a single CV by its public ID
@@ -34,4 +50,6 @@ export class CvService {
   getCV(cvPublicId: string): Observable<CV> {
     return this.http.get<CV>(`${this.apiUrl}/${cvPublicId}`);
   }
+
+  
 }
