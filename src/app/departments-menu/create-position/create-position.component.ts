@@ -1,7 +1,7 @@
 import { Component, OnInit , ViewChild, inject } from '@angular/core';
 import { PositionLevel } from '../../enums/position-level.enum';
 import { EducationLevel } from '../../enums/education-level.enum';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Position } from '../../_models/position';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PositionService } from '../../_services/position.service';
@@ -20,7 +20,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { LanguageService } from '../../_services/language.service';
 import { DepartmentTreeEventService } from '../../_services/department-tree-event.service';
 import { PositionTreeNode } from '../../_models/positionTreeNode';
-
+import { Slider } from 'primeng/slider';
+import { SliderModule } from 'primeng/slider';
 @Component({
   selector: 'app-create-position',
   imports: [
@@ -34,7 +35,9 @@ import { PositionTreeNode } from '../../_models/positionTreeNode';
     CardModule,
     SelectButton,
     TextareaModule,
-    MultiSelectModule
+    MultiSelectModule,
+    Slider,SliderModule,
+    
   ],
   templateUrl: './create-position.component.html',
   styleUrl: './create-position.component.css'
@@ -42,7 +45,7 @@ import { PositionTreeNode } from '../../_models/positionTreeNode';
 export class CreatePositionComponent implements OnInit {
  
   
-
+  
   positionForm!: FormGroup;
   departmentId!: number;
   positionLevels = this.mapEnumToOptions(PositionLevel);
@@ -57,6 +60,17 @@ export class CreatePositionComponent implements OnInit {
   private positionService = inject(PositionService);
   private notificationService = inject(NotificationService);
   private tree = inject(DepartmentTreeEventService);
+
+  weightFields: { key: keyof Position['weights']; label: string }[] = [
+    { key: 'requiredSkills',   label: 'Required Skills' },
+    { key: 'niceToHave',       label: 'Nice to Have' },
+    { key: 'languages',        label: 'Languages' },
+    { key: 'certification',    label: 'Certifications' },
+    { key: 'responsibilities', label: 'Responsibilities' },
+    { key: 'experienceMonths', label: 'Experience (months)' },
+    { key: 'level',            label: 'Position Level' },
+    { key: 'minimumEducation', label: 'Minimum Education' },
+  ];
 
   ngOnInit(): void {
     this.departmentId = Number(this.route.snapshot.paramMap.get('id'));
@@ -98,9 +112,28 @@ export class CreatePositionComponent implements OnInit {
       niceToHave: [''],
       languages: [[]],
       certifications: [''],
+      weights: this.fb.group({
+        requiredSkills:   [40,  [Validators.min(0), Validators.max(100)]],
+        niceToHave:       [10,  [Validators.min(0), Validators.max(100)]],
+        languages:        [10,  [Validators.min(0), Validators.max(100)]],
+        certification:    [30,  [Validators.min(0), Validators.max(100)]],
+        responsibilities: [10,  [Validators.min(0), Validators.max(100)]],
+        experienceMonths: [0,   [Validators.min(0), Validators.max(100)]],
+        level:            [0,   [Validators.min(0), Validators.max(100)]],
+        minimumEducation: [0,   [Validators.min(0), Validators.max(100)]],
+      }, {
+        validators: this.sumValidator
+      })
     });
   }
 
+  private sumValidator(group: FormGroup) {
+    const total = Object.values(group.value)
+                       .reduce((acc: number, v) => acc + Number(v), 0);
+    return total === 100
+      ? null
+      : { sumNotOne: true };
+  }
   get responsibilities(): FormArray {
     return this.positionForm.get('responsibilities') as FormArray;
   }
@@ -118,7 +151,8 @@ export class CreatePositionComponent implements OnInit {
       ...this.positionForm.value,
       requiredSkills: this.splitByComma(this.positionForm.value.requiredSkills),
       niceToHave: this.splitByComma(this.positionForm.value.niceToHave),
-      certifications: this.splitByComma(this.positionForm.value.certifications)
+      certifications: this.splitByComma(this.positionForm.value.certifications),
+      weights:         this.positionForm.value.weights
     };
 
     this.positionService.createPosition(this.departmentId, dto).subscribe({
@@ -153,14 +187,19 @@ export class CreatePositionComponent implements OnInit {
         // Venim din step 2
         fields = ['requiredSkills', 'minimumExperienceMonths', 'minimumEducationLevel'];
         break;
+      // case 4:
+      //   // validate each weight control
+      //   fields = this.weightFields.map(f => `weights.${f.key}`);
+      //   break;
       default:
         break;
     }
   
     fields.forEach(f => this.positionForm.get(f)?.markAsTouched());
-  
+    // const weightsValid = step !== 4 || this.positionForm.get('weights')?.valid;
+    const weightsValid = true; // this.positionForm.get('weights')?.valid;
     const isValid = fields.every(f => this.positionForm.get(f)?.valid);
-    if (isValid) {
+    if (isValid && weightsValid) {
       activate(step);
     }
   }

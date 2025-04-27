@@ -4,6 +4,8 @@
           <p-step [value]="1">General Details</p-step>
           <p-step [value]="2">Requirements</p-step>
           <p-step [value]="3">Nice To Have</p-step>
+          <p-step [value]="3">Weights</p-step>
+
       </p-step-list>
   
       <form [formGroup]="positionForm" class=" flex flex-col justify-center items-center">
@@ -219,12 +221,69 @@
                     label="Update"
                     icon="pi pi-check"
                     iconPos="right"
-                    (onClick)="onSubmit()"
+                    (onClick)="goToStep(4, activateCallback)"
                   />
                 </div>
                   
               </ng-template>
           </p-step-panel>
+
+          <p-step-panel [value]="4">
+            <ng-template #content let-activateCallback="activateCallback">
+              
+              <div formGroupName="weights" class="flex gap-8 w-[50vw] p-4 border-2 border-dashed border-surface-700 rounded-xl">
+  
+                <!-- Left column: first 4 fields -->
+                <div class="flex-1 space-y-4">
+                  <ng-container *ngFor="let field of weightFields | slice:0:4" class="gap-2 ">
+                    <label class="block font-medium mb-2">
+                      {{ field.label }}: {{ positionForm.get('weights.' + field.key)?.value }}%
+                    </label>
+                    <p-slider
+                      [formControlName]="field.key"
+                      [min]="0" [max]="100" [step]="1"
+                      class="w-full"
+                    ></p-slider>
+                  </ng-container>
+                </div>
+              
+                <!-- Right column: last 4 fields -->
+                <div class="flex-1 space-y-4">
+                  <ng-container *ngFor="let field of weightFields | slice:4:8" class="gap-2 ">
+                    <label class="block font-medium mb-2">
+                      {{ field.label }}: {{ positionForm.get('weights.' + field.key)?.value }}%
+                    </label>
+                    <p-slider
+                      [formControlName]="field.key"
+                      [min]="0" [max]="100" [step]="1"
+                      class="w-full"
+                    ></p-slider>
+                  </ng-container>
+                </div>
+              
+              </div>
+              
+              <small *ngIf="positionForm.get('weights')?.hasError('sumNotOneHundred')" class="p-error">
+                All weights must sum to 100
+              </small>
+              
+              <div class="flex justify-end gap-4 pt-4">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  (onClick)="activateCallback(3)"
+                  severity="secondary"
+                ></p-button>
+                <p-button
+                  label="Submit"
+                  icon="pi pi-check"
+                  iconPos="right"
+                  (onClick)="onSubmit()"
+                ></p-button>
+              </div>
+            </ng-template>
+          </p-step-panel>
+  
   
         </p-step-panels>
         

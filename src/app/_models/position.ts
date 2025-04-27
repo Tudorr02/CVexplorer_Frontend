@@ -12,5 +12,17 @@ export interface Position{
   minimumExperienceMonths: number;
   level: PositionLevel;
   minimumEducationLevel: EducationLevel;
+  weights: ScoreWeights;
 }
 
+export interface ScoreWeights {
+  requiredSkills: number ;
+  niceToHave: number;
+  languages: number;
+  certification: number;
+  responsibilities: number;
+  experienceMonths: number;
+  level: number;
+  minimumEducation: number;
+
+}

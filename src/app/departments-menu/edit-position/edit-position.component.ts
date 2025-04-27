@@ -19,7 +19,7 @@ import { FormControl } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { LanguageService } from '../../_services/language.service';
-
+import { Slider } from 'primeng/slider';
 @Component({
   selector: 'app-edit-position',
   imports: [ 
@@ -33,7 +33,8 @@ import { LanguageService } from '../../_services/language.service';
       CardModule,
       SelectButton,
       TextareaModule,
-      MultiSelectModule
+      MultiSelectModule,
+      Slider
     ],
   templateUrl: './edit-position.component.html',
   styleUrl: './edit-position.component.css'
@@ -53,6 +54,17 @@ export class EditPositionComponent implements OnInit{
   private notificationService = inject(NotificationService);
   private languageService = inject(LanguageService);
 
+  weightFields: { key: keyof Position['weights']; label: string }[] = [
+    { key: 'requiredSkills',   label: 'Required Skills' },
+    { key: 'niceToHave',       label: 'Nice to Have' },
+    { key: 'languages',        label: 'Languages' },
+    { key: 'certification',    label: 'Certifications' },
+    { key: 'responsibilities', label: 'Responsibilities' },
+    { key: 'experienceMonths', label: 'Experience (months)' },
+    { key: 'level',            label: 'Position Level' },
+    { key: 'minimumEducation', label: 'Minimum Education' },
+  ];
+
   ngOnInit(): void {
     this.publicId = this.route.snapshot.paramMap.get('publicId')!;
     this.initForm();
@@ -70,10 +82,29 @@ export class EditPositionComponent implements OnInit{
       minimumEducationLevel: [EducationLevel.HighSchool],
       niceToHave: [[]],
       languages: [[]],
-      certifications: [[]]
+      certifications: [[]],
+      weights: this.fb.group({
+        requiredSkills:   [40,  [Validators.min(0), Validators.max(100)]],
+        niceToHave:       [10,  [Validators.min(0), Validators.max(100)]],
+        languages:        [10,  [Validators.min(0), Validators.max(100)]],
+        certification:    [30,  [Validators.min(0), Validators.max(100)]],
+        responsibilities: [10,  [Validators.min(0), Validators.max(100)]],
+        experienceMonths: [0,   [Validators.min(0), Validators.max(100)]],
+        level:            [0,   [Validators.min(0), Validators.max(100)]],
+        minimumEducation: [0,   [Validators.min(0), Validators.max(100)]],
+      }, {
+        validators: this.sumValidator
+      })
     });
   }
 
+  private sumValidator(group: FormGroup) {
+    const total = Object.values(group.value)
+                       .reduce((acc: number, v) => acc + Number(v), 0);
+    return total === 100
+      ? null
+      : { sumNotOne: true };
+  }
   get responsibilities(): FormArray {
     return this.positionForm.get('responsibilities') as FormArray;
   }
@@ -100,7 +131,17 @@ export class EditPositionComponent implements OnInit{
           minimumEducationLevel: position.minimumEducationLevel,
           niceToHave: position.niceToHave ?? [],
           languages: position.languages ?? [],
-          certifications: position.certifications ?? []
+          certifications: position.certifications ?? [],
+          weights: {
+            requiredSkills: position.weights.requiredSkills,
+            niceToHave: position.weights.niceToHave,
+            languages: position.weights.languages,
+            certification: position.weights.certification,
+            responsibilities: position.weights.responsibilities,
+            experienceMonths: position.weights.experienceMonths,
+            level: position.weights.level,
+            minimumEducation: position.weights.minimumEducation
+          }
         });
 
         this.responsibilities.clear();
