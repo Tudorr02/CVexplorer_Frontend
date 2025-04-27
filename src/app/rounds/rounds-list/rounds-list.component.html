@@ -1,0 +1,16 @@
+<p>rounds-list works!</p>
+
+<div *ngIf="Rounds.length > 0; else noRounds">
+    <ul>
+      <li *ngFor="let round of Rounds">
+        <!-- adjust these bindings to your Round model -->
+        <strong>{{ round.name }}</strong>
+        &mdash; Created: {{ round.createdAt | date:'short' }}
+        &mdash; Candidates: {{ round.candidatesNumber }}
+      </li>
+    </ul>
+  </div>
+  
+  <ng-template #noRounds>
+    <p>No rounds available.</p>
+  </ng-template>

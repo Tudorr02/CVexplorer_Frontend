@@ -15,6 +15,7 @@ import { EditPositionComponent } from './departments-menu/edit-position/edit-pos
 import { UploadCvComponent } from './upload-cv/upload-cv.component';
 import { tabGuard } from './_guards/tab.guard';
 import { ExploreCvComponent } from './explore-cv/explore-cv.component';
+import { RoundsListComponent } from './rounds/rounds-list/rounds-list.component';
 export const routes: Routes = [
 
     {path : 'login', component: LoginComponent, canActivate : [guestGuard]},
@@ -44,14 +45,25 @@ export const routes: Routes = [
                 component: CreatePositionComponent , 
                 canActivate: [ authGuard, roleGuard(['HRUser', 'HRLeader'])]
             },
-            {
-                path: 'cv-explore',
-                component: ExploreCvComponent,
-                canActivate: [authGuard]
-            }
+            // {
+            //     path: 'cv-explore',
+            //     component: ExploreCvComponent,
+            //     canActivate: [authGuard]
+            // }
         ]
     },
-    
+
+    {
+        path: 'explore',
+        component: ExploreCvComponent,
+        canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]
+    },
+
+    {
+        path: 'evaluation-rounds',
+        component: RoundsListComponent,
+        canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]
+    },
     {
         path: 'positions/:publicId',
         canActivate: [authGuard],
@@ -62,17 +74,17 @@ export const routes: Routes = [
             component: UploadCvComponent,
             canActivate: [authGuard, tabGuard]
           },
-          {
-            path: 'cv-explore',
-            component: ExploreCvComponent,
-            canActivate: [authGuard]
-          }
+        //   {
+        //     path: 'cv-explore',
+        //     component: ExploreCvComponent,
+        //     canActivate: [authGuard]
+        //   }
         ]
     },
     
 
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
-    { path: 'not-found', component: NotFoundComponent }, // ✅ Define a separate route for the 404 page
-    { path: '**',redirectTo:'/not-found', pathMatch: 'full' } //  Catch-all route for 404 pages
+    // { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
+    // { path: 'not-found', component: NotFoundComponent }, // ✅ Define a separate route for the 404 page
+    // { path: '**',redirectTo:'/not-found', pathMatch: 'full' } //  Catch-all route for 404 pages
 
 ];

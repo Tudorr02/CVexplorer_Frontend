@@ -42,12 +42,19 @@ export class ExploreCvComponent implements OnInit{
   globalFilter: string = '';
   ngOnInit() {
     // snapshot is fine if you don't care about param changes
-    this.positionPublicId = this.route.snapshot.paramMap.get('publicId') ?? undefined;
-    this.departmentId     = this.route.snapshot.paramMap.get('id') != null
-                            ? Number(this.route.snapshot.paramMap.get('id'))
-                            : undefined;
+    // this.positionPublicId = this.route.snapshot.paramMap.get('publicId') ?? undefined;
+    // this.departmentId     = this.route.snapshot.paramMap.get('id') != null
+    //                         ? Number(this.route.snapshot.paramMap.get('id'))
+    //                         : undefined;
 
-    this.loadCvs();
+    // this.loadCvs();
+
+    this.route.queryParamMap.subscribe(qp => {
+        this.positionPublicId = qp.get('positionPublicId') ?? undefined;
+        const dept = qp.get('departmentId');
+        this.departmentId = dept != null ? Number(dept) : undefined;
+        this.loadCvs();
+    });
   }
 
   private loadCvs() {

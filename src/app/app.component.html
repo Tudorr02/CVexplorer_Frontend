@@ -29,6 +29,7 @@
                                 <p-tab  [value]="tab.route"
                                     [routerLink]="tab.route"
                                     [disabled]="tab.disabled"
+                                    [queryParams]="tab.queryParams"
                                  >
                                     <i [class]="tab.icon"></i>
                                     <span>{{ tab.label }}</span>
