@@ -26,11 +26,12 @@ export class RoundService {
     return this.http.get<Round[]>(this.apiUrl, { params });
   }
 
-  /**
-   * DELETE /api/rounds/{publicId}
-   */
   deleteRound(publicId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${publicId}`);
+  }
+  
+  getRound(publicId: string): Observable<Round> {
+    return this.http.get<Round>(`${this.apiUrl}/${publicId}`);
   }
   
 }

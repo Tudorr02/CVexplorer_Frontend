@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../_services/notification.service';
 import { Round } from '../../_models/round';
 import { CommonModule } from '@angular/common';
+import { RoundCardComponent } from '../round-card/round-card.component';
 @Component({
   selector: 'app-rounds-list',
-  imports: [CommonModule],
+  imports: [CommonModule, RoundCardComponent],
   templateUrl: './rounds-list.component.html',
   styleUrl: './rounds-list.component.css'
 })
@@ -16,7 +17,7 @@ export class RoundsListComponent implements OnInit {
   private cvService = inject(RoundService);
   private notificationService = inject(NotificationService);
 
-  Rounds: Round[] = [];
+  rounds: Round[] = [];
 
   positionPublicId?: string;
   departmentId?:     number;
@@ -33,7 +34,7 @@ export class RoundsListComponent implements OnInit {
   loadRounds() {
    this.cvService.getAllRounds(this.departmentId, this.positionPublicId).subscribe({
         next: (rounds) => {
-          this.Rounds = rounds;
+          this.rounds = rounds;
         },
         error: (error) => {
           this.notificationService.showError(error);

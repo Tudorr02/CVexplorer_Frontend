@@ -1,0 +1,29 @@
+<p-card [style]="{ backgroundColor: '#646464' }">
+    <div class="flex flex-nowrap items-center gap-6 p-1">
+      <i class="pi pi-trophy text-3xl text-yellow-400"></i>
+  
+      <span class="text-2xl font-semibold whitespace-nowrap">
+        {{ round.name }}
+      </span>
+  
+      <span class="text-lg whitespace-nowrap">
+        Created {{ round.createdAt | date:'dd/MM/yyyy' }}
+      </span>
+  
+      <span class="text-lg whitespace-nowrap">
+        Candidates {{ round.candidatesNumber }}
+      </span>
+  
+      <p-button
+        icon="pi pi-search"
+        severity="success"
+        size="large"
+        [rounded]="true"
+        [text]="true"
+        class="ml-auto"
+        (onClick)="openRound(round.publicId)"
+        >
+    </p-button>
+    </div>
+  </p-card>
+  

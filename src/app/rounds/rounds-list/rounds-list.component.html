@@ -1,16 +1,18 @@
-<p>rounds-list works!</p>
 
-<div *ngIf="Rounds.length > 0; else noRounds">
-    <ul>
-      <li *ngFor="let round of Rounds">
-        <!-- adjust these bindings to your Round model -->
-        <strong>{{ round.name }}</strong>
-        &mdash; Created: {{ round.createdAt | date:'short' }}
-        &mdash; Candidates: {{ round.candidatesNumber }}
-      </li>
-    </ul>
+<div *ngIf="rounds.length > 0; else noRounds">  
+  @for(round of rounds; track round.publicId){
+    <div class="py-5">
+
+    
+    <app-round-card
+      
+      [round]="round"
+      [ngClass]="{ 'round-card': true }">
+    </app-round-card>
   </div>
+  }
+</div>
   
-  <ng-template #noRounds>
-    <p>No rounds available.</p>
-  </ng-template>
+<ng-template #noRounds>
+  <p>No rounds available.</p>
+</ng-template>

@@ -62,6 +62,11 @@ export const routes: Routes = [
     {
         path: 'evaluation-rounds',
         component: RoundsListComponent,
+        canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])],
+    },
+    {
+        path: 'evaluation-rounds/:publicId',
+        component:DashboardComponent,
         canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]
     },
     {
