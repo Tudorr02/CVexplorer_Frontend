@@ -1,0 +1,17 @@
+.board  { display:flex; gap:2rem; }
+.column { flex:1 1 0; }
+
+h2      { margin:0 0 .5rem; font:600 1.1rem/1 system-ui; }
+
+.list   {
+  min-height:12rem; padding:.5rem;
+  background:#f3f4f6; border-radius:.5rem;
+  display:flex; flex-direction:column; gap:.5rem;
+}
+
+.card   {
+  padding:.5rem .75rem; background:#212020; border-radius:.375rem;
+  box-shadow:0 1px 2px rgb(0 0 0 / .1);
+  cursor:move; user-select:none;
+  display:flex; justify-content:space-between;
+}

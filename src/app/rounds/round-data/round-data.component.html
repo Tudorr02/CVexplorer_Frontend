@@ -1,0 +1,44 @@
+<div class="board">
+    <!-- Left column – available entries -->
+    <div class="column">
+      <h2>Pending candidates</h2>
+  
+      <div
+        cdkDropList
+        #src="cdkDropList"
+        [cdkDropListData]="sourceEntries"
+        [cdkDropListConnectedTo]="[tgt]"
+        class="list"
+        (cdkDropListDropped)="drop($event)">
+  
+        @for (e of sourceEntries; track e.id) {
+          <div class="card" cdkDrag>
+            <strong>{{ e.candidateName }}</strong>
+            <span>{{ e.score }} pts</span>
+          </div>
+        }
+      </div>
+    </div>
+  
+    <!-- Right column – selected entries -->
+    <div class="column">
+      <h2>Selected Candidates</h2>
+  
+      <div
+        cdkDropList
+        #tgt="cdkDropList"
+        [cdkDropListData]="targetEntries"
+        [cdkDropListConnectedTo]="[src]"
+        class="list"
+        (cdkDropListDropped)="drop($event)">
+  
+        @for (e of targetEntries; track e.id) {
+          <div class="card" style="border: 2px solid grey;" cdkDrag>
+            <strong>{{ e.candidateName }}</strong>
+            <span>{{ e.score }} pts</span>
+          </div>
+        }
+      </div>
+    </div>
+</div>
+  

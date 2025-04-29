@@ -16,6 +16,8 @@ import { UploadCvComponent } from './upload-cv/upload-cv.component';
 import { tabGuard } from './_guards/tab.guard';
 import { ExploreCvComponent } from './explore-cv/explore-cv.component';
 import { RoundsListComponent } from './rounds/rounds-list/rounds-list.component';
+import { Round } from './_models/round';
+import { RoundDataComponent } from './rounds/round-data/round-data.component';
 export const routes: Routes = [
 
     {path : 'login', component: LoginComponent, canActivate : [guestGuard]},
@@ -66,7 +68,7 @@ export const routes: Routes = [
     },
     {
         path: 'evaluation-rounds/:publicId',
-        component:DashboardComponent,
+        component:RoundDataComponent,
         canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]
     },
     {

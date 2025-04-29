@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Round } from '../_models/round';
+import { RoundEntry } from '../_models/round-entry';
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +31,8 @@ export class RoundService {
     return this.http.delete<void>(`${this.apiUrl}/${publicId}`);
   }
   
-  getRound(publicId: string): Observable<Round> {
-    return this.http.get<Round>(`${this.apiUrl}/${publicId}`);
+  getRound(publicId: string): Observable<RoundEntry[]> {
+    return this.http.get<RoundEntry[]>(`${this.apiUrl}/${publicId}`);
   }
   
 }
