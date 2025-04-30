@@ -1,0 +1,46 @@
+<div class="card align-items-center" cdkDrag>
+    <p-avatar icon="pi pi-user" class="mr-2 w-1/4" size="large" shape="circle" />
+    <strong class="w-1/4 flex justify-center" >{{ entry.candidateName }}</strong>
+    <span class="w-1/4 flex justify-center"> {{ entry.score }} pts</span>
+    <p-button class="w-1/4" label="See Evaluation" size="small" variant="text" (onClick)="getEvaluationResult(entry.id)" />
+    
+</div>
+
+<p-dialog 
+    [modal]="true" 
+    [(visible)]="viewEvaluation"
+    [style]="{'width': '100%', 'height': '100%'}"
+    (onHide)="onDialogHide()" 
+
+   >
+    <ng-template pTemplate="header">
+        <div class="flex justify-between items-center">
+            <h4>Evaluation Result</h4>
+        </div>
+    </ng-template>
+
+    <div class="flex w-full h-full">
+        <div class="flex w-1/2 h-full" >
+            <iframe 
+            *ngIf="pdfUrl"
+            [src]="pdfUrl"
+            class="w-full h-full"
+            style="border:none;"
+            ></iframe>
+        </div>
+        <div class="flex w-1/2 h-full ">
+            <div class="flex w-1/2 justify-center" style="background-color: red;">
+                <h3 class="items-center" >Position Requirements</h3>
+            </div>
+            <div class="flex w-1/2 flex-col items-center gap-5 ">
+                <h3 class="text-center">CV Results</h3>
+
+                <div class="flex gap-5">
+                    <label for="requiredSkills">Required Skills</label>
+                    <input pInputText id="requiredSkills" [ngModel]="eval?.evaluation?.requiredSkills?.scraped" (ngModelChange)="updateSkills($event)" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</p-dialog>

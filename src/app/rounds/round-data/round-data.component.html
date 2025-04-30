@@ -1,44 +1,44 @@
-<div class="board">
-    <!-- Left column – available entries -->
-    <div class="column">
-      <h2>Pending candidates</h2>
-  
-      <div
-        cdkDropList
-        #src="cdkDropList"
-        [cdkDropListData]="sourceEntries"
-        [cdkDropListConnectedTo]="[tgt]"
-        class="list"
-        (cdkDropListDropped)="drop($event)">
-  
-        @for (e of sourceEntries; track e.id) {
-          <div class="card" cdkDrag>
-            <strong>{{ e.candidateName }}</strong>
-            <span>{{ e.score }} pts</span>
-          </div>
-        }
-      </div>
+
+<div class="flex w-[100%] h-[100%] justify-center gap-8 p-10" style="background-color: green;">
+  <div class="w-[50%]">
+    <h2>Pending candidates</h2>
+    <p-scrollpanel [style]="{height: '80%'}">
+    <div
+      cdkDropList
+      #src="cdkDropList"
+      [cdkDropListData]="sourceEntries"
+      [cdkDropListConnectedTo]="[tgt]"
+      class="list"
+      (cdkDropListDropped)="drop($event)">
+      
+      @for (e of sourceEntries; track e.id) {
+        <app-round-entry-card [entry]="e" ></app-round-entry-card>
+      }
     </div>
-  
-    <!-- Right column – selected entries -->
-    <div class="column">
-      <h2>Selected Candidates</h2>
-  
-      <div
-        cdkDropList
-        #tgt="cdkDropList"
-        [cdkDropListData]="targetEntries"
-        [cdkDropListConnectedTo]="[src]"
-        class="list"
-        (cdkDropListDropped)="drop($event)">
-  
-        @for (e of targetEntries; track e.id) {
-          <div class="card" style="border: 2px solid grey;" cdkDrag>
-            <strong>{{ e.candidateName }}</strong>
-            <span>{{ e.score }} pts</span>
-          </div>
-        }
-      </div>
+    </p-scrollpanel>
+  </div>
+
+
+  <div class="w-[50%] ">
+    <h2>Selected Candidates</h2>
+    <div
+      cdkDropList
+      #tgt="cdkDropList"
+      [cdkDropListData]="targetEntries"
+      [cdkDropListConnectedTo]="[src]"
+      class="list h-[80%] overflow-auto"
+      (cdkDropListDropped)="drop($event)">
+
+      @for (e of targetEntries; track e.id) {
+        <!-- <div class="card" style="border: 2px solid grey;" cdkDrag>
+          <strong>{{ e.candidateName }}</strong>
+          <span>{{ e.score }} pts</span>
+        </div> -->
+        <app-round-entry-card [entry]="e" ></app-round-entry-card>
+
+      }
     </div>
+  </div>
 </div>
+
   

@@ -1,0 +1,7 @@
+.card   {
+    padding:.5rem .75rem; background:#212020; border-radius:.375rem;
+    box-shadow:0 1px 2px rgb(0 0 0 / .1);
+    cursor:move; user-select:none;
+    display:flex; justify-content:space-between;
+  }
+  

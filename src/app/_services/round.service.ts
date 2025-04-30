@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Round } from '../_models/round';
 import { RoundEntry } from '../_models/round-entry';
+import { CvEvaluationResult, Evaluation } from '../_models/evaluation';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,10 @@ export class RoundService {
   
   getRound(publicId: string): Observable<RoundEntry[]> {
     return this.http.get<RoundEntry[]>(`${this.apiUrl}/${publicId}`);
+  }
+
+  getEvaluation( entryId : number) :Observable<Evaluation> {
+    return this.http.get<Evaluation>(`${environment.apiBaseUrl}/RoundEntries/${entryId}`);
   }
   
 }

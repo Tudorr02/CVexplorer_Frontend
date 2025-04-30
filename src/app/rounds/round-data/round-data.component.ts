@@ -6,9 +6,12 @@ import { RoundEntry } from '../../_models/round-entry';
 import { NotificationService } from '../../_services/notification.service';
 import { PickListModule } from 'primeng/picklist';
 import { CardModule } from 'primeng/card';
+import { AvatarModule } from 'primeng/avatar';
+import { RoundEntryCardComponent } from "../round-entry-card/round-entry-card.component";
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 @Component({
   selector: 'app-round',
-  imports: [PickListModule , DragDropModule],
+  imports: [ScrollPanelModule,PickListModule, DragDropModule, AvatarModule, RoundEntryCardComponent],
   templateUrl: './round-data.component.html',
   styleUrl: './round-data.component.css',
   

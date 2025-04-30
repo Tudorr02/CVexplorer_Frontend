@@ -1,5 +1,9 @@
-.board  { display:flex; gap:2rem; }
-.column { flex:1 1 0; }
+
+:host {
+  height: 100%;
+  width: 100%;
+
+}
 
 h2      { margin:0 0 .5rem; font:600 1.1rem/1 system-ui; }
 
@@ -9,9 +13,3 @@ h2      { margin:0 0 .5rem; font:600 1.1rem/1 system-ui; }
   display:flex; flex-direction:column; gap:.5rem;
 }
 
-.card   {
-  padding:.5rem .75rem; background:#212020; border-radius:.375rem;
-  box-shadow:0 1px 2px rgb(0 0 0 / .1);
-  cursor:move; user-select:none;
-  display:flex; justify-content:space-between;
-}
