@@ -12,11 +12,11 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 @Component({
   selector: 'app-round',
   imports: [ScrollPanelModule,PickListModule, DragDropModule, AvatarModule, RoundEntryCardComponent],
-  templateUrl: './round-data.component.html',
-  styleUrl: './round-data.component.css',
+  templateUrl: './round-entry-list.component.html',
+  styleUrl: './round-entry-list.component.css',
   
 })
-export class RoundDataComponent {
+export class RoundEntryListComponent {
 
 
 

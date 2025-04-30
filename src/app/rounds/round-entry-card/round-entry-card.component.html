@@ -9,6 +9,7 @@
 <p-dialog 
     [modal]="true" 
     [(visible)]="viewEvaluation"
+    [modal]='true'
     [style]="{'width': '100%', 'height': '100%'}"
     (onHide)="onDialogHide()" 
 
@@ -19,7 +20,7 @@
         </div>
     </ng-template>
 
-    <div class="flex w-full h-full">
+    <div class="flex w-full h-full relative">
         <div class="flex w-1/2 h-full" >
             <iframe 
             *ngIf="pdfUrl"
@@ -28,19 +29,77 @@
             style="border:none;"
             ></iframe>
         </div>
-        <div class="flex w-1/2 h-full ">
-            <div class="flex w-1/2 justify-center" style="background-color: red;">
-                <h3 class="items-center" >Position Requirements</h3>
-            </div>
-            <div class="flex w-1/2 flex-col items-center gap-5 ">
-                <h3 class="text-center">CV Results</h3>
-
+        <div class="flex w-1/2 h-full justify-center">
+            <div class="flex flex-col items-center gap-2" >
+        
+                <p class = "text-xl">CV Results</p>
+                  
                 <div class="flex gap-5">
-                    <label for="requiredSkills">Required Skills</label>
-                    <input pInputText id="requiredSkills" [ngModel]="eval?.evaluation?.requiredSkills?.scraped" (ngModelChange)="updateSkills($event)" />
+                    <label class="mt-2" >Required Skills</label>
+                    <textarea pTextarea rows="3" cols="50" [readOnly]="!editMode" [ngModel]="eval?.evaluation?.requiredSkills?.scraped" ></textarea>
+                    <p-inputnumber id="requiredSkillsScore" [disabled]="!editMode" [inputStyle]="{ width: '5rem' , height: '3rem' }" [ngModel]="eval?.evaluation?.requiredSkills?.score"/>
+                </div>
+                <div class="flex gap-5">
+                    <label class="mt-2" >Nice To Have </label>
+                    <textarea pTextarea rows="3" cols="50" [readOnly]="!editMode" [ngModel]="eval?.evaluation?.niceToHave?.scraped" ></textarea>
+                    <p-inputnumber id="requiredSkillsScore" [disabled]="!editMode" [inputStyle]="{ width: '5rem' , height: '3rem' }" [ngModel]="eval?.evaluation?.niceToHave?.score"/>
+                </div>
+                <div class="flex gap-5">
+                    <label class="mt-2" for="requiredSkills">Languages </label>
+                    <textarea pTextarea rows="1" cols="50" [readOnly]="!editMode" [ngModel]="eval?.evaluation?.languages?.value" ></textarea>
+                    <p-inputnumber id="requiredSkillsScore"  [disabled]="!editMode" [inputStyle]="{ width: '5rem' , height: '3rem' }" [ngModel]="eval?.evaluation?.languages?.score"/>
+                </div>
+                <div class="flex gap-5">
+                    <label class="mt-2" for="requiredSkills">Certification </label>
+                    <textarea pTextarea rows="1" cols="50" [readOnly]="!editMode" [ngModel]="eval?.evaluation?.certifications?.scraped" ></textarea>
+                    <p-inputnumber id="requiredSkillsScore" [disabled]="!editMode" [inputStyle]="{ width: '5rem' , height: '3rem' }" [ngModel]="eval?.evaluation?.certifications?.score"/>
+                </div>
+                <div class="flex gap-5">
+                    <label class="mt-2" for="requiredSkills">Responsibilities </label>
+                    <textarea pTextarea rows="3" cols="50" [readOnly]="!editMode" [ngModel]="eval?.evaluation?.responsibilities?.scraped" ></textarea>
+                    <p-inputnumber id="requiredSkillsScore"  [disabled]="!editMode" [inputStyle]="{ width: '5rem' , height: '3rem' }" [ngModel]="eval?.evaluation?.responsibilities?.score"/>
+                </div>
+                <div class="flex gap-5">
+                    <label class="mt-2" for="requiredSkills">Experience Months </label>
+                    <textarea pTextarea rows="1" cols="50" [readOnly]="!editMode" [ngModel]="eval?.evaluation?.minimumExperienceMonths?.value" ></textarea>
+                    <p-inputnumber id="requiredSkillsScore"  [disabled]="!editMode"[inputStyle]="{ width: '5rem' , height: '3rem' }" [ngModel]="eval?.evaluation?.minimumExperienceMonths?.score"/>
+                </div>
+                <div class="flex gap-5">
+                    <label class="mt-2" for="requiredSkills">Level </label>
+                    <textarea pTextarea rows="1" cols="50" [readOnly]="!editMode" [ngModel]="eval?.evaluation?.level?.value" ></textarea>
+                    <p-inputnumber id="requiredSkillsScore" [disabled]="!editMode"  [inputStyle]="{ width: '5rem' , height: '3rem' }" [ngModel]="eval?.evaluation?.level?.score"/>
+                </div>
+                <div class="flex gap-5">
+                    <label class="mt-2" for="requiredSkills">Education Level </label>
+                    <textarea pTextarea rows="1" cols="50" [readOnly]="!editMode" [ngModel]="eval?.evaluation?.minimumEducationLevel?.value" ></textarea>
+                    <p-inputnumber id="requiredSkillsScore"  [disabled]="!editMode"[inputStyle]="{ width: '5rem' , height: '3rem' }" [ngModel]="eval?.evaluation?.minimumEducationLevel?.score"/>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="absolute bottom-4 right-4">
+
+            <!-- View-only: single Edit button -->
+            <p-button
+                *ngIf="!editMode"
+                label="Edit Evaluation"
+                (click)="editEvaluation()">
+            </p-button>
+          
+            <!-- Edit mode: Cancel + Update -->
+            <div *ngIf="editMode" class="flex gap-2">
+              <p-button
+                  label="Cancel"
+                  severity="secondary"
+                  (click)="cancelEdit()">
+              </p-button>
+          
+              <p-button
+                  label="Update"
+                  (click)="updateEvaluation(eval.cvPublicId, eval.evaluation)">
+              </p-button>
+            </div>
+          
+          </div>
+        </div>
 
 </p-dialog>

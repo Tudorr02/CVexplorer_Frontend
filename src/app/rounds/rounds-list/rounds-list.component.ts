@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { RoundCardComponent } from '../round-card/round-card.component';
 @Component({
   selector: 'app-rounds-list',
-  imports: [CommonModule, RoundCardComponent],
+  imports: [CommonModule, RoundCardComponent ],
   templateUrl: './rounds-list.component.html',
   styleUrl: './rounds-list.component.css'
 })

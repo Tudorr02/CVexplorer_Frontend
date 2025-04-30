@@ -17,7 +17,7 @@ import { tabGuard } from './_guards/tab.guard';
 import { ExploreCvComponent } from './explore-cv/explore-cv.component';
 import { RoundsListComponent } from './rounds/rounds-list/rounds-list.component';
 import { Round } from './_models/round';
-import { RoundDataComponent } from './rounds/round-data/round-data.component';
+import { RoundEntryListComponent } from './rounds/round-entry-list/round-entry-list.component';
 export const routes: Routes = [
 
     {path : 'login', component: LoginComponent, canActivate : [guestGuard]},
@@ -68,7 +68,7 @@ export const routes: Routes = [
     },
     {
         path: 'evaluation-rounds/:publicId',
-        component:RoundDataComponent,
+        component:RoundEntryListComponent,
         canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]
     },
     {
