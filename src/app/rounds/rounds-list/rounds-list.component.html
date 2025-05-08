@@ -1,18 +1,20 @@
 
-<div *ngIf="rounds.length > 0; else noRounds">  
-  @for(round of rounds; track round.publicId){
-    <div class="py-5">
-
-    
-    <app-round-card
-      
-      [round]="round"
-      [ngClass]="{ 'round-card': true }">
-    </app-round-card>
-  </div>
-  }
-</div>
+<p-scrollpanel [style]="{ width: '100%', height: '100%' }">
+  <div *ngIf="rounds.length > 0; else noRounds">  
   
+    @for(round of rounds; track round.publicId){
+      <div class="py-5">
+      <app-round-card
+        
+        [round]="round"
+        [ngClass]="{ 'round-card': true }">
+      </app-round-card>
+    </div>
+    }
+
+</div>
 <ng-template #noRounds>
   <p>No rounds available.</p>
 </ng-template>
+</p-scrollpanel>
+

@@ -6,19 +6,24 @@ import { ButtonModule } from 'primeng/button';
 import { CvService } from '../_services/cv.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { GmailAuthComponent } from '../gmail-auth/gmail-auth.component';
+import { GmailService } from '../_services/gmail.service';
 @Component({
   selector: 'app-upload-cv',
-  imports: [CommonModule,FileUploadModule, ButtonModule, ToastModule],
+  imports: [CommonModule,FileUploadModule, ButtonModule, ToastModule, GmailAuthComponent],
   templateUrl: './upload-cv.component.html',
   styleUrl: './upload-cv.component.css'
 })
 export class UploadCvComponent {
 
+
   private route = inject(ActivatedRoute);
   private cvService = inject(CvService);
-  private notificationService = inject(NotificationService);
+  private notificationService = inject(NotificationService);  
 
   positionPublicId: string = this.route.snapshot.paramMap.get('publicId')!;
+  gmailLabels: { id:string; name:string }[] = [];
+  chosenLabel = '';
 
   onUpload(event: any) {
     const fileUploadEvent: FileUploadEvent = {
@@ -54,4 +59,5 @@ export class UploadCvComponent {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
+
 }

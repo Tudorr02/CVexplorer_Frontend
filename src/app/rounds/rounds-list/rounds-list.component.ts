@@ -5,9 +5,10 @@ import { NotificationService } from '../../_services/notification.service';
 import { Round } from '../../_models/round';
 import { CommonModule } from '@angular/common';
 import { RoundCardComponent } from '../round-card/round-card.component';
+import { ScrollPanelModule } from 'primeng/scrollpanel';  
 @Component({
   selector: 'app-rounds-list',
-  imports: [CommonModule, RoundCardComponent ],
+  imports: [CommonModule, RoundCardComponent, ScrollPanelModule],
   templateUrl: './rounds-list.component.html',
   styleUrl: './rounds-list.component.css'
 })

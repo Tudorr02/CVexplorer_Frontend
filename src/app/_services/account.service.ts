@@ -62,7 +62,7 @@ export class AccountService {
   }
 
   login(model: any) : Observable<Account> {
-    return this.http.post<Account>(`${this.apiUrl}/Login`, model).pipe(
+    return this.http.post<Account>(`${this.apiUrl}/Login`, model , {withCredentials : true}).pipe(
       tap(user => { 
         if (user) {
           localStorage.setItem('userData', JSON.stringify(user)); //  Store user in localStorage
