@@ -83,6 +83,7 @@ export class AccountService {
   }
 
   logout() {
+
     if (this.tokenCheckInterval) {
       if(this.isTokenExpired()){
         console.log('Session expired. Stopping token check !');
@@ -93,6 +94,14 @@ export class AccountService {
     }
     localStorage.removeItem('userData');
     this.currentUser.set(null);
+    this.http.post<void>(`${this.apiUrl}/Logout`, {}, { withCredentials: true }).subscribe({
+      next: () => {
+        console.log('Logged out successfully');
+      },
+      error: (error) => {
+        console.error('Error during logout:', error);
+      }
+    });
   }
 
   isLoggedIn(): boolean {

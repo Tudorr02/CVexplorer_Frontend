@@ -1,5 +1,5 @@
 
-<p-button [disabled]="labels.length > 0 " label="Connect with Google" (click)="connect()"></p-button>
+<p-button [disabled]="sessionActive" label="Connect with Google" (click)="connect()"></p-button>
 
 <div *ngIf="labels.length" class="mt-4">
   <p-select [(ngModel)]="selectedLabel"

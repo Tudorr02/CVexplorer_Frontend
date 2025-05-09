@@ -24,16 +24,10 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
   private popup: Window | null = null;
   private pollTimer: any;
 
+  sessionActive = false; // for showing/hiding the Connect button
+
   ngOnInit() {
-    this.gmailService.isGmailSession().subscribe({
-      next: () => {
-        // 2) only if OK, load labels
-        this.loadLabels();
-      },
-      error: () => {
-        // not logged in → do nothing, show Connect button
-      }
-    });
+    this.checkSession(); // Check if the session is active on component init
   }
 
   ngOnDestroy() {
@@ -50,6 +44,8 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
         this.loadLabels();
       }
     }, 500);
+
+    this.checkSession(); // Check if the session is active
   }
 
   private clearPopupTimer() {
@@ -57,6 +53,18 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
       clearInterval(this.pollTimer);
       this.pollTimer = null;
     }
+  }
+
+  private checkSession() {
+    this.gmailService.isGmailSession().subscribe({
+      next: () => {
+        this.sessionActive = true; // Gmail session is active
+        this.loadLabels();
+      },
+      error: () => {
+        this.sessionActive = false; // Gmail session is not active
+      }
+    });
   }
 
   private loadLabels() {
