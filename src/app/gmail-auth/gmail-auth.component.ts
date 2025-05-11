@@ -6,6 +6,8 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';  
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../_services/notification.service';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-gmail-auth',
   imports: [Select, CommonModule, ButtonModule, ToastModule, FormsModule],
@@ -16,55 +18,47 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
 
   private gmailService = inject(GmailService);
   private notificationService = inject(NotificationService);
-
+  private route = inject(ActivatedRoute);
   labels: { id: string; name: string }[] = [];
   selectedLabel = '';
   
+  positionId!: string;
 
-  private popup: Window | null = null;
-  private pollTimer: any;
+  private messageHandler!: (event: MessageEvent) => void;
+  private connectSub?: Subscription;
 
   sessionActive = false; // for showing/hiding the Connect button
 
   ngOnInit() {
-    this.checkSession(); // Check if the session is active on component init
+    this.positionId = this.route.snapshot.paramMap.get('publicId')!;
+
+    this.gmailService.isGmailSession().subscribe({
+      next: () => {
+        this.sessionActive = true;
+        this.loadLabels();
+      },
+      error: () => this.sessionActive = false
+    });
   }
 
   ngOnDestroy() {
-    this.clearPopupTimer();
-  }
+    window.removeEventListener('message', this.messageHandler);
+    this.connectSub?.unsubscribe(); 
+   }
 
   connect() {
-    // 1. deschide popup-ul de autentificare
-    this.popup = this.gmailService.connectToGmail();
-    // 2. pornește un interval care verifică dacă s-a închis
-    this.pollTimer = setInterval(() => {
-      if (!this.popup || this.popup.closed) {
-        this.clearPopupTimer();
-        this.loadLabels();
-      }
-    }, 500);
-
-    this.checkSession(); // Check if the session is active
-  }
-
-  private clearPopupTimer() {
-    if (this.pollTimer) {
-      clearInterval(this.pollTimer);
-      this.pollTimer = null;
-    }
-  }
-
-  private checkSession() {
-    this.gmailService.isGmailSession().subscribe({
+    
+    this.connectSub = this.gmailService.connectToGmail().subscribe({
       next: () => {
-        this.sessionActive = true; // Gmail session is active
+        // Popup-ul s-a autentificat și s-a închis deja
+        this.sessionActive = true;
         this.loadLabels();
       },
       error: () => {
-        this.sessionActive = false; // Gmail session is not active
+        this.notificationService.showError('Autentificarea la Gmail a eșuat');
       }
     });
+
   }
 
   private loadLabels() {
@@ -76,11 +70,35 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
       error: err => {
        
         this.notificationService.showError('Failed to load Gmail Folders!');
-        
-        // poți adăuga un toast de eroare aici
       }
     });
   }
+
+
+  watch() {
+    if (!this.selectedLabel) {
+      this.notificationService.showError('Selecteaza un folder Gmail');
+      return;
+    }
+    this.gmailService.watchLabel(this.selectedLabel, this.positionId)
+    .subscribe({
+    next: res => {
+      console.log('Watch started:', res);
+      this.notificationService.showSuccess('Watch pornit cu succes');
+    },
+    error: () => this.notificationService.showError('Eroare la pornirea watch-ului')
+    });
+  }
+  
+
+// this.gmailService.unwatchLabels(this.selectedLabels, this.positionPublicId)
+//   .subscribe({
+//     next: res => {
+//       console.log('Watch stopped:', res);
+//       this.notify.showSuccess('Watch oprit cu succes');
+//     },
+//     error: () => this.notify.showError('Eroare la oprirea watch-ului')
+//   });
 
   
 }

@@ -10,5 +10,14 @@
           placeholder="Select a Folder"
           />
     
-
+  <p-button
+  pButton
+  type="button"
+  label="Start Watch"
+  icon="pi pi-play"
+  (click)="watch()"
+  [disabled]="!selectedLabel"
+/>
 </div>
+
+
