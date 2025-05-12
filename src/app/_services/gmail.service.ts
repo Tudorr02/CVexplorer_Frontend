@@ -75,13 +75,12 @@ export class GmailService {
   }
 
 
-  watchLabel(labelId: string, positionId: string): Observable<{
+  watchLabel(labelIds: string[], positionId: string): Observable<{
     labelIds: string[];
     historyId: number;
     expiration: number;
   }> {
     const params = new HttpParams()
-      .set('labelId', labelId)
       .set('positionPublicId', positionId);
 
     return this.http.post<{
@@ -90,7 +89,7 @@ export class GmailService {
       expiration: number;
     }>(
       `${this.apiUrl}/watch`,
-      [],
+      labelIds,
       { params,withCredentials: true }
     );
   }

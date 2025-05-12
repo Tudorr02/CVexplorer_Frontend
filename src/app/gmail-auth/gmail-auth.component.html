@@ -1,23 +1,22 @@
 
-<p-button [disabled]="sessionActive" label="Connect with Google" (click)="connect()"></p-button>
+<p-button [disabled]="sessionActive" label="Connect with Google" (onClick)="connect()"/>
 
 <div *ngIf="labels.length" class="mt-4">
-  <p-select [(ngModel)]="selectedLabel"
-          class="p-inputtext p-component"
-          [options]="labels"
-          optionLabel="name"
-          optionValue="id"
-          placeholder="Select a Folder"
-          />
+   <p-multiSelect
+    [(ngModel)]="selectedLabels"
+    [options]="labels"
+    optionLabel="name"
+    optionValue="id"
+    placeholder="Select Folders"
+    display="chip"
+    class="p-inputtext p-component"
+  />
     
   <p-button
-  pButton
-  type="button"
+  
   label="Start Watch"
   icon="pi pi-play"
   (click)="watch()"
-  [disabled]="!selectedLabel"
-/>
+  [disabled]="!selectedLabels.length"/>
 </div>
-
 

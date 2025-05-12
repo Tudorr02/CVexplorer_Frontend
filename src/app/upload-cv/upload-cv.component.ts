@@ -8,9 +8,10 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { GmailAuthComponent } from '../gmail-auth/gmail-auth.component';
 import { GmailService } from '../_services/gmail.service';
+import { OutlookAuthComponent } from '../outlook-auth/outlook-auth.component';
 @Component({
   selector: 'app-upload-cv',
-  imports: [CommonModule,FileUploadModule, ButtonModule, ToastModule, GmailAuthComponent],
+  imports: [OutlookAuthComponent,CommonModule,FileUploadModule, ButtonModule, ToastModule, GmailAuthComponent],
   templateUrl: './upload-cv.component.html',
   styleUrl: './upload-cv.component.css'
 })

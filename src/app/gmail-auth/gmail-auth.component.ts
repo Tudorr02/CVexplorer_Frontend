@@ -8,9 +8,10 @@ import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../_services/notification.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { MultiSelectModule } from 'primeng/multiselect';
 @Component({
   selector: 'app-gmail-auth',
-  imports: [Select, CommonModule, ButtonModule, ToastModule, FormsModule],
+  imports: [Select, CommonModule, ButtonModule, ToastModule, FormsModule, MultiSelectModule],
   templateUrl: './gmail-auth.component.html',
   styleUrl: './gmail-auth.component.css'
 })
@@ -20,7 +21,7 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
   private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
   labels: { id: string; name: string }[] = [];
-  selectedLabel = '';
+  selectedLabels: string[] = [];  // acum un array
   
   positionId!: string;
 
@@ -76,11 +77,11 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
 
 
   watch() {
-    if (!this.selectedLabel) {
+    if (!this.selectedLabels.length) {
       this.notificationService.showError('Selecteaza un folder Gmail');
       return;
     }
-    this.gmailService.watchLabel(this.selectedLabel, this.positionId)
+    this.gmailService.watchLabel(this.selectedLabels, this.positionId)
     .subscribe({
     next: res => {
       console.log('Watch started:', res);

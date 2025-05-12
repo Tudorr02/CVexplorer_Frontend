@@ -1,0 +1,17 @@
+<!-- outlook-auth.component.html -->
+<p-button [disabled]="sessionActive" (onClick)="login()" label="Connect to Outlook" />
+
+<!-- după login, afișăm folderele și watch -->
+<div *ngIf="sessionActive" class="mt-4">
+  <p-multiSelect
+    [(ngModel)]="selectedFolders"
+    [options]="folders"
+    optionLabel="displayName"
+    optionValue="id"
+    display="chip"
+    placeholder="Select folders"
+  ></p-multiSelect>
+  <button (click)="watch()" [disabled]="!selectedFolders.length" class="p-button p-component">
+    Start Watch
+  </button>
+</div>
