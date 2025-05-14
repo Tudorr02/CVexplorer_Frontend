@@ -20,7 +20,7 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
   private gmailService = inject(GmailService);
   private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
-  labels: { id: string; name: string }[] = [];
+  labels: { id: string; name: string ; selected : boolean}[] = [];
   selectedLabels: string[] = [];  // acum un array
   
   positionId!: string;
@@ -64,9 +64,10 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
 
   private loadLabels() {
     // 3. după ce popup-ul s-a închis, obține folderele
-    this.gmailService.getGmailFolders().subscribe({
+    this.gmailService.getGmailFolders(this.positionId).subscribe({
       next: lbls => {
         this.labels = lbls;
+        this.selectedLabels = lbls.filter(label => label.selected).map(label => label.id);
       },
       error: err => {
        

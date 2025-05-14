@@ -13,10 +13,13 @@ export class GmailService {
   private apiUrl = `${environment.apiBaseUrl}/Gmail`;
   
 
-  getGmailFolders(): Observable<{ id: string; name: string }[]> {
-    return this.http.get<{ id: string; name: string }[]>(
+  getGmailFolders(positionId : string): Observable<{ id: string; name: string ; selected: boolean}[]> 
+  {
+    const params = new HttpParams()
+      .set('publicPosId', positionId);
+    return this.http.get<{ id: string; name: string ; selected: boolean}[]>(
       `${this.apiUrl}/labels`,
-      { withCredentials: true }
+      { params,withCredentials: true }
     );
   }
 
