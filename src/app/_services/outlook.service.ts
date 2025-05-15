@@ -62,11 +62,32 @@ export class OutlookService {
     return this.http.get<void>(`${this.apiUrl}/session`, { withCredentials: true });
   }
 
-   getOutlookFolders(): Observable<{ id: string; displayName: string }[]> {
-    return this.http.get<{ id: string;  displayName: string }[]>(
+   getOutlookFolders(positionId : string): Observable<{ id: string; name: string ; selected: boolean }[]> {
+    return this.http.get<{ id: string;  name: string; selected: boolean }[]>(
       `${this.apiUrl}/folders`,
-      { withCredentials: true }
+      { params: { publicPosId: positionId }, withCredentials: true }
+      
     );
   }
+
+  
+  watchFolder(folderIds: string[], positionId: string): Observable<any> {
+     
+    const body: any = {
+      folderIds:            folderIds,
+      positionPublicId:     positionId
+    };
+      return this.http.post<{
+        labelIds: string[];
+        historyId: number;
+        expiration: number;
+      }>(
+        `${this.apiUrl}/subscribe-folders`,
+        body,
+        { withCredentials: true }
+
+      );
+    }
+  
  
 }
