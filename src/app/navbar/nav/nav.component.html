@@ -1,9 +1,22 @@
 
-<nav class="navbar" [ngClass]="{'navbar-login': isLogin()}">
+<nav class="
+    flex items-center justify-between   /* Tailwind: flexbox, aliniere */
+    px-6 py-2 h-16                     /* Tailwind: padding, înălţime */
+    bg-surface dark:bg-surface-100    /* culori din PrimeNG vars */
+    text-text                         /* culoare text din PrimeNG vars */
+  " 
+  [ngClass]="{'navbar-login': isLogin()}">
     <a aria-label="CVexplorer Logo" href="/dashboard" class="logo-container">
         <img [src]="logoPath" alt="Logo" width="10%"/>
     </a>
-
+    <li>
+        <p-button
+            [icon]="'pi ' + (isDarkMode ? 'pi-sun' : 'pi-moon')"
+            [variant]="'text'"
+            [styleClass]="'topbar-item'"
+            (onClick)="toggleTheme()"
+        ></p-button>
+    </li>
     @if(!isLoginRoute){
         <ul class="topbar-items">
             <li class="nav-item ">
@@ -21,9 +34,7 @@
                     variant="outlined" [size]="isLargeScreen() ? 'large' : 'small'" 
                     (onClick)="openEnrollUserDialog()"/>
             </li>
-            <li>
-                <p-button label="{{buttonText}}" [size]="isLargeScreen() ? 'large' : 'small'"   icon="{{iconClass}}" class="topbar-item" [style]="{'width': '6.5vw'}" [variant]="'outlined'"  (click)="toggleTheme()"/>
-            </li>
+            
             <li>
                 <p-button label="Sign Out" [size]="isLargeScreen() ? 'large' : 'small'" severity="danger" icon="pi pi-sign-out"  [variant]="'outlined'"  (onClick)="signOut()"/>
             </li>

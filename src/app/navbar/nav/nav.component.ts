@@ -56,6 +56,7 @@ export class NavComponent implements OnInit {
   logoPath: string = 'logos/CVexplorerDark.svg';
   iconClass: string = 'pi pi-moon';
 
+  
   // ✅ User Data
   username = computed(() => this.AccountService.currentUser()?.username || '');
  
@@ -81,7 +82,6 @@ export class NavComponent implements OnInit {
     const element = document.querySelector('html');
     element?.classList.toggle('my-app-dark', isDark);
     element?.classList.toggle('my-app-light', !isDark);
-    this.buttonText = isDark ? 'Dark Mode' : 'Light Mode';
     this.logoPath = isDark ? 'logos/CVexplorerDark.svg' : 'logos/CVexplorerLight.svg';
     this.iconClass = isDark ? 'pi pi-moon' : 'pi pi-sun';
   }

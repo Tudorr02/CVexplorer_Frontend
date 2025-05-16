@@ -19,7 +19,18 @@ import { RoundsListComponent } from './rounds/rounds-list/rounds-list.component'
 import { Round } from './_models/round';
 import { RoundEntryListComponent } from './rounds/round-entry-list/round-entry-list.component';
 import { OAuthCallbackComponent } from './oauth-callback/oauth-callback.component';
+import { NavComponent } from './navbar/nav/nav.component';
 export const routes: Routes = [
+
+
+    
+    ///// DE TEST
+
+    { path: 'lol', component: NavComponent},
+
+
+    
+
 
     {path : 'login', component: LoginComponent, canActivate : [guestGuard]},
     {
@@ -92,8 +103,27 @@ export const routes: Routes = [
     { path: 'oauth-callback', component: OAuthCallbackComponent },
 
 
+
+
+
+
+
+
+
+
+
+
+
     { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
     { path: 'not-found', component: NotFoundComponent }, // ✅ Define a separate route for the 404 page
-    { path: '**',redirectTo:'/not-found', pathMatch: 'full' } //  Catch-all route for 404 pages
+    { path: '**',redirectTo:'/not-found', pathMatch: 'full' } ,//  Catch-all route for 404 pages
+
+
+
+
+
+
+
+    
 
 ];

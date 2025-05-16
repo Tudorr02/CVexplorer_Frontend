@@ -1,10 +1,10 @@
-@import "bootstrap/dist/css/bootstrap.min.css";
+/* @import "bootstrap/dist/css/bootstrap.min.css";
 
 .navbar {
-    display: flex; /* Makes the navbar a flex container */
-    justify-content: space-between; /* Pushes items to the edges */
-    align-items: center; /* Vertically centers items */
-    padding: 0vh var(--width-padding-site); /* Add spacing inside the navbar */
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    padding: 0vh var(--width-padding-site); 
     vertical-align: middle;
     height: var(--navbar-height);
   }
@@ -27,11 +27,11 @@
 }
 
 .logo-container {
-    width: 10vw; /* Increase the parent container's width */
+    width: 10vw;
   }
 .logo-container img {
-    width: 100%; /* Make the logo fit the container */
-    height: 100%; /* Maintain aspect ratio */
+    width: 100%; 
+    height: 100%; 
 }
 
 .topbar-items {
@@ -45,4 +45,4 @@
 }
 
 
-
+ */
