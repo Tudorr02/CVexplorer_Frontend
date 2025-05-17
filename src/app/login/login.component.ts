@@ -24,6 +24,14 @@ export class LoginComponent {
 
   model = { username: '', password: '' };
 
+   rootStyles = getComputedStyle(document.documentElement);
+    // conținutul semantic background → poate fi var(--p-surface-0) sau var(--p-surface-900)
+    bgCssVar = this.rootStyles
+    .getPropertyValue('--p-content-background')
+    .trim() || '#222222';
+
+     // 2) Transformă "#rrggbb" într-un 0xrrggbb:
+     bgColorNum = parseInt(this.bgCssVar.replace('#', ''), 16);
 
   ngAfterViewInit(): void {
     this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js')
@@ -37,9 +45,9 @@ export class LoginComponent {
           minHeight: 200.00,
           minWidth: 200.00,
           baseColor: 0x10B981,
-          backgroundColor: 0x222222,
+          backgroundColor: this.bgColorNum,
           amplitudeFactor: 1.20,
-          xOffset: 0.25,
+          xOffset: 0.20,
           yOffset: 0.00,
           size: 1.20
         });

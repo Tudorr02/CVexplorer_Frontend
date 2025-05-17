@@ -1,44 +1,60 @@
 
-<nav class="
-    flex items-center justify-between   /* Tailwind: flexbox, aliniere */
-    px-6 py-2 h-16                     /* Tailwind: padding, înălţime */
-    bg-surface dark:bg-surface-100    /* culori din PrimeNG vars */
-    text-text                         /* culoare text din PrimeNG vars */
-  " 
-  [ngClass]="{'navbar-login': isLogin()}">
-    <a aria-label="CVexplorer Logo" href="/dashboard" class="logo-container">
-        <img [src]="logoPath" alt="Logo" width="10%"/>
+<nav 
+    class="flex justify-between items-center w-full h-[var(--nav-height)] px-[var(--nav-px)] " 
+    [ngClass]="{'absolute z-0': isLogin()}"
+>
+    <a aria-label="CVexplorer Logo" href="/dashboard" class="w-[var(--nav-logo-width)]">
+        <img [src]="logoPath" alt="Logo" class="w-full h-full"/>
     </a>
-    <li>
-        <p-button
-            [icon]="'pi ' + (isDarkMode ? 'pi-sun' : 'pi-moon')"
-            [variant]="'text'"
-            [styleClass]="'topbar-item'"
-            (onClick)="toggleTheme()"
-        ></p-button>
-    </li>
+    
+
+
     @if(!isLoginRoute){
-        <ul class="topbar-items">
-            <li class="nav-item ">
-                <p-button label="{{username()}}" [size]="isLargeScreen() ? 'large' : 'small'"  
-                [variant]="'text'" [styleClass]="isDarkMode ? 'nav-username-dark' : 'nav-username-light'"  
-                (onClick)="openAccountDetailsDialog()" />
-            </li>
-            <li *appHasRole="['HRLeader']">
-                <p-button label="Manage Users" icon="pi pi-building" 
-                    variant="outlined" [size]="isLargeScreen() ? 'large' : 'small'" 
-                    (onClick)="openManageUsersDialog()"/>
-            </li>
-            <li *appHasRole="['HRLeader']">
-                <p-button label="Enroll a User" icon="pi pi-user-plus" 
-                    variant="outlined" [size]="isLargeScreen() ? 'large' : 'small'" 
-                    (onClick)="openEnrollUserDialog()"/>
-            </li>
-            
-            <li>
-                <p-button label="Sign Out" [size]="isLargeScreen() ? 'large' : 'small'" severity="danger" icon="pi pi-sign-out"  [variant]="'outlined'"  (onClick)="signOut()"/>
-            </li>
-        </ul>
+
+
+        <div class="flex gap-[var(--nav-items-gap)]">
+            <p-button
+            label="{{ username() }}"
+            [size]="isLargeScreen() ? 'large' : 'small'"
+            variant="text"
+            (onClick)="openAccountDetailsDialog()"
+            ></p-button>
+
+            <p-button
+                *appHasRole="['HRLeader']"
+                label="Manage Users"
+                icon="pi pi-building"
+                variant="outlined"
+                [size]="isLargeScreen() ? 'large' : 'small'"
+                (onClick)="openManageUsersDialog()"
+            ></p-button>
+
+            <p-button
+                *appHasRole="['HRLeader']"
+                label="Enroll a User"
+                icon="pi pi-user-plus"
+                variant="outlined"
+                [size]="isLargeScreen() ? 'large' : 'small'"
+                (onClick)="openEnrollUserDialog()"
+            ></p-button>
+            <p-button
+                [icon]="'pi ' + (isDarkMode ? 'pi-sun' : 'pi-moon')"
+                variant="outlined"
+                [size]="isLargeScreen() ? 'large' : 'small'"
+                (onClick)="toggleTheme()"/>
+            <p-button
+                label="Sign Out"
+                [size]="isLargeScreen() ? 'large' : 'small'"
+                severity="danger"
+                icon="pi pi-sign-out"
+                variant="outlined"
+                (onClick)="signOut()"
+            ></p-button>
+
+        
+        </div>
+        
+
     }
     
     
@@ -46,9 +62,11 @@
 </nav>
 
 
+
+
 <p-dialog header="Enroll a New User" 
     [(visible)]="visibleEnrollUser" [modal]="true" 
-    [style]="{ width: '25rem', border: 'None' }"
+    styleClass="w-dialog-sm h-dialog-sm border-none"
     (onHide)="closeEnrollUserDialog()"
 >
   
@@ -59,19 +77,18 @@
 
 
 <p-dialog header="Account Details" 
-[modal]="true"
-[(visible)]="visibleDetails" 
-[style]="{ width: '25rem' , border: 'None' }"
-(onHide)="closeAccountDetailsDialog()"
+    [modal]="true"
+    [(visible)]="visibleDetails" 
+    styleClass="w-dialog-sm h-dialog-m border-none"
+    (onHide)="closeAccountDetailsDialog()"
 >     
     <app-nav-user-details></app-nav-user-details>
 </p-dialog>
 
 
-
 <p-dialog header="Manage Users" 
     [(visible)]="visibleManageUsers" [modal]="true" 
-    [style]="{ width: '100rem', height:'90rem' , border: 'None' }"
+    styleClass="w-dialog-lg h-dialog-lg border-none"
     (onHide)="closeManageUsersDialog()"
 >
     <app-nav-manage-users></app-nav-manage-users>

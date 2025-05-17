@@ -1,6 +1,7 @@
 <p-toast position="top-center"></p-toast> <!--Ensures notifications are visible -->
 <app-nav></app-nav>
 
+
 @if(isUserLoggedIn()) {
     <div id="homeContainer">
     
@@ -53,12 +54,13 @@
     <router-outlet ></router-outlet>
 }
 
-<div class="footer" [ngClass]="{'dashboard-footer': isDashboard()}">
+<!-- <div class="footer" [ngClass]="{'dashboard-footer': isDashboard()}">
     <p>© 2025  CVexplorer. All rights reserved.</p>
-</div>
+</div> -->
 
-
-    
+<footer class="fixed bottom-0 w-full flex items-center justify-center text-center text-[var(--p-surface-400)]">
+  © 2025  CVexplorer. All rights reserved.
+</footer>
     
 
 

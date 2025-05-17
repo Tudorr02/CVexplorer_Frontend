@@ -1,0 +1,19 @@
+:root {
+
+    /* Tailwind CSS tokens */
+
+    //navbar
+    --nav-px: 2%;
+    --nav-height: 8vh;
+    --nav-items-gap: 1rem;
+    --nav-logo-width: 10rem;
+
+    //login
+    --login-height: calc(100% - var(--nav-height) - 2vh);
+    --login-card-height: 40vh;
+    --login-card-width: 20vw;
+    --login-card-border-radius: 2rem;
+
+}
+
+

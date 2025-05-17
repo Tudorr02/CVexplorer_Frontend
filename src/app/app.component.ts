@@ -28,12 +28,6 @@ export class AppComponent  {
   AccountService = inject(AccountService);
   Router = inject(Router);
   NodeSelectionService = inject(NodeSelectionService);
-  
-
-  title(title: any) {
-    throw new Error('Method not implemented.');
-  }
-
   private userService = inject(AccountService);
 
   constructor(private router: Router) {

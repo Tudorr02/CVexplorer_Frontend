@@ -1,4 +1,4 @@
-@import './variables';    // fișierul tău _variables.scss
+@import './variables';  
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,14 +7,31 @@
 html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  
-  /* font-family: Inter var,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol; */
-  /* font-family:  sans-serif; */
+
   overflow: hidden;
 }
 
-body{
+body , app-root,html{
  margin: 0;
- height: 100vh;
- width: 100vw;
+ padding: 0;
+ height: 100%;
+ width: 100%;
+}
+
+
+/* 4. Definirea break-point-urilor custom (opțional) */
+:root {
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+}
+
+/* 5. Exemple de media-queries mobile-first */
+@media (min-width: var(--breakpoint-sm)) {
+  /* stiluri pentru ecrane ≥ 576px */
+}
+
+@media (min-width: var(--breakpoint-md)) {
+  /* stiluri pentru ecrane ≥ 768px */
 }
