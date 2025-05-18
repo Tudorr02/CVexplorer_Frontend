@@ -1,37 +1,39 @@
 <p-toast position="top-center"></p-toast> <!--Ensures notifications are visible -->
-<app-nav></app-nav>
+<app-nav ></app-nav>
 
 
 @if(isUserLoggedIn()) {
-    <div id="homeContainer">
-    
+    <div  class="h-[var(--home-container-height)] px-[var(--home-container-padding-x)] py-[var(--home-container-padding-y)]  ">
 
-        <p-splitter [panelSizes]="[20, 80]" 
-        [minSizes]="[20,80]" 
+       
+        <p-splitter 
+        [panelSizes]="[30, 70]" 
+        [minSizes]="[30,70]" 
         [gutterSize]="0"
-        [style]="{
-                'border': 'none',          
-                'borderRadius': 'var(--card-border-radius)'
-        }"
+        [style]="{'border': 'none' }"
+        styleClass="border-round-3xl shadow-9 w-full h-full py-[var(--home-card-padding-y)]  px-[var(--home-card-padding-x)] " 
+        panelStyleClass="px-[var(--home-panel-padding-x)] "
+        
         >
     
             <ng-template #panel *appHasRole="['HRUser','HRLeader']" >
-                <div class="left-menu-container">
+                <div class="w-full h-fulll">
                     <app-left-menu></app-left-menu>
                 </div>  
             </ng-template>
     
             <ng-template #panel>
-                <div class="component-container">
-                    <p-tabs [value]="currentTab()">
-                        <p-tablist> 
+                <div class="w-full h-full flex flex-col">
+                    
+                    <p-tabs [value]="currentTab()" class=" ">
+                        <p-tablist > 
                             @for(tab of tabs(); track tab.route){
                                 
                                 <p-tab  [value]="tab.route"
                                     [routerLink]="tab.route"
                                     [disabled]="tab.disabled"
                                     [queryParams]="tab.queryParams"
-                                 >
+                                >
                                     <i [class]="tab.icon"></i>
                                     <span>{{ tab.label }}</span>
                                 </p-tab>
@@ -39,14 +41,16 @@
                         </p-tablist>
                     </p-tabs>
                     
-                    <p-tabpanels>
-                        <router-outlet></router-outlet>  
-                    </p-tabpanels> 
+                    <div class="flex overflow-hidden w-full">
+                        <p-tabpanels class="w-full h-full flex1">
+                            <router-outlet></router-outlet>  
+                        </p-tabpanels> 
+                    </div>
+
                 </div>
             </ng-template>
     
         </p-splitter>
-    
         
     </div>
 }
@@ -54,13 +58,12 @@
     <router-outlet ></router-outlet>
 }
 
-<!-- <div class="footer" [ngClass]="{'dashboard-footer': isDashboard()}">
-    <p>© 2025  CVexplorer. All rights reserved.</p>
-</div> -->
 
-<footer class="fixed bottom-0 w-full flex items-center justify-center text-center text-[var(--p-surface-400)]">
-  © 2025  CVexplorer. All rights reserved.
+<footer class="fixed bottom-0 w-full flex items-center justify-center text-center text-[var(--p-surface-400)] h-[var(--footer-height)] ">
+© 2025  CVexplorer. All rights reserved.
 </footer>
+
+
     
 
 

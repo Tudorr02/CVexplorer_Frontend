@@ -1,55 +1,6 @@
-
-::ng-deep .p-tree {
-    background-color: transparent !important; /* Makes the tree's background transparent */ 
-    height: 93%;
-}
-
-::ng-deep .tree-header {
-   padding-inline: 1vw;  
-}
-::ng-deep .tree-header p-button {
-    display: flex;
-    align-items: center;
-}
-
-::ng-deep .node-content {
-    display: flex; /* ✅ Enables horizontal alignment */
-    align-items: center; /* ✅ Centers items vertically */
-    justify-content: space-between;
-    width: 13vw; /* ✅ Limits the width of the node content */
-    margin-left: 1%;
-}
-
-::ng-deep .node-content p-button {
-    opacity: 0; /* ✅ Hide button by default */
-    visibility: hidden; /* ✅ Ensures it's not clickable when hidden */
-    transition: opacity 0.2s ease-in-out, visibility 0.2s;
-}
-
-/* ✅ Show the button when hovering over the node */
-::ng-deep .node-content:hover p-button {
-    opacity: 1; /* ✅ Makes button visible */
-    visibility: visible;
-}
-
-::ng-deep .loading-content{
-    margin-top: 1.8vh;
+::ng-deep  .p-tree-node{
     width: 100%;
-    
 }
-
-.loading-department {
-    display: flex;
-    justify-content: space-between  ;
-    align-items: center;
-    width: 94%;
-    margin-left: 0.5vw;
-    padding-inline: 1vw;
-}
-
-.loading-searchbar{
+::ng-deep  .p-tree-node-label {
     width: 100%;
-    display: flex;
-    justify-content: center;
 }
-

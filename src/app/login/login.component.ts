@@ -27,7 +27,7 @@ export class LoginComponent {
    rootStyles = getComputedStyle(document.documentElement);
     // conținutul semantic background → poate fi var(--p-surface-0) sau var(--p-surface-900)
     bgCssVar = this.rootStyles
-    .getPropertyValue('--p-content-background')
+    .getPropertyValue('--dark-background-color')
     .trim() || '#222222';
 
      // 2) Transformă "#rrggbb" într-un 0xrrggbb:

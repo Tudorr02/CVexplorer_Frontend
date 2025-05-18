@@ -1,46 +1,48 @@
 
-<div class="content">
-    <div class="field">
-        <label for="companyName" class="font-semibold w-24">Company</label>
-        <input pInputText id="companyName" [(ngModel)]="userDetails.companyName" [readOnly]="true" variant="filled" autocomplete="off" />
+<div class="h-full w-full flex flex-col">
+    <div class=" h-4/5 flex flex-col gap-3 px-4 justify-center ">
+        <div class="flex  items-center justify-between">
+            <label for="companyName" class="font-semibold w-24">Company</label>
+            <input pInputText id="companyName" [(ngModel)]="userDetails.companyName" [readOnly]="true" variant="filled" autocomplete="off" />
+        </div>
+        <div class="flex  items-center justify-between">
+            <label for="firstName" class="font-semibold w-24">First Name</label>
+            <input pInputText id="firstName" 
+            [(ngModel)]="userDetails.firstName" 
+            [readOnly]="!isEditing" 
+            autocomplete="off"
+            [variant]="!isEditing ? 'filled' : 'outlined'" 
+            />
+        </div>
+        <div class="flex  items-center justify-between">
+            <label for="lastName" class="font-semibold w-24">Last Name</label>
+            <input pInputText id="lastName" 
+            [(ngModel)]="userDetails.lastName" 
+            [variant]="!isEditing ? 'filled' : 'outlined'"  
+            [readOnly]="!isEditing"
+            autocomplete="off" />
+            
+        </div>
+        <div class="flex  items-center justify-between">
+            <label for="email" class="font-semibold w-24">Email</label>
+            <input pInputText id="email"
+            [(ngModel)]="userDetails.email" 
+            [variant]="!isEditing ? 'filled' : 'outlined'" 
+            [readOnly]="!isEditing" 
+            autocomplete="off" />
+        </div>
     </div>
-    <div class="field">
-        <label for="firstName" class="font-semibold w-24">First Name</label>
-        <input pInputText id="firstName" 
-        [(ngModel)]="userDetails.firstName" 
-        [readOnly]="!isEditing" 
-        autocomplete="off"
-        [variant]="!isEditing ? 'filled' : 'outlined'" 
-        />
-    </div>
-    <div class="field">
-        <label for="lastName" class="font-semibold w-24">Last Name</label>
-        <input pInputText id="lastName" 
-        [(ngModel)]="userDetails.lastName" 
-        [variant]="!isEditing ? 'filled' : 'outlined'"  
-        [readOnly]="!isEditing"
-        autocomplete="off" />
-        
-    </div>
-    <div class="field">
-        <label for="email" class="font-semibold w-24">Email</label>
-        <input pInputText id="email"
-        [(ngModel)]="userDetails.email" 
-        [variant]="!isEditing ? 'filled' : 'outlined'" 
-        [readOnly]="!isEditing" 
-        autocomplete="off" />
-    </div>
-</div>
 
-<div class="dialog-actions">
-    @if(loading){
-        <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
-    }
-    @if(isEditing){
-        <p-button  label="Cancel" severity="secondary" (click)="cancelEdit()" />
-        <p-button label="Save" (click)="updateDetails()" />
-    }
-    @else {
-        <p-button  label="Edit" severity="secondary" (click)="editFields()" />  
-    } 
+    <div class=" h-1/5 flex justify-end items-center gap-3">
+        @if(loading){
+            <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
+        }
+        @if(isEditing){
+            <p-button  label="Cancel" severity="secondary" (click)="cancelEdit()" />
+            <p-button label="Save" (click)="updateDetails()" />
+        }
+        @else {
+            <p-button  label="Edit" severity="secondary" (click)="editFields()" />  
+        } 
+    </div>
 </div>

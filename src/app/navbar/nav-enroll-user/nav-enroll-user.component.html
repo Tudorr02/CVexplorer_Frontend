@@ -1,36 +1,33 @@
-<div class="content">
-    <div class="field">
+<div class="h-full w-full flex flex-col">
+<div class=" h-4/5 flex flex-col gap-3 px-4 justify-center">
+    <div class="flex  items-center justify-between">
         <label for="username" class="font-semibold w-24">Username</label>
         <input pInputText id="username" [(ngModel)]="userEnrollment.username" autocomplete="off"/>
     </div>
     
-    <div class="field">
+    <div class="flex  items-center justify-between">
         <label for="password" class="font-semibold w-24">Password</label>
         <input pInputText id="password" [(ngModel)]="userEnrollment.password" type="password" autocomplete="off"/>
     </div>
 
-    <div class="field">
+    <div class="flex  items-center justify-between">
         <label class="font-semibold w-24">Roles</label>
         <p-selectbutton 
             [options]="roles" 
             [(ngModel)]="userEnrollment.userRole"
-            placeholder="Select role">
-            <!-- <ng-template let-role pTemplate="selectedItem">
-                <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
-            </ng-template> -->
-        
-            <!-- <ng-template let-role pTemplate="item">
-                <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
-            </ng-template> -->
+            placeholder="Select role"
+            >
+            
         </p-selectbutton>
     </div>
 
 </div>
 
 <!-- ✅ Dialog Actions -->
-<div class="dialog-actions">
+<div class="h-1/5 flex justify-end items-center gap-3">
     @if(loading){
         <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
     }
     <p-button label="Enroll" (click)="enrollUser()" />
+</div>
 </div>

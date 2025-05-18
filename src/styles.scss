@@ -1,8 +1,16 @@
 @import './variables';  
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .bg-transparent-2{
+    @apply backdrop-blur-sm  bg-[#2c2e2c]/30 shadow-9;
+  }
+
+  
+}
 
 html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
@@ -35,3 +43,16 @@ body , app-root,html{
 @media (min-width: var(--breakpoint-md)) {
   /* stiluri pentru ecrane ≥ 768px */
 }
+
+
+.my-app-light {
+  background-color: var(--light-background-color);
+}
+
+.my-app-dark {
+  background-color: var(--dark-background-color);
+}
+html {
+  transition: background-color 0.5s ease, color 0.5s ease, opacity 0.5s ease;
+}
+

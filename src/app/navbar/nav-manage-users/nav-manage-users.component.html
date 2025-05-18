@@ -5,7 +5,7 @@ scrollHeight="flex"
 dataKey="id"  
 editMode="row" 
 [loading]="loadingUsers"
-[style]="{'width': '100%'}"
+styleClass="w-full h-full"
 [globalFilterFields]="['username', 'firstName', 'lastName', 'email', 'userRole']"
 >
 <ng-template #caption>
@@ -18,29 +18,31 @@ editMode="row"
 </ng-template>
 
 <ng-template #header>
+   
     <tr>
-        <th style="width: 15%;">Username</th>
-        <th style="width: 15%;">First Name</th>
-        <th style="width: 15%;">Last Name</th>
-        <th style="width: 20%;">Email</th>
-        <th style="width: 10%;">Roles</th>
-        <th style="width: 7%;"></th>
-        <th style="width: 7%;"></th>
+        <th class="w-[15%]">Username</th>
+        <th class="w-[15%]">First Name</th>
+        <th class="w-[15%]">Last Name</th>
+        <th class="w-[20%]">Email</th>
+        <th class="w-[15%]">Role</th>
+        <th class="w-[10%]"></th>
+        <th class="w-[10%]"></th>
     </tr>
+    
 </ng-template>
 
 <ng-template #body let-user let-editing="editing">
     
-    <tr [pEditableRow]="user">
+    <tr class="h-20" [pEditableRow]="user">
 
     <!-- Username (Read-Only) -->
     <td>{{ user.username }}</td>
 
     <!-- First Name (Editable) -->
-    <td>
-        <p-cellEditor>
+    <td >
+        <p-cellEditor >
             <ng-template pTemplate="input">
-                <input pInputText type="text" [(ngModel)]="user.firstName" required />
+                <input pInputText type="text"  [(ngModel)]="user.firstName" required  class="w-5/6"/>
             </ng-template>
             <ng-template pTemplate="output">
                 <span [ngClass]="{'grey-text': !user.firstName}">{{ user.firstName || 'Not Available' }}</span>
@@ -49,10 +51,10 @@ editMode="row"
     </td>
 
     <!-- Last Name (Editable) -->
-    <td>
+    <td >
         <p-cellEditor>
             <ng-template pTemplate="input">
-                <input pInputText type="text" [(ngModel)]="user.lastName" required />
+                <input pInputText type="text"  [(ngModel)]="user.lastName" required  class="w-5/6"/>
             </ng-template>
             <ng-template pTemplate="output">
                 <span [ngClass]="{'grey-text': !user.lastName}">{{ user.lastName || 'Not Available' }}</span>
@@ -64,7 +66,7 @@ editMode="row"
     <td>
         <p-cellEditor>
             <ng-template pTemplate="input">
-                <input pInputText type="email" [(ngModel)]="user.email" required />
+                <input pInputText type="email"  [(ngModel)]="user.email" required />
             </ng-template>
             <ng-template pTemplate="output">
                 <span [ngClass]="{'grey-text': !user.email}">{{ user.email || 'Not Available' }}</span>
@@ -73,14 +75,14 @@ editMode="row"
     </td>
 
     <!-- Roles (Editable Dropdown) -->
-    <td>
-        <p-cellEditor>
-            <ng-template pTemplate="input">
+    <td >
+        <p-cellEditor >
+            <ng-template pTemplate="input" >
                 <p-select 
                     [options]="roles" 
                     [(ngModel)]="user.userRole"
                     appendTo="body"
-                    [style]="{'width':'70%'}"
+                    
                     placeholder="Select roles">
                     <ng-template let-role pTemplate="item">
                         <p-tag [severity]="getRoleSeverity(role)">{{ role }}</p-tag>
@@ -96,7 +98,7 @@ editMode="row"
     </td>
     
     <!-- Actions -->
-    <td>
+    <td >
         <div class="flex items-center justify-center gap-2">
             <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
                 icon="pi pi-pencil" (click)="onRowEditInit(user)" text rounded severity="secondary"></button>
@@ -108,7 +110,8 @@ editMode="row"
     </td>
 
     <!-- Delete Actions -->
-    <td>
+    <td >
+        <div class="flex items-center justify-center gap-2">
         <button *ngIf="!deletingUsers[user.id]" pButton pRipple type="button" 
             icon="pi pi-trash" (click)="onRowDeleteInit(user.id)" text rounded severity="danger">
         </button>
@@ -123,6 +126,7 @@ editMode="row"
                 text rounded severity="secondary">
             </button>
         </ng-container>
+        </div>
     </td>
     
     </tr>
