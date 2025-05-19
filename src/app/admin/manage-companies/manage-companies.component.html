@@ -1,19 +1,17 @@
-<div class="card">
-    
+
     <p-table #dtCompanies 
         [value]="companies"  
         [scrollable]="true"
         scrollHeight="flex"
         dataKey="id"
         [loading]="loadingCompanies"  
-        [style]="{'width': '100%'}"
         [globalFilterFields]="['name']"
         editMode="row"
     >
         
         <ng-template #caption >
 
-            <div class="flex justify-between items-center " >
+            <div class="flex gap-4" >
 
                 <p-iconfield iconPosition="left">
                     <p-inputicon>
@@ -22,15 +20,12 @@
                     <input pInputText type="text" [(ngModel)]="globalFilter" (input)="filterGlobal()" placeholder="Search companies..." />
                 </p-iconfield>
 
-                <div style="margin-inline: 2%;">
-                    <!-- Add Button -->
-                    <button *ngIf="!addingCompany"  pButton pRipple type="button" icon="pi pi-building" label="Add a company"
-                    (click)="addCompanyInit()" W>
-                    </button>
-
+                <div class="flex justify-center ">
                     
+                    <p-button *ngIf="!addingCompany" label="Add Company" variant="text" icon="pi pi-building" (onClick)="addCompanyInit()" />
+
                     <!-- Add Company Row -->
-                    <div *ngIf="addingCompany" class="flex items-center gap-2" style="position: absolute;">
+                    <div *ngIf="addingCompany" class="flex items-center justify-center gap-2">
                         <p-icon-field icon="pi pi-building">
                             <input pInputText type="text" [(ngModel)]="newCompanyName" placeholder="Enter company name..." required />
                         </p-icon-field>
@@ -44,15 +39,15 @@
 
         <ng-template #header>
             <tr>
-                <th style="width: 40%;">Company Name</th>
-                <th style="width: 40%;">Employees</th>
-                <th style="width: 10%;"></th>
-                <th style="width: 10%;"></th>
+                <th class="w-[40%]">Company Name</th>
+                <th class="w-[40%]">Employees</th>
+                <th class="w-[10%]"></th>
+                <th class="w-[10%]"></th>
             </tr>
         </ng-template>
         
         <ng-template #body let-company let-editing="editing" let-ri="rowIndex">
-            <tr [pEditableRow]="company">
+            <tr class="h-20" [pEditableRow]="company">
 
                 <!-- Company Name (Editable) -->
                 <td>
@@ -85,28 +80,27 @@
 
                 <!-- Delete Confirmation -->
                 <td>
+                    <div class="flex items-center justify-center gap-2">
                     <!-- Default Mode: Show Trash Icon -->
-                    <button *ngIf="!deletingCompanies[company.id]" pButton pRipple type="button" 
-                        icon="pi pi-trash" (click)="onRowDeleteInit(company.id)" text rounded severity="danger">
-                    </button>
+                        <button *ngIf="!deletingCompanies[company.id]" pButton pRipple type="button" 
+                            icon="pi pi-trash" (click)="onRowDeleteInit(company.id)" text rounded severity="danger">
+                        </button>
 
-                    <!-- Delete Mode: Show Confirm & Cancel -->
-                    <ng-container *ngIf="deletingCompanies[company.id]">
-                        <button pButton pRipple type="button" pSaveEditableRow 
-                            icon="pi pi-check" (click)="onRowDeleteConfirm(company.id,company.name)" 
-                            text rounded severity="secondary">
-                        </button>
-                        <button pButton pRipple type="button" pCancelEditableRow 
-                            icon="pi pi-times" (click)="onRowDeleteCancel(company.id)" 
-                            text rounded severity="secondary">
-                        </button>
-                    </ng-container>
+                        <!-- Delete Mode: Show Confirm & Cancel -->
+                        <ng-container *ngIf="deletingCompanies[company.id]">
+                            <button pButton pRipple type="button" pSaveEditableRow 
+                                icon="pi pi-check" (click)="onRowDeleteConfirm(company.id,company.name)" 
+                                text rounded severity="secondary">
+                            </button>
+                            <button pButton pRipple type="button" pCancelEditableRow 
+                                icon="pi pi-times" (click)="onRowDeleteCancel(company.id)" 
+                                text rounded severity="secondary">
+                            </button>
+                        </ng-container>
+                    </div>
                 </td>
             </tr>
             
         </ng-template>
-    
-    </p-table>
-    
-    
-</div>
+
+    </p-table> 

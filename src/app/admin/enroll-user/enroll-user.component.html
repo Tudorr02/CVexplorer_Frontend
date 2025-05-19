@@ -1,88 +1,74 @@
-<div class="card">
-    <div class="grid-container">
-        <!-- ✅ MANDATORY PANEL -->
-        <div class="container">
-            <h2>Mandatory Fields</h2>
-            <div class="form-container">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input pInputText id="username" type="text" [(ngModel)]="userEnrollment.username"/>
-                </div>
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input pInputText id="password" [(ngModel)]="userEnrollment.password"/>
-                </div>
+<div class="w-full h-full flex flex-col gap-1">
+    <div class="w-full flex h-full ">
 
-                <div class="form-group">
-                    <label >Roles</label>
-                    <div class="roles-container">
-                        <!-- <div *ngFor="let role of roles" >
-                            <p-tag [severity]="getRoleSeverity(role.name)">
-                                <p-checkbox 
-                                    [inputId]="role.key" 
-                                    name="rolesGroup" 
-                                    [value]="role.key" 
-                                    [(ngModel)]="userEnrollment.userRole"
-                                    [disabled]="role.disabled"
-                                    id="role"
-                                    >
-                                </p-checkbox>
-                                {{ role.name }}
-                            </p-tag>
-                        </div>  -->
-                        <p-selectbutton 
-                        [options]="roles" 
-                        [(ngModel)]="userEnrollment.userRole" 
-                        optionLabel="name" 
-                        optionValue="key" 
-                        aria-labelledby="basic" 
-                        [ngStyle]="{'background-color': getRoleSeverity(userEnrollment.userRole)}"
-                        />
-                    </div> 
-                </div>
-            </div>
-        </div>
+        <div class="w-1/2 h-full flex flex-col ">
+            
+                <h2 class=" h-1/5 text-2xl font-semibold flex items-center justify-center w-full">Mandatory Fields</h2>
+                    <div class="border-1 h-4/5 w-full flex justify-center ">
 
-        <!-- ✅ OPTIONAL PANEL -->
-        <div class="container">
-            <h2>Optional Fields</h2>
-            <div class="form-container">
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <input pInputText id="firstName" type="text" [(ngModel)]="userEnrollment.firstName"/>
-                </div>
+                        <div class=" h-full  gap-4 flex flex-col justify-center">
+                            <div class="flex w-full items-center  gap-4">
+                                <label for="username" class="font-semibold w-1/2 flex justify-end  ">Username</label>
+                                <div class="w-1/2 flex justify-start ">
+                                    <input pInputText id="username"  [(ngModel)]="userEnrollment.username"/>
 
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input pInputText id="lastName" type="text" [(ngModel)]="userEnrollment.lastName"/>
-                </div>
+                                </div>
+                            </div>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input pInputText id="email" type="email" [(ngModel)]="userEnrollment.email"/>
-                </div>
+                            <div class="flex items-center  gap-4">
+                                <label for="password" class="font-semibold w-1/2 flex justify-end">Password</label>
+                                <div class="w-1/2 flex justify-start">
+                                <input pInputText id="password" [(ngModel)]="userEnrollment.password"/>
+                                </div>
+                            </div>
 
-                <div class="form-group">
-                    <label for="companyName">Company</label>
-                    <p-select id="companyName" 
-                              [(ngModel)]="userEnrollment.companyName"
-                              [options]="companies" 
-                              [filter]="true"
-                              placeholder="Select a Company"
-                              (click)="fetchCompanies()"
-                              [loading]="loadingCompanies"
-                              [showClear]="true"
+                            <div class="flex flex-col   gap-1">
+
+                                <div class="gap-4 flex items-center w-full">
+                                    <label class="font-semibold w-1/2  flex justify-end" >Role</label>
+                                    <div class="flex flex-col gap-1  w-1/2 flex justify-start">
+                                        <p-selectButton
+                                            [options]="roles | slice:0:2"
+                                            [(ngModel)]="userEnrollment.userRole"
+                                            optionLabel="name"
+                                            optionValue="key"
+                                            aria-labelledby="basic1"
+                                            [ngStyle]="{ 'background-color': getRoleSeverity(userEnrollment.userRole) }"
+                                        ></p-selectButton>
+                                    </div> 
+                                </div>
+                                <div class="gap-4 flex items-center w-full">
+                                    <label class="w-1/2   flex justify-end" ></label>
+                                    <div class="w-1/2 flex justify-start">
+                                        <p-selectButton
+                                            [options]="roles | slice:2:4"
+                                            [(ngModel)]="userEnrollment.userRole"
+                                            optionLabel="name"
+                                            optionValue="key"
+                                            aria-labelledby="basic2"
+                                            [ngStyle]="{ 'background-color': getRoleSeverity(userEnrollment.userRole) }"
+                                        ></p-selectButton>
+                                    </div>
+                                </div>
                                 
-                            >
-                    </p-select>
-                </div>
-            </div>
-        </div>
-    </div>
+                            
+                            </div>
+                        </div>
+                        
 
-    <!-- ✅ Submit Button -->
-    <div class="form-actions">
-        <p-button label="Enroll User" icon="pi pi-user-plus" (click)="enrollUser()" />
+                    </div>
+
+        </div>
+
+        <div class="w-1/2 h-full border-3">
+
+        </div>
+
+    </div>
+    <div class="w-full h-1/5 flex items-center justify-center border-3">
+        <p-button label="Enroll User" icon="pi pi-user-plus" (onClick)="enrollUser()" />
     </div>
 </div>
+
+
