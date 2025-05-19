@@ -8,7 +8,10 @@
   .bg-transparent-2{
     @apply backdrop-blur-sm  bg-[#2c2e2c]/30 shadow-9;
   }
-
+  
+  .border-custom{
+    @apply border-dashed  border-2  rounded-3xl border-[var(--p-form-field-border-color)]
+  }
   
 }
 
@@ -24,24 +27,6 @@ body , app-root,html{
  padding: 0;
  height: 100%;
  width: 100%;
-}
-
-
-/* 4. Definirea break-point-urilor custom (opțional) */
-:root {
-  --breakpoint-sm: 576px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 992px;
-  --breakpoint-xl: 1200px;
-}
-
-/* 5. Exemple de media-queries mobile-first */
-@media (min-width: var(--breakpoint-sm)) {
-  /* stiluri pentru ecrane ≥ 576px */
-}
-
-@media (min-width: var(--breakpoint-md)) {
-  /* stiluri pentru ecrane ≥ 768px */
 }
 
 

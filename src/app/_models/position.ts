@@ -19,7 +19,7 @@ export interface ScoreWeights {
   requiredSkills: number ;
   niceToHave: number;
   languages: number;
-  certification: number;
+  certifications: number;
   responsibilities: number;
   experienceMonths: number;
   level: number;

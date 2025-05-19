@@ -65,7 +65,7 @@ export class CreatePositionComponent implements OnInit {
     { key: 'requiredSkills',   label: 'Required Skills' },
     { key: 'niceToHave',       label: 'Nice to Have' },
     { key: 'languages',        label: 'Languages' },
-    { key: 'certification',    label: 'Certifications' },
+    { key: 'certifications',    label: 'Certifications' },
     { key: 'responsibilities', label: 'Responsibilities' },
     { key: 'experienceMonths', label: 'Experience (months)' },
     { key: 'level',            label: 'Position Level' },
@@ -116,7 +116,7 @@ export class CreatePositionComponent implements OnInit {
         requiredSkills:   [40,  [Validators.min(0), Validators.max(100)]],
         niceToHave:       [10,  [Validators.min(0), Validators.max(100)]],
         languages:        [10,  [Validators.min(0), Validators.max(100)]],
-        certification:    [30,  [Validators.min(0), Validators.max(100)]],
+        certifications:    [30,  [Validators.min(0), Validators.max(100)]],
         responsibilities: [10,  [Validators.min(0), Validators.max(100)]],
         experienceMonths: [0,   [Validators.min(0), Validators.max(100)]],
         level:            [0,   [Validators.min(0), Validators.max(100)]],
@@ -185,7 +185,9 @@ export class CreatePositionComponent implements OnInit {
         break;
       case 3:
         // Venim din step 2
-        fields = ['requiredSkills', 'minimumExperienceMonths', 'minimumEducationLevel'];
+        //fields = ['requiredSkills', 'minimumExperienceMonths', 'minimumEducationLevel'];
+        //fields = this.weightFields.map(f => `weights.${f.key}`);
+
         break;
       // case 4:
       //   // validate each weight control

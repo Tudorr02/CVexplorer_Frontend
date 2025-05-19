@@ -9,9 +9,11 @@ module.exports = {
 
       width: {
         'dialog-sm': '25rem',
+        'dialog-m': '30rem',
         'dialog-lg': '100rem',
       },
       height: {
+        'dialog-xs': '15rem',
         'dialog-sm': '25rem',
         'dialog-m': '30rem',
         'dialog-lg': '50rem',
