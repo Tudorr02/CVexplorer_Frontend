@@ -2,7 +2,7 @@ import { Component, OnInit , ViewChild, inject } from '@angular/core';
 import { PositionLevel } from '../../enums/position-level.enum';
 import { EducationLevel } from '../../enums/education-level.enum';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Position } from '../../_models/position';
+import { Position , ScoreWeights } from '../../_models/position';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PositionService } from '../../_services/position.service';
 import { NotificationService } from '../../_services/notification.service';
@@ -22,6 +22,10 @@ import { DepartmentTreeEventService } from '../../_services/department-tree-even
 import { PositionTreeNode } from '../../_models/positionTreeNode';
 import { Slider } from 'primeng/slider';
 import { SliderModule } from 'primeng/slider';
+import { Observable } from 'rxjs';
+import { Knob } from 'primeng/knob';
+import { KnobModule } from 'primeng/knob';
+import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'app-create-position',
   imports: [
@@ -37,17 +41,20 @@ import { SliderModule } from 'primeng/slider';
     TextareaModule,
     MultiSelectModule,
     Slider,SliderModule,
-    
+    KnobModule    
   ],
-  templateUrl: './create-position.component.html',
-  styleUrl: './create-position.component.css'
+
+  templateUrl: './create-edit-position.component.html',
+  styleUrl: './create-edit-position.component.css'
 })
-export class CreatePositionComponent implements OnInit {
+export class CreateEditPositionComponent implements OnInit {
  
   
   
   positionForm!: FormGroup;
-  departmentId!: number;
+  isEditMode = false;
+  private departmentId!: number;
+  private positionId!: string;
   positionLevels = this.mapEnumToOptions(PositionLevel);
   educationLevels =  this.mapEnumToOptions(EducationLevel);
   languages: { label: string; value: string }[] = [];
@@ -59,7 +66,7 @@ export class CreatePositionComponent implements OnInit {
   private router = inject(Router);
   private positionService = inject(PositionService);
   private notificationService = inject(NotificationService);
-  private tree = inject(DepartmentTreeEventService);
+  private treeService = inject(DepartmentTreeEventService);
 
   weightFields: { key: keyof Position['weights']; label: string }[] = [
     { key: 'requiredSkills',   label: 'Required Skills' },
@@ -73,12 +80,35 @@ export class CreatePositionComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.departmentId = Number(this.route.snapshot.paramMap.get('id'));
-    console.log(this.departmentId);
     this.initForm();
+
+    this.route.params.subscribe(params => {
+      this.departmentId = params['id'] || undefined;
+      this.positionId = params['publicId'] || undefined;
+      if(this.positionId){
+        this.isEditMode = true;
+        this.loadPosition(this.positionId);
+      }
+    }); 
     this.loadLanguages();
+
+    const weightsGroup = this.positionForm.get('weights') as FormGroup;
+    weightsGroup.valueChanges.subscribe(vals => {
+      const sum = Object
+        .entries(vals)
+        .filter(([key]) => key !== 'totalWeight')
+        .reduce((acc, [, v]) => acc + Number(v), 0);
+      // push into totalWeight _without_ retriggering valueChanges
+      weightsGroup.get('totalWeight')!
+                  .setValue(sum, { emitEvent: false });
+    });
+
   }
 
+  get sumWeights(): number {
+    const w = (this.positionForm.get('weights')!.value as Record<string,number>);
+    return Object.values(w).reduce((a,b) => a + b, 0);
+  }
   loadLanguages() {
     this.languageService.getLanguages().subscribe({
       next: (languages) => {
@@ -97,9 +127,9 @@ export class CreatePositionComponent implements OnInit {
     }));
   }
 
-  initForm() {
+  private initForm() {
     this.positionForm = this.fb.group({
-          // Step 1
+      // Step 1
       name: ['', Validators.required],
       level: [PositionLevel.Intern],
       responsibilities: this.fb.array([this.fb.control('')]),
@@ -107,23 +137,23 @@ export class CreatePositionComponent implements OnInit {
       // Step 2
       requiredSkills: [''],
       minimumExperienceMonths: [0, [Validators.required, Validators.min(0)]],
-      minimumEducationLevel: [EducationLevel.HighSchool],
-      // Step 3
+      minimumEducationLevel: [EducationLevel.HighSchool ],
       niceToHave: [''],
       languages: [[]],
       certifications: [''],
+
+      // Step 3
       weights: this.fb.group({
         requiredSkills:   [40,  [Validators.min(0), Validators.max(100)]],
         niceToHave:       [10,  [Validators.min(0), Validators.max(100)]],
         languages:        [10,  [Validators.min(0), Validators.max(100)]],
-        certifications:    [30,  [Validators.min(0), Validators.max(100)]],
+        certifications:   [30,  [Validators.min(0), Validators.max(100)]],
         responsibilities: [10,  [Validators.min(0), Validators.max(100)]],
         experienceMonths: [0,   [Validators.min(0), Validators.max(100)]],
         level:            [0,   [Validators.min(0), Validators.max(100)]],
         minimumEducation: [0,   [Validators.min(0), Validators.max(100)]],
-      }, {
-        validators: this.sumValidator
-      })
+        totalWeight:      [{ value: 100, disabled: true }]
+      }, {  validators: this.sumValidator })
     });
   }
 
@@ -134,6 +164,9 @@ export class CreatePositionComponent implements OnInit {
       ? null
       : { sumNotOne: true };
   }
+
+
+
   get responsibilities(): FormArray {
     return this.positionForm.get('responsibilities') as FormArray;
   }
@@ -142,6 +175,8 @@ export class CreatePositionComponent implements OnInit {
   }
 
   onSubmit() {
+    
+    this.positionForm.markAllAsTouched();
     if (this.positionForm.invalid) {
       this.positionForm.markAllAsTouched();
       return;
@@ -152,26 +187,38 @@ export class CreatePositionComponent implements OnInit {
       requiredSkills: this.splitByComma(this.positionForm.value.requiredSkills),
       niceToHave: this.splitByComma(this.positionForm.value.niceToHave),
       certifications: this.splitByComma(this.positionForm.value.certifications),
-      weights:         this.positionForm.value.weights
+      weights:         this.positionForm.value.weights as ScoreWeights
     };
 
-    this.positionService.createPosition(this.departmentId, dto).subscribe({
-      next: (newPosition : Position) => {
-        
-        this.tree.addPositionToTree({
-          departmentId: this.departmentId,
-          position: {publicId : newPosition.publicId! , name : newPosition.name} as PositionTreeNode
-        });
-        this.notificationService.showSuccess('Position created successfully');
-        this.router.navigate(['/dashboard']); // sau oriunde vrei să redirecționezi
-      },
-      error: () => {
-        this.notificationService.showError('Failed to create position');
-      }
-    });
+      const action$: Observable<Position> = this.isEditMode
+      ? this.positionService.updatePosition(this.positionId, dto)
+      : this.positionService.createPosition(this.departmentId, dto);
+
+      action$.subscribe({
+        next: (newPosition : Position) => {
+          
+          if(this.isEditMode) {
+            this.notificationService.showSuccess('Position updated successfully');
+          }else {
+            this.treeService.addPositionToTree({
+            departmentId: this.departmentId,
+            position: {publicId : newPosition.publicId! , name : newPosition.name} as PositionTreeNode
+            });
+            this.notificationService.showSuccess('Position created successfully');
+          }
+          
+          this.router.navigate(['/dashboard']); // sau oriunde vrei să redirecționezi
+        },
+        error: () => {
+          this.notificationService.showError('Failed to create position');
+        }
+      });
   }
 
   splitByComma(value: string | null): string[] {
+    if (Array.isArray(value)) {
+      return value;
+    }
     return value ? value.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
   }
 
@@ -185,28 +232,70 @@ export class CreatePositionComponent implements OnInit {
         break;
       case 3:
         // Venim din step 2
-        //fields = ['requiredSkills', 'minimumExperienceMonths', 'minimumEducationLevel'];
-        //fields = this.weightFields.map(f => `weights.${f.key}`);
-
+        fields = [
+        'requiredSkills',
+        'minimumExperienceMonths',
+        'minimumEducationLevel',
+        'niceToHave',
+        'languages',
+        'certifications'];
+      
         break;
-      // case 4:
-      //   // validate each weight control
-      //   fields = this.weightFields.map(f => `weights.${f.key}`);
-      //   break;
+
       default:
         break;
     }
   
-    fields.forEach(f => this.positionForm.get(f)?.markAsTouched());
-    // const weightsValid = step !== 4 || this.positionForm.get('weights')?.valid;
-    const weightsValid = true; // this.positionForm.get('weights')?.valid;
-    const isValid = fields.every(f => this.positionForm.get(f)?.valid);
-    if (isValid && weightsValid) {
+    // 2) Marchează fiecare control ca touched și recalculăm validarea
+    fields.forEach(path => {
+      const ctrl = this.positionForm.get(path);
+      if (ctrl) {
+        ctrl.markAsTouched();
+        ctrl.updateValueAndValidity();
+      }
+    });
+
+    const allValid = fields.every(path => this.positionForm.get(path)?.valid);
+
+    if (allValid) {
       activate(step);
-    }
+  }
   }
   
+    loadPosition(publicId: string) {
+      this.positionService.getPosition(publicId).subscribe({
+        next: (position: Position) => {
+          this.positionForm.patchValue({
+            name: position.name,
+            level: position.level,
+            requiredSkills: position.requiredSkills ?? [],
+            minimumExperienceMonths: position.minimumExperienceMonths,
+            minimumEducationLevel: position.minimumEducationLevel,
+            niceToHave: position.niceToHave ?? [],
+            languages: position.languages ?? [],
+            certifications: position.certifications ?? [],
+            weights: {
+              requiredSkills: position.weights.requiredSkills,
+              niceToHave: position.weights.niceToHave,
+              languages: position.weights.languages,
+              certifications: position.weights.certifications,
+              responsibilities: position.weights.responsibilities,
+              experienceMonths: position.weights.experienceMonths,
+              level: position.weights.level,
+              minimumEducation: position.weights.minimumEducation
+            }
+          });
 
+          this.responsibilities.clear();
+          position.responsibilities.forEach(res => {
+            this.responsibilities.push(this.fb.control(res));
+          });
+        },
+        error: () => {
+          this.notificationService.showError('Failed to load position data.');
+        }
+      });
+  }
 
   onListInput(fieldName: keyof Position, event: FocusEvent) {
     const input = (event.target as HTMLInputElement).value;

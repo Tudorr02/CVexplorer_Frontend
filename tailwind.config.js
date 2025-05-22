@@ -10,12 +10,14 @@ module.exports = {
       width: {
         'dialog-sm': '25rem',
         'dialog-m': '30rem',
+        'dialog-m2': '50rem',
         'dialog-lg': '100rem',
       },
       height: {
         'dialog-xs': '15rem',
         'dialog-sm': '25rem',
         'dialog-m': '30rem',
+        'dialog-m2': '40rem',
         'dialog-lg': '50rem',
       },
       boxShadow: {

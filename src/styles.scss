@@ -10,7 +10,7 @@
   }
   
   .border-custom{
-    @apply border-dashed  border-2  rounded-3xl border-[var(--p-form-field-border-color)]
+    @apply border-dashed  border-2  rounded-3xl border-[var(--p-form-field-border-color)] bg-[var(--p-form-field-border-custom)];
   }
   
 }

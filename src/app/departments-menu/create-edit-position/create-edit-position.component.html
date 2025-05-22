@@ -1,6 +1,6 @@
 <div class="w-full h-full">
-  <p-stepper [value]="3" class="flex flex-col w-full h-full justify-center items-center "  [linear]="true">
-    <p-step-list class="w-full h-1/6 px-8" >
+  <p-stepper [value]="1" [linear]="true" class="flex flex-col w-full h-full justify-center items-center "  >
+    <p-step-list class="w-full px-8" >
         <p-step [value]="1">General Details</p-step>
         <p-step [value]="2">Candidate Profile</p-step>
         <p-step [value]="3">Evaluation Weights</p-step>
@@ -8,7 +8,7 @@
 
     </p-step-list>
 
-    <form [formGroup]="positionForm" >
+    <form [formGroup]="positionForm" (ngSubmit)="onSubmit()" >
       <p-step-panels>
          
         <p-step-panel [value]="1">
@@ -28,13 +28,13 @@
                     formControlName="name"
                     pInputText
                     placeholder="e.g. Frontend Developer"
-                    [ngClass]="{ 'p-invalid': positionForm.get('name')?.invalid && positionForm.get('name')?.touched }"
 
                   />
 
-                  <small class="p-error" *ngIf="positionForm.get('name')?.touched && positionForm.get('name')?.hasError('required')">
+                  <small  *ngIf="positionForm.get('name')?.touched && positionForm.get('name')?.hasError('required')">
                     Position name is required.
                   </small>
+
                 </div>
                     
 
@@ -191,7 +191,7 @@
               </div>
             </div>
 
-            <div class="flex justify-end gap-4 pt-4">
+            <div class="flex justify-between gap-4 pt-4">
               <p-button
                 variant="outlined"
                 label="Back"
@@ -226,6 +226,24 @@
                       ></p-slider>
                   </ng-container>
                   
+                    <!-- Knob showing the total sum -->
+                  <div class="flex flex-col justify-center items-center ">
+                    <p-knob
+                      formControlName="totalWeight"
+                      [min]="0"
+                      [max]="positionForm.get('weights.totalWeight')!.value > 100
+                            ? positionForm.get('weights.totalWeight')!.value
+                            : 100"
+                      [step]="1"
+                      [valueColor]="sumWeights > 100 ? 'red' : 'var(--p-primary-color)'"
+                      valueTemplate="{value}%"
+                      [readonly]="true"
+                    ></p-knob>
+                    <small *ngIf="positionForm.get('weights')?.hasError('sumNotOne') && positionForm.get('weights')?.touched" >
+                    All weights must sum to 100%
+                    </small>
+
+                  </div>
                 </div>
                 
                 <div class="flex flex-col gap-4 w-1/2 px-4">
@@ -240,15 +258,14 @@
                         class="w-full"
                       ></p-slider>
                   </ng-container>
+                  
                 </div>
-                <small *ngIf="positionForm.get('weights')?.hasError('sumNotOneHundred')" class="p-error">
-                  All weights must sum to 100
-                </small>
+                
                 
               </div>
           
               <!-- Navigation Buttons -->
-              <div class="flex justify-end gap-4 pt-4">
+              <div class="flex justify-between gap-4 pt-4">
                 <p-button
                   variant="outlined"
                   label="Back"
@@ -258,7 +275,7 @@
                 />
                 <p-button
                 variant="outlined"
-                label="Submit"
+                label="{{ isEditMode ? 'Update' : 'Create' }}"
                 icon="pi pi-check"
                 iconPos="right"
                 (onClick)="onSubmit()"

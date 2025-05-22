@@ -10,8 +10,7 @@ import { ManageUsersComponent } from './admin/manage-users/manage-users.componen
 import { EnrollUserComponent } from './admin/enroll-user/enroll-user.component';
 import { guestGuard } from './_guards/guest.guard';
 import { ManageCompaniesComponent } from './admin/manage-companies/manage-companies.component';
-import { CreatePositionComponent } from './departments-menu/create-position/create-position.component';
-import { EditPositionComponent } from './departments-menu/edit-position/edit-position.component';
+import { CreateEditPositionComponent } from './departments-menu/create-edit-position/create-edit-position.component';
 import { UploadCvComponent } from './upload-cv/upload-cv.component';
 import { tabGuard } from './_guards/tab.guard';
 import { ExploreCvComponent } from './explore-cv/explore-cv.component';
@@ -56,7 +55,7 @@ export const routes: Routes = [
         canActivate: [authGuard],
         children: [
             { path: 'create-position', 
-                component: CreatePositionComponent , 
+                component: CreateEditPositionComponent , 
                 canActivate: [ authGuard, roleGuard(['HRUser', 'HRLeader'])]
             },
             // {
@@ -87,17 +86,12 @@ export const routes: Routes = [
         path: 'positions/:publicId',
         canActivate: [authGuard],
         children: [
-          { path: 'edit',component: EditPositionComponent },
+          { path: 'edit-position',component: CreateEditPositionComponent },
           {
             path: 'cv-upload',
             component: UploadCvComponent,
             canActivate: [authGuard, tabGuard]
           },
-        //   {
-        //     path: 'cv-explore',
-        //     component: ExploreCvComponent,
-        //     canActivate: [authGuard]
-        //   }
         ]
     },
     { path: 'oauth-callback', component: OAuthCallbackComponent },

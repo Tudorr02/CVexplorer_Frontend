@@ -26,6 +26,7 @@ import { Position } from '../../_models/position';
 import { PositionTreeNode } from '../../_models/positionTreeNode';
 import { DeletePositionComponent } from '../delete-position/delete-position.component';
 import { NodeSelectionService } from '../../_services/node-selection.service';
+
 @Component({
   selector: 'app-left-menu',
   imports: [Skeleton,DeletePositionComponent,DeleteDepartmentComponent,EditDepartmentComponent,FormsModule, InputTextModule, Dialog, HasRoleDirective, TabsModule, ButtonModule, Tree, TreeModule, CommonModule, Menu, AddDepartmentComponent],
@@ -276,7 +277,7 @@ setupContextMenu() {
   editPosition(node: TreeNode): void {
     const positionId = node.data?.publicId;
     if (positionId) {
-      this.router.navigate([`/positions/${positionId}/edit`]);
+      this.router.navigate([`/positions/${positionId}/edit-position`]);
     }
   }
 

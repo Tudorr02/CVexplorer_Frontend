@@ -1,4 +1,7 @@
-<p-fileUpload
+<div class="h-full w-full flex flex-col gap-4">
+
+  <div class="h-1/2 border-custom w-full">
+  <p-fileUpload
   #fu
   name="file"
   mode="advanced"
@@ -8,15 +11,18 @@
   accept=".pdf,.rar,.zip"
   [maxFileSize]="1000000"
   (uploadHandler)="onUpload($event)"
-  class="w-full"
->
-  <!-- Custom header (hidden buttons if needed) -->
-  <ng-template #header></ng-template>
+  styleClass="bg-transparent border-none w-full h-full"
+  class="w-full h-full flex"
 
+  chooseStyleClass="hidden"
+  uploadStyleClass="hidden"
+  cancelStyleClass="hidden"
+>
+  
   <!-- Custom content (drop zone + icon) -->
-  <ng-template #content let-files let-chooseCallback="chooseCallback">
+  <ng-template  #content let-files let-chooseCallback="chooseCallback" >
     <div
-      class="w-full h-40 border-2 border-dashed border-gray-400 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-blue-400 transition"
+      class="w-full h- border-3 flex flex-col items-center justify-center cursor-pointer"
       (click)="choose($event, chooseCallback)"
     >
       <i class="pi pi-upload text-4xl text-gray-500 mb-2"></i>
@@ -24,7 +30,7 @@
     </div>
 
     <!-- Show selected file below -->
-    <div *ngIf="files?.length > 0" class="mt-4 flex flex-col items-start gap-2">
+    <div *ngIf="files?.length > 0" class="mt-4 flex flex-col items-start gap-2 h-full">
       <p class="font-semibold">Selected file:</p>
       <span class="text-sm text-gray-700">{{ files[0].name }} ({{ formatSize(files[0].size) }})</span>
     </div>
@@ -34,15 +40,18 @@
   <ng-template #empty>
     <p class="text-gray-400 text-center">No file selected</p>
   </ng-template>
-</p-fileUpload>
-
-<p-button label="Upload" icon="pi pi-cloud-upload" (click)="fu.upload()" severity="success" class="mt-4" />
+  </p-fileUpload>
 
 
-<hr class="my-6" />
+  </div>
+
+  <div class="h-1/2 flex gap-4">
+    <div class="w-1/2 border-custom">
+
+    </div>
+    <div class="w-1/2 border-custom">
+    </div>
+  </div>
 
 
-<div class="flex">
-<app-gmail-auth></app-gmail-auth>
-<app-outlook-auth></app-outlook-auth>
 </div>

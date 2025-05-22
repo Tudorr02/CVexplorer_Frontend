@@ -561,6 +561,7 @@ const MyPreset = definePreset(Aura, {
                     700: "#4d504e",
                     800: "#3d3f3d",
                     900: "#2c2e2c",
+                    920: "#272927",
                     950: "#1c1d1c"
                 },
                 primary: {
@@ -580,6 +581,7 @@ const MyPreset = definePreset(Aura, {
                     color: "{surface.200}"
                 },
                 formField: {
+                    borderCustom: "{surface.920}",
                     background: "{surface.950}",
                     disabledBackground: "{surface.700}",
                     filledBackground: "{surface.800}",

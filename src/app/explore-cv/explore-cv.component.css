@@ -1,5 +1,4 @@
-:host {
-    height: 100%;
-    width: 100%;
-
+:host ::ng-deep .p-datatable-header  {
+  padding-top: 0 !important; 
+  
 }

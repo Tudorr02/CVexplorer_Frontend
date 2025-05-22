@@ -24,8 +24,8 @@ export class PositionService {
   }
 
   // ✅ Update a position
-  updatePosition(publicId: string, dto: Position): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${publicId}`, dto);
+  updatePosition(publicId: string, dto: Position): Observable<Position> {
+    return this.http.put<Position>(`${this.apiUrl}/${publicId}`, dto);
   }
 
   // ✅ Delete a position

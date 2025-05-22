@@ -51,5 +51,26 @@ export class CvService {
     return this.http.get<CV>(`${this.apiUrl}/${cvPublicId}`);
   }
 
+  deleteCVs(
+    cvPublicIds: string[],
+    positionPublicId?: string,
+    departmentId?: number
+  ): Observable<boolean> {
+    // Construim query-params
+    let params = new HttpParams();
+    if (positionPublicId) {
+      params = params.set('positionPublicId', positionPublicId);
+    }
+    if (departmentId != null) {
+      params = params.set('departmentId', departmentId.toString());
+    }
+
+    // Angular HttpClient suportă DELETE cu body din v7+:
+    return this.http.delete<boolean>(this.apiUrl, {
+      params,
+      body: cvPublicIds
+    });
+  }
+
   
 }

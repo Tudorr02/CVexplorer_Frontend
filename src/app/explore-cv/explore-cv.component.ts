@@ -13,9 +13,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { timer, forkJoin, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 @Component({
   selector: 'app-explore-cv',
-  imports: [DialogModule,TableModule, ButtonModule, CommonModule, IconField, InputIcon, InputTextModule, FormsModule],
+  imports: [ProgressSpinner,DialogModule,TableModule, ButtonModule, CommonModule, IconField, InputIcon, InputTextModule, FormsModule],
   templateUrl: './explore-cv.component.html',
   styleUrl: './explore-cv.component.css'
 })
@@ -25,14 +28,17 @@ export class ExploreCvComponent implements OnInit{
   private cvService = inject(CvService);
   private notificationService = inject(NotificationService);
   private sanitizer = inject(DomSanitizer);
+  private readonly MIN_SPINNER_MS = 500;
 
   positionPublicId?: string;
   departmentId?:     number;
+  loading: boolean = false;
 
   cvs: CV[] = [];
   selectedCVs: CV[] = [];
 
   viewCV: boolean = false; // For the dialog
+  viewDeleteDialog: boolean = false; // For the delete dialog
   inspectedCV: CV | undefined; // For the dialog
 
   pdfUrl?: SafeResourceUrl;
@@ -41,13 +47,6 @@ export class ExploreCvComponent implements OnInit{
   @ViewChild('dtCVs') dt!: Table; // Reference to PrimeNG Table
   globalFilter: string = '';
   ngOnInit() {
-    // snapshot is fine if you don't care about param changes
-    // this.positionPublicId = this.route.snapshot.paramMap.get('publicId') ?? undefined;
-    // this.departmentId     = this.route.snapshot.paramMap.get('id') != null
-    //                         ? Number(this.route.snapshot.paramMap.get('id'))
-    //                         : undefined;
-
-    // this.loadCvs();
 
     this.route.queryParamMap.subscribe(qp => {
         this.positionPublicId = qp.get('positionPublicId') ?? undefined;
@@ -76,15 +75,50 @@ export class ExploreCvComponent implements OnInit{
   }
 
   deleteSelected() {
+    if (!this.selectedCVs.length) {
+      this.notificationService.showError('Select at least one CV to delete');
+      return;
+    }
+
+    this.loading = true;
     const toDelete = this.selectedCVs.map(cv => cv.publicId!);
-    // this.cvService.deleteMany(toDelete).subscribe({
-    //   next: () => {
-    //     this.notification.showSuccess('Deleted successfully');
-    //     this.selectedCVs = [];
-    //     this.loadAll();
-    //   },
-    //   error: err => this.notification.showError('Delete failed', err)
-    // });
+
+    // 1) stream-ul HTTP, cu catchError pentru a emite false în loc de eroare
+    const delete$ = this.cvService
+      .deleteCVs(toDelete, this.positionPublicId, this.departmentId)
+      .pipe(
+        catchError(err => {
+          // notificăm eroarea, dar continuăm stream-ul cu `false`
+          this.notificationService.showError('Failed to delete CVs');
+          return of(false);
+        })
+      );
+
+    // 2) timer-ul care emite după MIN_SPINNER_MS și apoi se completează
+    const spinnerMin$ = timer(this.MIN_SPINNER_MS);
+
+    // 3) așteptăm ambele să se termine
+    forkJoin([delete$, spinnerMin$])
+      .pipe(
+        finalize(() => {
+          // se execută când *ambele* s-au completat
+          this.loading = false;
+        })
+      )
+      .subscribe(([success]) => {
+        // notificăm rezultatul delete$
+        if (success) {
+          this.notificationService.showSuccess('Documents deleted successfully');
+        } else {
+          this.notificationService.showInfo('No documents were deleted');
+        }
+
+        // cleanup-ul comun
+        this.selectedCVs = [];
+        this.loadCvs();
+        this.dt.clear();
+        this.onDialogHide();
+      });
   }
 
   getCV(cvPublicId: string) {
@@ -107,7 +141,17 @@ export class ExploreCvComponent implements OnInit{
 
   onDialogHide() {
     this.viewCV = false;
+    this.viewDeleteDialog = false;
+    this.globalFilter = '';
     this.inspectedCV = undefined;
     this.pdfUrl = undefined;
+  }
+
+  openDeleteDialog() {
+   if(this.selectedCVs.length == 0) {
+      this.notificationService.showError('Select at least one CV to delete');
+      return;
+   }
+    this.viewDeleteDialog = true;
   }
 }
