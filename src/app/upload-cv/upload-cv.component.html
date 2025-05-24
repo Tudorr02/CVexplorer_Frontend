@@ -36,9 +36,9 @@
     </ng-template>
 
     <ng-template #file let-file let-index="index">
-      <div class="w-full h-full p-4">
-        <div class="flex flex-col items-start gap-4 justify-center px-8   h-4/5">
-          <p class="text-3xl font-medium border-bottom-1 border-[var(--p-form-field-border-color)] w-full">Document Details</p>
+      <div class="w-full h-full p-4 px-8 flex">
+        <div class="flex flex-col items-start gap-4 justify-center  w-4/5 h-full">
+          <p class="text-3xl font-medium  w-full">Document Details</p>
           <div class="px-4 gap-2 w-full">
             <div class="flex items-center w-full  justify-start gap-2">
             <div class="flex w-4rem justify-between">
@@ -78,7 +78,7 @@
           </div>
         
         </div>
-        <div class="flex items-center justify-center h-1/5 mt-2 gap-4">          
+        <div class="flex items-center justify-center  gap-4">          
           <p-button label="Upload" variant="text" icon="pi pi-upload" size="large" (onClick)="fu.upload()"/>
           <p-button label="Cancel" variant="text" severity="danger" icon="pi pi-times" size="large" (onClick)="fu.remove($event,index)" />   
         </div>

@@ -15,7 +15,7 @@ import { Menu } from 'primeng/menu';
 
 @Component({
   selector: 'app-gmail-auth',
-  imports: [Select, CommonModule, ButtonModule, ToastModule, FormsModule, MultiSelectModule, Menu],
+  imports: [CommonModule, ButtonModule, ToastModule, FormsModule, MultiSelectModule, Menu],
   templateUrl: './gmail-auth.component.html',
   styleUrl: './gmail-auth.component.css'
 })
@@ -24,39 +24,23 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
   private gmailService = inject(GmailService);
   private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
-  labels: { id: string; name: string ; selected : boolean}[] = [];
-  selectedLabels: string[] = [];  // acum un array
+  labels: { id: string; name: string ; isSubscribed: boolean}[] = [];
+  selectedLabels: string[] = []; 
   gmailLogo : string ='logos/icons8-gmail.svg';
   positionId!: string;
-  items: MenuItem[] = [
-    {
-      label: 'Settings',
-      items: [
-        {
-          label: 'Unsubscribe',
-          icon: 'pi pi-stop-circle',
-          command: () => this.connect()
-        },
-        {
-          label: 'Disconnect',
-          icon: 'pi pi-sign-out',
-          command: () => this.watch()
-        }
-      ]
-    }
-  ];
+  settings: MenuItem[] = [];
+
   private messageHandler!: (event: MessageEvent) => void;
   private connectSub?: Subscription;
 
-  sessionActive = false; // for showing/hiding the Connect button
+  sessionActive = false; 
 
   ngOnInit() {
     this.positionId = this.route.snapshot.paramMap.get('publicId')!;
 
     this.gmailService.isGmailSession().subscribe({
       next: () => {
-        this.sessionActive = true;
-        this.loadLabels();
+        this.loadGmailData();
       },
       error: () => this.sessionActive = false
     });
@@ -65,18 +49,40 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
   ngOnDestroy() {
     window.removeEventListener('message', this.messageHandler);
     this.connectSub?.unsubscribe(); 
-   }
+  }
+
+  loadGmailData() {
+    this.sessionActive = true;
+    this.settings = [
+      {
+        label: 'Settings',
+        items: [
+          {
+            label: 'Unsubscribe',
+            icon: 'pi pi-stop-circle',
+            command: () => this.connect()
+          },
+          {
+            label: 'Disconnect',
+            icon: 'pi pi-sign-out',
+            command: () => this.watch()
+          }
+        ]
+      }
+    ];
+    this.loadLabels();
+  }
 
   connect() {
     
-    this.connectSub = this.gmailService.connectToGmail().subscribe({
+    this.connectSub = this.gmailService.connect().subscribe({
       next: () => {
-        // Popup-ul s-a autentificat și s-a închis deja
-        this.sessionActive = true;
-        this.loadLabels();
+        this.loadGmailData();
+        this.notificationService.showSuccess('Gmail connected successfully!');
       },
       error: () => {
-        this.notificationService.showError('Autentificarea la Gmail a eșuat');
+        this.notificationService.showError('Gmail connection failed!');
+        this.sessionActive = false;
       }
     });
 
@@ -84,13 +90,12 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
 
   private loadLabels() {
     // 3. după ce popup-ul s-a închis, obține folderele
-    this.gmailService.getGmailFolders(this.positionId).subscribe({
+    this.gmailService.loadFolders(this.positionId).subscribe({
       next: lbls => {
         this.labels = lbls;
-        this.selectedLabels = lbls.filter(label => label.selected).map(label => label.id);
+        this.selectedLabels = lbls.filter(label => label.isSubscribed).map(label => label.id);
       },
       error: err => {
-       
         this.notificationService.showError('Failed to load Gmail Folders!');
       }
     });
@@ -99,28 +104,47 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
 
   watch() {
     if (!this.selectedLabels.length) {
-      this.notificationService.showError('Selecteaza un folder Gmail');
+      this.notificationService.showError('Choose at least one label to watch');
       return;
     }
     this.gmailService.watchLabel(this.selectedLabels, this.positionId)
     .subscribe({
-    next: res => {
-      console.log('Watch started:', res);
-      this.notificationService.showSuccess('Watch pornit cu succes');
+    next: lbls => {
+      this.labels = lbls;
+      this.selectedLabels = lbls.filter(label => label.isSubscribed).map(label => label.id);
+      
+      this.notificationService.showSuccess('Watch started successfully!');
     },
-    error: () => this.notificationService.showError('Eroare la pornirea watch-ului')
+    error: () => this.notificationService.showError('Failed to start watch!')
     });
   }
   
+  destroyGmailData() {
+    this.sessionActive = false;
+    this.settings = [];
+    this.labels = [];
+    this.selectedLabels = [];
+  }
 
-// this.gmailService.unwatchLabels(this.selectedLabels, this.positionPublicId)
-//   .subscribe({
-//     next: res => {
-//       console.log('Watch stopped:', res);
-//       this.notify.showSuccess('Watch oprit cu succes');
-//     },
-//     error: () => this.notify.showError('Eroare la oprirea watch-ului')
-//   });
+  disconnect() {
+    this.gmailService.disconnect().subscribe({
+      next: () => {
+        this.destroyGmailData();
+        this.notificationService.showSuccess('Gmail disconnected successfully!');
+      },
+      error: () => this.notificationService.showError('Failed to disconnect Gmail!')
+    });
+  }
 
-  
+  unsubscribe() {
+    this.gmailService.unsubscribe(this.positionId).subscribe({
+      next: () => {
+        this.labels = [];
+        this.selectedLabels = []
+        this.notificationService.showSuccess('Unsubscribed from Gmail successfully!');
+      },
+      error: () => this.notificationService.showError('Failed to unsubscribe from Gmail!')
+    });
+  }
+
 }

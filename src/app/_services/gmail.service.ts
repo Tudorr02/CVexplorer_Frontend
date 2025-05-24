@@ -13,58 +13,56 @@ export class GmailService {
   private apiUrl = `${environment.apiBaseUrl}/Gmail`;
   
 
-  getGmailFolders(positionId : string): Observable<{ id: string; name: string ; selected: boolean}[]> 
+  loadFolders(positionId : string): Observable<{ id: string; name: string ; isSubscribed: boolean}[]> 
   {
     const params = new HttpParams()
       .set('publicPosId', positionId);
-    return this.http.get<{ id: string; name: string ; selected: boolean}[]>(
-      `${this.apiUrl}/labels`,
+    return this.http.get<{ id: string; name: string ; isSubscribed: boolean}[]>(
+      `${this.apiUrl}/Folders`,
       { params,withCredentials: true }
     );
   }
 
-  getUnread(labelId: string): Observable<any[]> {
-    return this.http.get<any[]>(
-      `${this.apiUrl}/unread?labelId=${encodeURIComponent(labelId)}`,
-      { withCredentials: true }
+  unsubscribe(positionId : string): Observable<void> {
+    const params = new HttpParams()
+      .set('publicPosId', positionId);
+    return this.http.post<void>(
+      `${this.apiUrl}/Unsubscribe`,
+      {},
+      { params, withCredentials: true }
     );
   }
 
-  connectToGmail(
+  connect(
     width = 500,
     height = 650
   ): Observable<void> {
     return new Observable<void>(observer => {
-      // 1) Deschizi popup-ul
+      
       const left = (window.screen.width  - width)  / 2;
       const top  = (window.screen.height - height) / 2;
       const popup = window.open(
-        `${this.apiUrl}/login`,
+        `${this.apiUrl}/Connect`,
         'googleAuth',
         `width=${width},height=${height},left=${left},top=${top}`
       );
 
-      // 2) Definim handler-ul de postMessage
+      
       const handler = (event: MessageEvent) => {
-        // Dacă vrei să restrângi origin-ul:
-        // if (event.origin !== window.location.origin) return;
         const data = event.data as { type: string; status: string };
         if (data?.type === 'gmail-auth' && data.status === 'success') {
-          // Emit și complete în NgZone
           this.zone.run(() => {
             observer.next();
             observer.complete();
           });
-          // Închide popup-ul și dezafectează listener-ul
           popup?.close();
           window.removeEventListener('message', handler);
         }
       };
 
-      // 3) Atașezi listener-ul
+      
       window.addEventListener('message', handler);
-
-      // 4) Cleanup la unsubscribe
+    
       return () => {
         window.removeEventListener('message', handler);
         popup?.close();
@@ -72,26 +70,35 @@ export class GmailService {
     });
   }
 
+  disconnect(): Observable<void> {
+  return this.http.post<void>(
+    `${this.apiUrl}/Disconnect`,
+    {},
+    { withCredentials: true }
+  );
+  }
+
+
 
   isGmailSession(): Observable<void> {
-    return this.http.get<void>(`${this.apiUrl}/session`, { withCredentials: true });
+    return this.http.get<void>(`${this.apiUrl}/Session`, { withCredentials: true });
   }
 
 
   watchLabel(labelIds: string[], positionId: string): Observable<{
-    labelIds: string[];
-    historyId: number;
-    expiration: number;
-  }> {
+    id: string; 
+    name: string ; 
+    isSubscribed: boolean
+  }[]> {
     const params = new HttpParams()
       .set('positionPublicId', positionId);
 
     return this.http.post<{
-      labelIds: string[];
-      historyId: number;
-      expiration: number;
-    }>(
-      `${this.apiUrl}/watch`,
+      id: string; 
+      name: string ; 
+      isSubscribed: boolean
+    }[]>(
+      `${this.apiUrl}/Watch`,
       labelIds,
       { params,withCredentials: true }
     );
