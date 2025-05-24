@@ -1,55 +1,104 @@
 <div class="h-full w-full flex flex-col gap-4">
 
-  <div class="h-1/2 border-custom w-full">
-  <p-fileUpload
-  #fu
-  name="file"
-  mode="advanced"
-  [customUpload]="true"
-  [auto]="false"
-  [multiple]="false"
-  accept=".pdf,.rar,.zip"
-  [maxFileSize]="1000000"
-  (uploadHandler)="onUpload($event)"
-  styleClass="bg-transparent border-none w-full h-full"
-  class="w-full h-full flex"
-
-  chooseStyleClass="hidden"
-  uploadStyleClass="hidden"
-  cancelStyleClass="hidden"
->
-  
-  <!-- Custom content (drop zone + icon) -->
-  <ng-template  #content let-files let-chooseCallback="chooseCallback" >
-    <div
-      class="w-full h- border-3 flex flex-col items-center justify-center cursor-pointer"
-      (click)="choose($event, chooseCallback)"
+  <div class="h-1/2 border-custom w-full overflow-hidden">
+    <p-fileUpload
+    #fu
+    name="file"
+    mode="advanced"
+    [customUpload]="true"
+    [auto]="false"
+    [multiple]="false"
+    accept=".pdf,.rar,.zip"
+    [maxFileSize]="1000000"
+    (onSelect)="onSelect($event)"
+    (uploadHandler)="onUpload($event)"
+    styleClass="bg-transparent border-none w-full h-full"
+    chooseStyleClass="hidden"
+    uploadStyleClass="hidden"
+    cancelStyleClass="hidden"
     >
-      <i class="pi pi-upload text-4xl text-gray-500 mb-2"></i>
-      <p class="text-gray-500">Click or drag to upload .pdf, .rar, or .zip</p>
-    </div>
+    
+    <ng-template  #content let-files let-chooseCallback="chooseCallback" >
+      <div *ngIf="!files?.length"
+        class="w-full h-full flex flex-col items-center justify-center cursor-pointer gap-2"
+        (click)="onChoose($event, chooseCallback)"
+      >
+        <i class="pi pi-upload text-[var(--p-text-muted-color)]" style="font-size: 2.5rem" ></i>
+        <p class="font-medium text-2xl text-[var(--p-text-muted-color)] ">Drag and drop or click here</p>
+        <p class="font-medium text-[var(--p-text-muted-color)]">Accepted formats</p>
+        <div class="flex gap-2">
+            <p-tag severity="secondary" value=".pdf" />
+            <p-tag severity="secondary" value=".rar" />
+            <p-tag severity="secondary" value=".zip" />
+          </div>
+      </div>
+      
+    </ng-template>
 
-    <!-- Show selected file below -->
-    <div *ngIf="files?.length > 0" class="mt-4 flex flex-col items-start gap-2 h-full">
-      <p class="font-semibold">Selected file:</p>
-      <span class="text-sm text-gray-700">{{ files[0].name }} ({{ formatSize(files[0].size) }})</span>
-    </div>
-  </ng-template>
+    <ng-template #file let-file let-index="index">
+      <div class="w-full h-full p-4">
+        <div class="flex flex-col items-start gap-4 justify-center px-8   h-4/5">
+          <p class="text-3xl font-medium border-bottom-1 border-[var(--p-form-field-border-color)] w-full">Document Details</p>
+          <div class="px-4 gap-2 w-full">
+            <div class="flex items-center w-full  justify-start gap-2">
+            <div class="flex w-4rem justify-between">
+              <p class="text-lg font-medium">Name</p>
+              <p class="text-lg font-medium">:</p>
+            </div>
+            <span class="font-medium text-sm">{{ file.name }}</span>
+            </div>
+            <div class="flex items-center justify-start gap-2">
+              <div class="flex w-4rem justify-between">
+              <p class="text-lg font-medium">Type</p>
+              <p class="text-lg font-medium">:</p>
+            </div>
+              <span class="font-medium text-sm">{{ file.type }}</span>
+            </div>
+            <div class="flex items-center justify-start gap-2">
+              <div class="flex w-4rem justify-between">
+              <p class="text-lg font-medium">Size</p>
+              <p class="text-lg font-medium">:</p>
+              </div>
+              <span class="font-medium text-sm">({{ formatSize(file.size) }})</span>
+            </div>
+            <div class="flex items-center justify-start gap-2">
+              <div class="flex w-4rem justify-between">
+              <p class="text-lg font-medium">CVs</p>
+              <p class="text-lg font-medium">:</p>
+              </div>
+              <span class="font-medium text-sm">{{cvCount}}</span>
+            </div>
+            <div class="flex items-center justify-start gap-2">
+              <div class="flex w-4rem justify-between">
+              <p class="text-lg font-medium">Time</p>
+              <p class="text-lg font-medium">:</p>
+              </div>
+              <span class="font-medium text-sm">Estimated processing time is {{ cvCount * 3 }} seconds.</span>
+            </div>
+          </div>
+        
+        </div>
+        <div class="flex items-center justify-center h-1/5 mt-2 gap-4">          
+          <p-button label="Upload" variant="text" icon="pi pi-upload" size="large" (onClick)="fu.upload()"/>
+          <p-button label="Cancel" variant="text" severity="danger" icon="pi pi-times" size="large" (onClick)="fu.remove($event,index)" />   
+        </div>
+        
+      </div>
+      
+    </ng-template>
+    
 
-  <!-- Optional empty template -->
-  <ng-template #empty>
-    <p class="text-gray-400 text-center">No file selected</p>
-  </ng-template>
-  </p-fileUpload>
+    </p-fileUpload>
 
 
   </div>
 
   <div class="h-1/2 flex gap-4">
-    <div class="w-1/2 border-custom">
-
+    <div class="w-1/2 border-custom p-4 h-full ">
+      <app-gmail-auth></app-gmail-auth>
     </div>
-    <div class="w-1/2 border-custom">
+    <div class="w-1/2 border-custom p-4 h-full ">
+      <app-outlook-auth></app-outlook-auth>
     </div>
   </div>
 

@@ -9,9 +9,13 @@ import { NotificationService } from '../_services/notification.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { MenuItem } from 'primeng/api';
+import { Menu } from 'primeng/menu';
+
+
 @Component({
   selector: 'app-gmail-auth',
-  imports: [Select, CommonModule, ButtonModule, ToastModule, FormsModule, MultiSelectModule],
+  imports: [Select, CommonModule, ButtonModule, ToastModule, FormsModule, MultiSelectModule, Menu],
   templateUrl: './gmail-auth.component.html',
   styleUrl: './gmail-auth.component.css'
 })
@@ -22,9 +26,25 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
   private route = inject(ActivatedRoute);
   labels: { id: string; name: string ; selected : boolean}[] = [];
   selectedLabels: string[] = [];  // acum un array
-  
+  gmailLogo : string ='logos/icons8-gmail.svg';
   positionId!: string;
-
+  items: MenuItem[] = [
+    {
+      label: 'Settings',
+      items: [
+        {
+          label: 'Unsubscribe',
+          icon: 'pi pi-stop-circle',
+          command: () => this.connect()
+        },
+        {
+          label: 'Disconnect',
+          icon: 'pi pi-sign-out',
+          command: () => this.watch()
+        }
+      ]
+    }
+  ];
   private messageHandler!: (event: MessageEvent) => void;
   private connectSub?: Subscription;
 

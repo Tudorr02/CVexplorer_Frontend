@@ -1,0 +1,34 @@
+:host ::ng-deep .p-fileupload-header{
+    display : none
+}
+
+:host ::ng-deep .p-fileupload-content .p-progressbar {
+  display: none !important;
+}
+
+:host ::ng-deep .p-fileupload-content {
+    height: 100%;
+    padding: 0;
+    gap: 0;
+    
+}
+
+:host ::ng-deep .p-fileupload-file-list{
+    height: 100%;
+    padding: 0;
+    
+}
+
+
+/* target the drop‐zone wrapper, then any <p> or <i> inside it on hover */
+:host ::ng-deep .p-fileupload-content > div:hover p,
+:host ::ng-deep .p-fileupload-content > div:hover i {
+  color: var(--p-text-color) !important;
+}
+
+
+:host ::ng-deep .p-fileupload-content > div:hover .p-tag {
+  --p-tag-value-color: var(--p-text-color) !important;
+
+  color: var(--p-text-color) !important;
+}

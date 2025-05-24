@@ -1,7 +1,7 @@
-<!-- outlook-auth.component.html -->
+<!-- 
 <p-button [disabled]="sessionActive" (onClick)="login()" label="Connect to Outlook" />
 
-<!-- după login, afișăm folderele și watch -->
+
 <div *ngIf="sessionActive" class="mt-4">
   <p-multiSelect
     [(ngModel)]="selectedFolders"
@@ -14,4 +14,45 @@
   <button (click)="watch()" [disabled]="!selectedFolders.length" class="p-button p-component">
     Start Watch
   </button>
+</div> 
+-->
+
+<div class="flex h-1/5 w-full justify-between items-center  ">
+    <div class="flex justify-start items-center gap-2">
+      <img [src]="outlookLogo" class="w-1/3"/>
+      <p class="text-2xl font-medium">Outlook</p>
+    </div>
+    <div class="flex justify-center">
+      <p-menu #menu [model]="items" [popup]="true" />
+      <p-button icon="pi pi-cog" [rounded]="true" [text]="true" severity="secondary" (click)="menu.toggle($event)" size="large"/>
+    </div>
+</div>
+
+<div class="flex h-4/5 w-full  flex-col justify-center items-center gap-0 px-6">
+
+  <div class="flex w-full h-1/3 justify-center items-center  gap-2">
+    <p class="font-medium w-1/6 justify-start flex ">Step 1</p>
+    <p-button class=" w-5/6 flex justify-start " [disabled]="sessionActive"  label="Connect" (onClick)="connect()" [raised]="true" size="small"/>
+  </div>
+  <div class="flex w-full h-1/3 justify-center items-center  gap-2 ">
+    <p class="font-medium w-1/6 justify-start flex 2 ">Step 2</p>
+    <div class="w-5/6 flex justify-start ">
+      <p-multiSelect
+      class="flex justify-start"
+      [(ngModel)]="selectedFolders"
+      [options]="folders"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="Select Folders"
+      display="chip"
+      />
+    </div>
+    
+  </div>
+  <div class="flex w-full h-1/3 justify-center items-center  gap-2 ">
+    <p class="font-medium w-1/6 justify-start flex ">Step 3</p>
+    <p-button class=" w-5/6 flex justify-start " [disabled]="sessionActive"  icon="pi pi-caret-right" label="Start" (onClick)="connect()" size="small"/>
+
+  </div>
+
 </div>

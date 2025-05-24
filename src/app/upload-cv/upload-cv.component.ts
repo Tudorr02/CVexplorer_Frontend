@@ -7,11 +7,13 @@ import { CvService } from '../_services/cv.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { GmailAuthComponent } from '../gmail-auth/gmail-auth.component';
-import { GmailService } from '../_services/gmail.service';
 import { OutlookAuthComponent } from '../outlook-auth/outlook-auth.component';
+import JSZip from 'jszip';
+import { Tag } from 'primeng/tag';
+
 @Component({
   selector: 'app-upload-cv',
-  imports: [OutlookAuthComponent,CommonModule,FileUploadModule, ButtonModule, ToastModule, GmailAuthComponent],
+  imports: [OutlookAuthComponent,CommonModule,FileUploadModule, ButtonModule, ToastModule, GmailAuthComponent, Tag],
   templateUrl: './upload-cv.component.html',
   styleUrl: './upload-cv.component.css'
 })
@@ -23,8 +25,8 @@ export class UploadCvComponent {
   private notificationService = inject(NotificationService);  
 
   positionPublicId: string = this.route.snapshot.paramMap.get('publicId')!;
-  gmailLabels: { id:string; name:string }[] = [];
-  chosenLabel = '';
+  cvCount = 0;
+
 
   onUpload(event: any) {
     const fileUploadEvent: FileUploadEvent = {
@@ -47,9 +49,38 @@ export class UploadCvComponent {
       }
     });
   }
-  choose(event: Event, callback: () => void): void {
+
+  onSelect(event: any) {
+    const file: File = event.files?.[0];
+    this.cvCount = 0;
+    if (!file) 
+      return;
+
+
+    const name = file.name.toLowerCase();
+    if (file.type === 'application/pdf' || name.endsWith('.pdf')) {
+      this.cvCount = 1;
+    } 
+    else if (name.endsWith('.zip') || name.endsWith('.rar')) {
+      JSZip.loadAsync(file).then(zip => {
+        let count = 0;
+        zip.forEach((relativePath, zipEntry) => {
+          if (!zipEntry.dir && zipEntry.name.toLowerCase().endsWith('.pdf')) {
+            count++;
+          }
+        });
+        this.cvCount = count;
+      });
+    } 
+    else {
+      this.cvCount = 0;
+    }
+  
+  }
+
+  onChoose(event: Event, callback: () => void): void {
     event.preventDefault();
-    callback(); // deschide file picker-ul intern al PrimeNG
+    callback();
   }
   
 

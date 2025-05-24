@@ -7,21 +7,41 @@ import { CommonModule } from '@angular/common';
 import { OutlookService } from '../_services/outlook.service';
 import { ButtonModule } from 'primeng/button';
 import { NotificationService } from '../_services/notification.service';
+import { Menu } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
 @Component({
   selector: 'app-outlook-auth',
-  imports: [ButtonModule,MultiSelectModule, FormsModule, CommonModule],
+  imports: [ButtonModule,MultiSelectModule, FormsModule, CommonModule, Menu],
   templateUrl: './outlook-auth.component.html',
   styleUrl: './outlook-auth.component.css'
 })
 export class OutlookAuthComponent implements OnInit {
   private http: HttpClient;
   private router: Router;
-
+items: MenuItem[] = [
+    {
+      label: 'Settings',
+      items: [
+        {
+          label: 'Unsubscribe',
+          icon: 'pi pi-stop-circle',
+          command: () => this.connect()
+        },
+        {
+          label: 'Disconnect',
+          icon: 'pi pi-sign-out',
+          command: () => this.watch()
+        }
+      ]
+    }
+  ];
   folders: any[] = [];
   selectedFolders: string[] = [];
   sessionActive = false;
   outlookService = inject(OutlookService);
     private route = inject(ActivatedRoute);
+
+  outlookLogo: string = 'logos/icons8-outlook.svg';
   
   private notificationService = inject(NotificationService);
 
@@ -43,7 +63,7 @@ export class OutlookAuthComponent implements OnInit {
     );
   }
 
-  login(): void {
+  connect(): void {
     this.outlookService.connectToOutlook().subscribe({
     next: () => {
       this.sessionActive = true;

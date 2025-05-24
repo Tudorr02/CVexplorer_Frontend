@@ -8,8 +8,6 @@ import { CV } from '../_models/cv';
   providedIn: 'root'
 })
 export class CvService {
-
-
   private http =  inject(HttpClient);
   private apiUrl = `${environment.apiBaseUrl}/CVs`;
 
@@ -19,9 +17,7 @@ export class CvService {
     return this.http.post<CV[]>(`${environment.apiBaseUrl}/Positions/${positionPublicId}/CVs`, formData);
   }
 
-  /**
-   * Get all CVs for a specific position
-   */
+ 
   getAllCVs(positionPublicId?: string, departmentId?: number): Observable<CV[]> {
     let params = new HttpParams();
 
@@ -44,9 +40,6 @@ export class CvService {
   }
 
 
-  /**
-   * Get a single CV by its public ID
-   */
   getCV(cvPublicId: string): Observable<CV> {
     return this.http.get<CV>(`${this.apiUrl}/${cvPublicId}`);
   }
