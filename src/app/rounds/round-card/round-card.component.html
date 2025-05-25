@@ -1,29 +1,32 @@
-<p-card [style]="{ backgroundColor: '#646464' }">
-    <div class="flex flex-nowrap items-center gap-6 p-1">
-      <i class="pi pi-trophy text-3xl text-yellow-400"></i>
+
+
+<div class="w-full h-full border-2 flex flex-col px-4 py-2 rounded-3xl border-custom ">
   
-      <span class="text-2xl font-semibold whitespace-nowrap">
-        {{ round.name }}
-      </span>
-  
-      <span class="text-lg whitespace-nowrap">
-        Created {{ round.createdAt | date:'dd/MM/yyyy' }}
-      </span>
-  
-      <span class="text-lg whitespace-nowrap">
-        Candidates {{ round.candidatesNumber }}
-      </span>
-  
-      <p-button
-        icon="pi pi-search"
-        severity="success"
-        size="large"
-        [rounded]="true"
-        [text]="true"
-        class="ml-auto"
-        (onClick)="openRound(round.publicId)"
-        >
-    </p-button>
+  <div class="h-1/4 flex items-center justify-center gap-2 border-bottom-1 border-[var(--p-form-field-border-color)] px-4 ">
+    <div class=" h-full flex items-center justify-center">
+      <i class="pi pi-trophy" style="font-size: 2.5rem" ></i>
     </div>
-  </p-card>
-  
+    <div class="  h-full flex items-center justify-start">
+      <p class="text-2xl font-medium">{{ round.name }}</p>
+    </div>
+  </div>
+  <div class="h-2/4 flex items-start justify-center     px-4">
+    <div class="flex flex-col items-start justify-center  w-full h-full">
+      <p class="font-medium">Created: {{ round.createdAt | date:'dd/MM/yyyy' }}</p>
+      <p class="font-medium">Candidates: 15</p>
+      <p class="font-medium">Selected : 2</p>
+    </div>
+  </div>
+  <div class="h-1/4 flex items-center justify-center">
+    <p-button
+    icon="pi pi-search"
+    size="large"
+    label="View Round"
+    
+    [text]="true"
+    (onClick)="openRound(round.publicId)"
+    >
+    </p-button>
+  </div>
+
+</div>

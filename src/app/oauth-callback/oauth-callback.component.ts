@@ -9,8 +9,13 @@ import { Component, OnInit } from '@angular/core';
 export class OAuthCallbackComponent implements OnInit {
 
   ngOnInit() {
+
+    const params   = new URLSearchParams(window.location.search);
+    const provider = params.get('provider') || 'generic';
+
+    console.log('OAuth callback initialized');
     window.opener.postMessage(
-      { type: 'gmail-auth', status: 'success' },
+      { type: `${provider}-auth`, status: 'success' },
       window.location.origin
     );
     window.close();

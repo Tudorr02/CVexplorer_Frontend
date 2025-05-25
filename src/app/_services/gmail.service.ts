@@ -50,7 +50,7 @@ export class GmailService {
       
       const handler = (event: MessageEvent) => {
         const data = event.data as { type: string; status: string };
-        if (data?.type === 'gmail-auth' && data.status === 'success') {
+        if (data?.type === 'Google-auth' && data.status === 'success') {
           this.zone.run(() => {
             observer.next();
             observer.complete();
@@ -80,8 +80,8 @@ export class GmailService {
 
 
 
-  isGmailSession(): Observable<void> {
-    return this.http.get<void>(`${this.apiUrl}/Session`, { withCredentials: true });
+  isGmailSession(): Observable<{sessionActive : boolean}> {
+    return this.http.get<{sessionActive : boolean}>(`${this.apiUrl}/Session`, { withCredentials: true });
   }
 
 

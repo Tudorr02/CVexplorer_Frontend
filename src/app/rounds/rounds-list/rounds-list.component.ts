@@ -6,9 +6,12 @@ import { Round } from '../../_models/round';
 import { CommonModule } from '@angular/common';
 import { RoundCardComponent } from '../round-card/round-card.component';
 import { ScrollPanelModule } from 'primeng/scrollpanel';  
+import { InputIcon } from 'primeng/inputicon';
+import { IconField } from 'primeng/iconfield';
+import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-rounds-list',
-  imports: [CommonModule, RoundCardComponent, ScrollPanelModule],
+  imports: [CommonModule, RoundCardComponent, ScrollPanelModule, InputIcon, IconField, InputTextModule],
   templateUrl: './rounds-list.component.html',
   styleUrl: './rounds-list.component.css'
 })

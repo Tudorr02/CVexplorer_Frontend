@@ -58,9 +58,9 @@ export class AppComponent  {
   
   private userTabs : Tab[]= [
     { label: 'Dashboard', route: '/dashboard', icon: 'pi pi-home' },
-    { label: 'Upload CVs', route: '/cv-upload', icon: 'pi pi-file-arrow-up',disabled: true },
-    { label: 'Explore CVs', route: 'explore', icon: 'pi pi-globe',disabled: true },
-    { label: 'Evaluation', route: '/evaluation-rounds', icon: 'pi pi-search',disabled: true },
+    { label: 'Upload', route: '/cv-upload', icon: 'pi pi-file-arrow-up',disabled: true },
+    { label: 'Explore', route: 'explore', icon: 'pi pi-globe',disabled: true },
+    { label: 'Evaluate', route: '/evaluation-rounds', icon: 'pi pi-search',disabled: true },
     
   ];
 
@@ -72,12 +72,6 @@ export class AppComponent  {
   ];
 
   
-
-
-  // ✅ Compute tabs dynamically based on user role
-  // tabs = computed(() => {
-  //   return (this.AccountService.currentUser()?.role === 'Admin' || this.AccountService.currentUser()?.role === 'Moderator' ) ? this.adminTabs : this.userTabs;
-  // });
   
   tabs = computed<Tab[]>(() => {
     const user = this.AccountService.currentUser();
@@ -90,9 +84,9 @@ export class AppComponent  {
     const departmentId = selectedNode?.data?.type==="department"? selectedNode?.data?.id : null; // Get departmentId from selected node
     
     return this.userTabs.map(tab => {
-      if (tab.label === 'Upload CVs' && publicId) {
+      if (tab.label === 'Upload' && publicId) {
         return { ...tab, route: `/positions/${publicId}`+tab.route, disabled: false };
-      } else if (tab.label === 'Explore CVs') {
+      } else if (tab.label === 'Explore') {
 
         if (departmentId) {
           return { ...tab, queryParams:{ departmentId}, disabled: false };
@@ -101,7 +95,7 @@ export class AppComponent  {
           return { ...tab, queryParams: { positionPublicId: publicId } , disabled: false };
         }
         
-      } else if (tab.label === 'Evaluation') {
+      } else if (tab.label === 'Evaluate') {
 
         if (departmentId) {
           return { ...tab, queryParams:{ departmentId}, disabled: false };

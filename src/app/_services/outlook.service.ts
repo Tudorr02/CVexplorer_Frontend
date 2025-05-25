@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable, NgZone } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
@@ -11,36 +11,29 @@ export class OutlookService {
   private zone = inject(NgZone);
   private apiUrl = `${environment.apiBaseUrl}/Outlook`;
 
-  connectToOutlook(
+  connect(
     width = 500,
     height = 650
   ): Observable<void> {
     return new Observable<void>(observer => {
-      // 1) Deschizi popup-ul centrat
+      
       const left  = (window.screen.width  - width)  / 2;
       const top   = (window.screen.height - height) / 2;
       const popup = window.open(
-        `${this.apiUrl}/login`,
+        `${this.apiUrl}/Connect`,
         'outlookAuth',
         `width=${width},height=${height},left=${left},top=${top},resizable,scrollbars`
       );
 
-      if (!popup) {
-        observer.error(new Error('Popup failed to open'));
-        return;
-      }
-
-      // 2) Handlerul de postMessage
       const handler = (event: MessageEvent) => {
-        // Restrânge origin-ul dacă vrei:
-        // if (event.origin !== window.location.origin) return;
+        
         const data = event.data as { type: string; status: string };
-        if (data?.type === 'outlook-auth' && data.status === 'success') {
+        if (data?.type === 'Microsoft-auth' && data.status === 'success') {
           this.zone.run(() => {
             observer.next();
             observer.complete();
           });
-          popup.close();
+          popup?.close();
           window.removeEventListener('message', handler);
         }
       };
@@ -51,43 +44,63 @@ export class OutlookService {
       // 4) Cleanup la unsubscribe
       return () => {
         window.removeEventListener('message', handler);
-        if (!popup.closed) {
-          popup.close();
-        }
+        popup?.close();
       };
     });
   }
 
-  isOutlookSession(): Observable<void> {
-    return this.http.get<void>(`${this.apiUrl}/session`, { withCredentials: true });
+   disconnect(): Observable<void> {
+  return this.http.post<void>(
+    `${this.apiUrl}/Disconnect`,
+    {},
+    { withCredentials: true }
+  );
   }
 
-   getOutlookFolders(positionId : string): Observable<{ id: string; name: string ; selected: boolean }[]> {
-    return this.http.get<{ id: string;  name: string; selected: boolean }[]>(
-      `${this.apiUrl}/folders`,
-      { params: { publicPosId: positionId }, withCredentials: true }
-      
+  isOutlookSession(): Observable<{sessionActive: boolean }> {
+    return this.http.get<{sessionActive: boolean }>(`${this.apiUrl}/Session`, { withCredentials: true });
+  }
+
+    loadFolders(positionId : string): Observable<{ id: string; name: string ; isSubscribed: boolean}[]> 
+  {
+    const params = new HttpParams()
+      .set('publicPosId', positionId);
+    return this.http.get<{ id: string; name: string ; isSubscribed: boolean}[]>(
+      `${this.apiUrl}/Folders`,
+      { params,withCredentials: true }
     );
   }
 
   
-  watchFolder(folderIds: string[], positionId: string): Observable<any> {
+  watchFolder(folderIds: string[], positionId: string): Observable<{
+    id: string; 
+    name: string ; 
+    isSubscribed: boolean
+  }[]> {
      
-    const body: any = {
-      folderIds:            folderIds,
-      positionPublicId:     positionId
-    };
-      return this.http.post<{
-        labelIds: string[];
-        historyId: number;
-        expiration: number;
-      }>(
-        `${this.apiUrl}/subscribe-folders`,
-        body,
-        { withCredentials: true }
+    const params = new HttpParams()
+          .set('publicPosId', positionId);
+    
+        return this.http.post<{
+          id: string; 
+          name: string ; 
+          isSubscribed: boolean
+        }[]>(
+          `${this.apiUrl}/Watch`,
+          folderIds,
+          { params,withCredentials: true }
+        );
+  }
 
-      );
-    }
+  unsubscribe(positionId : string): Observable<void> {
+    const params = new HttpParams()
+      .set('publicPosId', positionId);
+    return this.http.post<void>(
+      `${this.apiUrl}/Unsubscribe`,
+      {},
+      { params, withCredentials: true }
+    );
+  }
   
  
 }

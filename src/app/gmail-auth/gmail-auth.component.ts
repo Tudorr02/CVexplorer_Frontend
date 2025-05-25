@@ -39,11 +39,17 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
     this.positionId = this.route.snapshot.paramMap.get('publicId')!;
 
     this.gmailService.isGmailSession().subscribe({
-      next: () => {
-        this.loadGmailData();
-      },
-      error: () => this.sessionActive = false
-    });
+        next: (res) => {
+          this.sessionActive = res.sessionActive;
+          if (this.sessionActive)
+          this.loadGmailData();
+        },
+        error: (err) => {
+          this.sessionActive = false
+        }
+      });
+   
+   
   }
 
   ngOnDestroy() {
@@ -60,12 +66,12 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
           {
             label: 'Unsubscribe',
             icon: 'pi pi-stop-circle',
-            command: () => this.connect()
+            command: () => this.unsubscribe()
           },
           {
             label: 'Disconnect',
             icon: 'pi pi-sign-out',
-            command: () => this.watch()
+            command: () => this.disconnect()
           }
         ]
       }
@@ -139,7 +145,6 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
   unsubscribe() {
     this.gmailService.unsubscribe(this.positionId).subscribe({
       next: () => {
-        this.labels = [];
         this.selectedLabels = []
         this.notificationService.showSuccess('Unsubscribed from Gmail successfully!');
       },
