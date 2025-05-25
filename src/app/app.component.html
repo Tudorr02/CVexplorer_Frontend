@@ -3,29 +3,17 @@
 
 
 @if(isUserLoggedIn()) {
-    <div  class="h-[var(--home-container-height)] px-[var(--home-container-padding-x)] py-[var(--home-container-padding-y)]  ">
+    <div  class=" h-[var(--home-container-height)] px-[var(--home-container-padding-x)] py-[var(--home-container-padding-y)] flex justify-center items-center w-full">
+    
+        <div id="main-panel" class="w-full h-full  flex py-[var(--main-panel-padding-y)]  px-[var(--main-panel-padding-x)]  bg-[var(--p-primary-contrast-color)] border-round-3xl shadow-9 ">
+            <div id="left-panel" class="w-1/3 h-full  py-[var(--left-panel-padding-y)]  px-[var(--left-panel-padding-x)]" *appHasRole="['HRUser','HRLeader']">
+                 <app-left-menu></app-left-menu>
+            </div>
 
-       
-        <p-splitter 
-        [panelSizes]="[30, 70]" 
-        [minSizes]="[30,70]" 
-        [gutterSize]="0"
-        [style]="{'border': 'none' }"
-        styleClass="border-round-3xl shadow-9 w-full h-full py-[var(--home-card-padding-y)]  px-[var(--home-card-padding-x)] " 
-        panelStyleClass="px-[var(--home-panel-padding-x)] "
-        
-        >
-    
-            <ng-template #panel *appHasRole="['HRUser','HRLeader']" >
-                <div class="w-full h-fulll">
-                    <app-left-menu></app-left-menu>
-                </div>  
-            </ng-template>
-    
-            <ng-template #panel>
-                <div class="w-full h-full flex flex-col">
+            <div id="right-panel" class="w-2/3 h-full  py-[var(--right-panel-padding-y)]  px-[var(--right-panel-padding-x)] " >
+                <div class="w-full h-full flex flex-col ">
                     
-                    <p-tabs [value]="currentTab()" class=" ">
+                    <p-tabs [value]="currentTab()">
                         <p-tablist > 
                             @for(tab of tabs(); track tab.route){
                                 
@@ -41,20 +29,17 @@
                         </p-tablist>
                     </p-tabs>
                     
-                    <div class="flex overflow-hidden w-full h-full">
-                        <p-tabpanels class="w-full h-full flex1">
+                    <div class="flex overflow-hidden w-full h-full ">
+                        <p-tabpanels class="w-full h-full flex1 border-2 p-[1rem]">
                             <router-outlet></router-outlet>  
                         </p-tabpanels> 
                     </div>
-
-                    
-                    
-
                 </div>
-            </ng-template>
-    
-        </p-splitter>
-        
+
+            </div>
+
+        </div>
+
     </div>
 }
 @else {

@@ -3,13 +3,13 @@
     /* Tailwind CSS tokens */
 
     //navbar
-    --nav-px: 2%;
-    --nav-height: 8vh;
+    --nav-px: 2vw;
+    --nav-height: 10vh;
     --nav-items-gap: 1rem;
-    --nav-logo-width: 10rem;
+    --nav-logo-width: 12rem;
 
     //footer
-    --footer-height: 3vh;
+    --footer-height: 5vh;
 
     //login
     --login-height: calc(100% - var(--nav-height) - var(--footer-height));
@@ -18,11 +18,21 @@
 
     //home-container
     --home-container-height: calc(100% - var(--nav-height) - var(--footer-height));
-    --home-container-padding-x:5%;
+    --home-container-padding-x:5vw;
     --home-container-padding-y:2vh;
-    --home-panel-padding-x: 1%;
-    --home-card-padding-y: 1%;
-    --home-card-padding-x: 1%;
+
+    //main-panel
+    --main-panel-padding-x: 1rem;
+    --main-panel-padding-y: 0.5rem;
+
+    //left-panel
+    --left-panel-padding-x: 1rem;
+    --left-panel-padding-y: 0rem;
+
+    //right-panel
+    --right-panel-padding-x: 1rem;
+    --right-panel-padding-y: 0rem;
+    
 
     //light/dark mode
     --light-background-color: rgb(47, 105, 80);
