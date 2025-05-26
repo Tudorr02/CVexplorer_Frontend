@@ -15,7 +15,7 @@
         <div class="flex gap-[var(--nav-items-gap)]">
             <p-button
             label="{{ username() }}"
-            [size]="isLargeScreen() ? 'large' : 'small'"
+            [size]="isLargeScreen() ? 'small' : 'small'"
             variant="text"
             styleClass="text-[var(--p-primary-color)]"
             (onClick)="openAccountDetailsDialog()"
@@ -26,7 +26,7 @@
                 label="Manage Users"
                 icon="pi pi-building"
                 variant="outlined"
-                [size]="isLargeScreen() ? 'large' : 'small'"
+                [size]="isLargeScreen() ? 'small' : 'small'"
                 (onClick)="openManageUsersDialog()"
             ></p-button>
 
@@ -35,17 +35,17 @@
                 label="Enroll a User"
                 icon="pi pi-user-plus"
                 variant="outlined"
-                [size]="isLargeScreen() ? 'large' : 'small'"
+                [size]="isLargeScreen() ? 'small' : 'small'"
                 (onClick)="openEnrollUserDialog()"
             ></p-button>
             <p-button
                 [icon]="'pi ' + (isDarkMode ? 'pi-sun' : 'pi-moon')"
                 variant="outlined"
-                [size]="isLargeScreen() ? 'large' : 'small'"
+                [size]="isLargeScreen() ? 'small' : 'small'"
                 (onClick)="toggleTheme()"/>
             <p-button
                 label="Sign Out"
-                [size]="isLargeScreen() ? 'large' : 'small'"
+                [size]="isLargeScreen() ? 'small' : 'small'"
                 severity="danger"
                 icon="pi pi-sign-out"
                 variant="outlined"

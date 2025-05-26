@@ -1,21 +1,22 @@
 <div class="h-full w-full flex flex-col">
 <div class=" h-4/5 flex flex-col gap-3 px-4 justify-center">
     <div class="flex  items-center justify-between">
-        <label for="username" class="font-semibold w-24">Username</label>
-        <input pInputText id="username" [(ngModel)]="userEnrollment.username" autocomplete="off"/>
+        <label for="username" class="font-medium w-1/3 w-1/3">Username</label>
+        <input pInputText id="username" [(ngModel)]="userEnrollment.username" autocomplete="off" class="w-2/3"/>
     </div>
     
     <div class="flex  items-center justify-between">
-        <label for="password" class="font-semibold w-24">Password</label>
-        <input pInputText id="password" [(ngModel)]="userEnrollment.password" type="password" autocomplete="off"/>
+        <label for="password" class="font-medium w-1/3 w-1/3 ">Password</label>
+        <input pInputText id="password" [(ngModel)]="userEnrollment.password" type="password" autocomplete="off" class="w-2/3"/>
     </div>
 
     <div class="flex  items-center justify-between">
-        <label class="font-semibold w-24">Roles</label>
+        <label class="font-medium w-1/3 w-1/3 w-24">Roles</label>
         <p-selectbutton 
             [options]="roles" 
             [(ngModel)]="userEnrollment.userRole"
             placeholder="Select role"
+            class="w-2/3"
             >
             
         </p-selectbutton>

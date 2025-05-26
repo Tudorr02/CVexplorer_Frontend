@@ -6,21 +6,44 @@ import { definePreset } from "@primeng/themes";
 
 const MyPreset = definePreset(Aura, {
     components: {
-        button:{
-            label : {
-              font : {
-                weight : 'bold',
-              }
-            }
-        },
-        inputText:{
-            font : {
-              weight : 'bold',
-            }
-        },
-          
+           tabs:{
+               tab: {
+                 font:{
+                    weight: "500"
+                 }
+               }
+           },
+            button:{
+                label : {
+                    font : {
+                    weight : '500',
+                    }
+                }
+            },
+            datatable: {
+                column:{
+                    title :{
+                        font: {
+                            weight: "500"
+                        }
+                    }
+                },
+                header:{
+                    padding: "0rem 1rem 1rem 1rem"
+                }
+            },
+            dialog:{
+                title:{
+                    font:{
+                        weight: "500"
+                    }
+                }
+            },
+            
+
     },
     primitive: {
+
         borderRadius: {
             none: "0",
             xs: "2px",

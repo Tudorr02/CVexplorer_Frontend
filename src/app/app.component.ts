@@ -71,11 +71,14 @@ export class AppComponent  {
     { label: 'Logs', route: '/logs', icon: 'pi pi-file' }
   ];
 
-  
+  isAdmin(): boolean {
+    const user = this.AccountService.currentUser();
+    return user?.role === 'Admin' || user?.role === 'Moderator';
+  }
   
   tabs = computed<Tab[]>(() => {
-    const user = this.AccountService.currentUser();
-    const isAdmin = user?.role === 'Admin' || user?.role === 'Moderator';
+    
+    const isAdmin = this.isAdmin();
 
     if (isAdmin) return this.adminTabs;
 

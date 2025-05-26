@@ -12,14 +12,12 @@
             
             grid grid-rows-4
             items-center justify-items-center
-            font-[sans-serif]
             max-w-[25rem] max-h-[25rem]
             min-w-[20rem] min-h-[25rem]"
-            
             >
             
             <div class="row-span-1 flex items-center justify-center">
-                <h3 class="text-4xl ">
+                <h3 class="text-4xl font-regular">
                     Member Login
                 </h3>
             </div>
@@ -28,33 +26,32 @@
 
             <form (ngSubmit)="login()"  class="row-span-3 w-full h-full grid grid-rows-3 gap-4">
                 <div class="flex flex-col items-start gap-2 w-4/5 mx-auto">
-                    <label for="username"  class="text-white text-[1.3rem] self-start">Username</label>
+                    <label for="username"  class="self-start text-lg font-light">Username</label>
                     <input type="text" pInputText id="username" autocomplete="username"
                             [(ngModel)]="model.username" name="username" required 
-                            class="w-full font-semibold" />
+                            class="w-full" />
                 </div>
     
                 <div class="flex flex-col items-start gap-2 w-4/5 mx-auto">
-                    <label for="password"  class="text-white text-[1.3rem] self-start">Password</label>      
+                    <label for="password"  class="self-start text-lg font-light">Password</label>      
                     <p-password [feedback]="false" id="password" [toggleMask]="true" autocomplete="current-password"
                                 [(ngModel)]="model.password" name="password" required
                                 fluid="true"
                                 class="w-full"
                                 styleClass="w-full"
-                                inputStyleClass="w-full font-semibold"/>
+                                inputStyleClass="w-full"/>
                 </div>
                 
                 <div class="flex flex-col justify-center  mx-auto login-button">
-                    <p-button label="Log In" [raised]="true" type="submit" 
-                    styleClass="w-full border-round-xl shadow-7"
-                    />
+                    <p-button label="Log In" type="submit"  />
                 </div>
+                
             </form>
+            
         </div>
 
         
     </div>
-      
 </div>
 
 

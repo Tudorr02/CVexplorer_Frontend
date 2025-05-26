@@ -21,13 +21,14 @@
     <div class="w-5/6 flex justify-start ">
       <p-multiSelect
       [disabled]="!sessionActive"
-      class="flex justify-start"
+      class="ustify-start w-2/3"
+      styleClass="w-2/3"
       [(ngModel)]="selectedFolders"
       [options]="folders"
       optionLabel="name"
       optionValue="id"
       placeholder="Select Folders"
-      display="chip"
+      [maxSelectedLabels]="1"
       />
     </div>
     

@@ -19,69 +19,61 @@
   </p-tabs>
   
   <div class="flex overflow-hidden w-full">
-    
-      @if(loading){
-        <div class="p-3 flex flex-col w-full">
-          <div class=" w-full">
-            <p-skeleton height="2.5rem" />
-          </div>
-
-          <div class="px-3 mt-0.1">
-            <ng-container *ngFor="let i of loadingItems; let index = index">
-              <div class="flex items-center mt-1">
-                <i class="pi pi-chevron-right" style="font-size: 0.9rem; color: grey"></i>
-                <div class="w-full px-2">
-                  <p-skeleton height="2.8rem"  />
-                </div>
-              </div>
-            </ng-container>
-          </div>
+    @if(loading){
+      <div class="p-3 flex flex-col w-full">
+        <div class=" w-full">
+          <p-skeleton height="2.5rem" />
         </div>
 
+        <div class="px-3 mt-0.1">
+          <ng-container *ngFor="let i of loadingItems; let index = index">
+            <div class="flex items-center mt-1">
+              <i class="pi pi-chevron-right" style="font-size: 0.9rem; color: grey"></i>
+              <div class="w-full px-2">
+                <p-skeleton height="2.8rem"  />
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      
+    }
+    @else {
+    <div class="flex-1">
+      <p-tree 
+      (onNodeExpand)="onNodeExpand($event)"
+      (onNodeCollapse)="onNodeCollapse($event)"
+      scrollHeight="flex"
+      [filter]="true" 
+      filterPlaceholder="Search Departments or Positions..." 
+      [value]="treeData"
+      [style]="{fontSize:'1.25rem'}"
+      selectionMode="single"
+      [(selection)]="selectedNode"
+      [metaKeySelection]="true"
+      (onNodeSelect)="onNodeSelect($event)"
+      emptyMessage="-"
+      styleClass="h-full w-full" 
+      >
         
-      }
-      @else {
-        
-          <div class="flex-1">
-            <p-tree 
-            (onNodeExpand)="onNodeExpand($event)"
-            (onNodeCollapse)="onNodeCollapse($event)"
-            scrollHeight="flex"
-            [filter]="true" 
-            filterPlaceholder="Search Departments or Positions..." 
-            [value]="treeData"
-            [style]="{fontSize:'1.25rem'}"
-            selectionMode="single"
-            [(selection)]="selectedNode"
-            [metaKeySelection]="true"
-            (onNodeSelect)="onNodeSelect($event)"
-            emptyMessage="-"
-            styleClass="h-full w-full border-2" 
-            >
-              
-              <ng-template pTemplate="default" let-node >
-                <div class=" flex items-center justify-between px-2">
-                    <span >{{ node.label }}</span>
-                    <p-button 
-                      icon="pi pi-ellipsis-v" 
-                      (click)="openNodeOptions($event, node)" 
-                      rounded="true" 
-                      [text]="true" 
-                      severity="secondary" />
-                      
-                </div>
+        <ng-template pTemplate="default" let-node >
+          <div class=" flex items-center justify-between px-2">
+              <span >{{ node.label }}</span>
+              <p-button 
+                icon="pi pi-ellipsis-v" 
+                (click)="openNodeOptions($event, node)" 
+                rounded="true" 
+                [text]="true" 
+                severity="secondary" />
                 
-              </ng-template>
-              
-            
-          
-            </p-tree> 
           </div>
+          
+        </ng-template>
         
-       
-      }
-    
-    
+      </p-tree> 
+    </div>
+    }
   </div>
 </div>
 

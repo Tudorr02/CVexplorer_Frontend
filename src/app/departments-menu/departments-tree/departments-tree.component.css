@@ -9,9 +9,10 @@
     display: none;
 }
 
-::ng-deep  .p-tree-node-content {
-    width: 100%;
-}
+/* ::ng-deep  .p-tree-node-content {
+    width: 90%;
+    border: 1px solid red;
+} */
 
 :host ::ng-deep  .p-iconfield {
     background: var(--p-datatable-header-background);
@@ -24,3 +25,8 @@
 }
 
 
+/* ::ng-deep .p-tree-root-children{
+    
+    width: 95%;
+    overflow:auto
+} */
