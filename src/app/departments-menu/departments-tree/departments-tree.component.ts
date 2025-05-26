@@ -26,10 +26,12 @@ import { Position } from '../../_models/position';
 import { PositionTreeNode } from '../../_models/positionTreeNode';
 import { DeletePositionComponent } from '../delete-position/delete-position.component';
 import { NodeSelectionService } from '../../_services/node-selection.service';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-left-menu',
-  imports: [Skeleton,DeletePositionComponent,DeleteDepartmentComponent,EditDepartmentComponent,FormsModule, InputTextModule, Dialog, HasRoleDirective, TabsModule, ButtonModule, Tree, TreeModule, CommonModule, Menu, AddDepartmentComponent],
+  imports: [IconFieldModule,  InputIconModule,Skeleton,DeletePositionComponent,DeleteDepartmentComponent,EditDepartmentComponent,FormsModule, InputTextModule, Dialog, HasRoleDirective, TabsModule, ButtonModule, Tree, TreeModule, CommonModule, Menu, AddDepartmentComponent],
   templateUrl: './departments-tree.component.html',
   styleUrl: './departments-tree.component.css',
   

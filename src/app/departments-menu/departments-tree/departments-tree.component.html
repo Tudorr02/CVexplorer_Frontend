@@ -41,43 +41,43 @@
         
       }
       @else {
-        <div class="flex-1 ">
-            
-          <p-tree 
-          (onNodeExpand)="onNodeExpand($event)"
-          (onNodeCollapse)="onNodeCollapse($event)"
-          scrollHeight="95%"
-          [filter]="true" 
-          filterPlaceholder="Search.." 
-          [value]="treeData"
-          [style]="{fontSize:'1.25rem'}"
-          selectionMode="single"
-          [(selection)]="selectedNode"
-          [metaKeySelection]="true"
-          (onNodeSelect)="onNodeSelect($event)"
-          emptyMessage="-"
-          styleClass="h-full w-full border-2" 
-          >
         
-            <ng-template pTemplate="default" let-node >
-              <div class=" flex items-center justify-between px-2">
-                  <span >{{ node.label }}</span>
-                  <p-button 
-                    icon="pi pi-ellipsis-v" 
-                    (click)="openNodeOptions($event, node)" 
-                    rounded="true" 
-                    [text]="true" 
-                    severity="secondary" />
-                    
-              </div>
+          <div class="flex-1">
+            <p-tree 
+            (onNodeExpand)="onNodeExpand($event)"
+            (onNodeCollapse)="onNodeCollapse($event)"
+            scrollHeight="flex"
+            [filter]="true" 
+            filterPlaceholder="Search Departments or Positions..." 
+            [value]="treeData"
+            [style]="{fontSize:'1.25rem'}"
+            selectionMode="single"
+            [(selection)]="selectedNode"
+            [metaKeySelection]="true"
+            (onNodeSelect)="onNodeSelect($event)"
+            emptyMessage="-"
+            styleClass="h-full w-full border-2" 
+            >
               
-            </ng-template>
+              <ng-template pTemplate="default" let-node >
+                <div class=" flex items-center justify-between px-2">
+                    <span >{{ node.label }}</span>
+                    <p-button 
+                      icon="pi pi-ellipsis-v" 
+                      (click)="openNodeOptions($event, node)" 
+                      rounded="true" 
+                      [text]="true" 
+                      severity="secondary" />
+                      
+                </div>
+                
+              </ng-template>
+              
+            
           
-          
+            </p-tree> 
+          </div>
         
-          </p-tree> 
-          
-        </div>
        
       }
     

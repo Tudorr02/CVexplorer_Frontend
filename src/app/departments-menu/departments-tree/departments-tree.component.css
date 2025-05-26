@@ -4,3 +4,23 @@
 ::ng-deep  .p-tree-node-label {
     width: 100%;
 }
+
+:host ::ng-deep .p-inputicon {
+    display: none;
+}
+
+::ng-deep  .p-tree-node-content {
+    width: 100%;
+}
+
+:host ::ng-deep  .p-iconfield {
+    background: var(--p-datatable-header-background);
+    color: var(--p-datatable-header-color);
+    border-color: var(--p-datatable-header-border-color);
+    border-style: solid;
+    border-width: var(--p-datatable-header-border-width);
+    padding: var(--p-datatable-header-padding);
+    padding-top: 0;
+}
+
+
