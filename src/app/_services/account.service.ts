@@ -107,6 +107,12 @@ export class AccountService {
   isLoggedIn(): boolean {
     return this.currentUser() !== null || localStorage.getItem('userData') !== null;
   }
+
+  isAdmin(): boolean {
+    const user = this.currentUser();
+    return user?.role === 'Admin' || user?.role === 'Moderator';
+  }
+    
   
   
 

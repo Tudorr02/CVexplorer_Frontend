@@ -72,13 +72,12 @@ export class AppComponent  {
   ];
 
   isAdmin(): boolean {
-    const user = this.AccountService.currentUser();
-    return user?.role === 'Admin' || user?.role === 'Moderator';
+    return this.AccountService.isAdmin();
   }
-  
+ 
   tabs = computed<Tab[]>(() => {
     
-    const isAdmin = this.isAdmin();
+    const isAdmin = this.AccountService.isAdmin();
 
     if (isAdmin) return this.adminTabs;
 

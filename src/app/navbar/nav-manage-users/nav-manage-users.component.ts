@@ -30,6 +30,7 @@ import { Select } from 'primeng/select';
 export class NavManageUsersComponent  {
   @ViewChild('dtUsers') dt!: Table;
 
+  
   // ✅ Dialog visibility
   visibleManageUsers: boolean = false;
 
@@ -41,7 +42,7 @@ export class NavManageUsersComponent  {
 
   // ✅ Data
   users: User[] = [];
-  loadingUsers: boolean = false;
+
   roles: string[] = [];
   globalFilter: string = '';
   clonedUsers: { [userId: number]: User } = {};
@@ -53,11 +54,10 @@ export class NavManageUsersComponent  {
     this.loadRoles();
   }
 
+
   // ✅ Load Users & Roles
   loadUsers(): void {
-    this.loadingUsers = true;
     this.UserService.getUsers()
-    .pipe(finalize(() => setTimeout(() => this.loadingUsers = false, 1000)))
     .subscribe({
       next: (users) => (this.users = users),
       error: () => this.NotificationService.showError('Failed to load users.')

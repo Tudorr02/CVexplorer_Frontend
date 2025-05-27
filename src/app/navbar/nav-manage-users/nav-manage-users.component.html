@@ -1,13 +1,16 @@
+
 <p-table #dtUsers 
 [value]="users" 
 [scrollable]="true"
-scrollHeight="flex"  
+[rows]="16"
+scrollHeight="calc(50rem - 80px - 49px - 16px - 16px)"  
 dataKey="id"  
 editMode="row" 
-[loading]="loadingUsers"
-styleClass="w-full h-full"
+class="w-full flex flex-col h-full"
 [globalFilterFields]="['username', 'firstName', 'lastName', 'email', 'userRole']"
+[virtualScroll]="true" [virtualScrollItemSize]="80"
 >
+<!-- [loading]="loadingUsers" -->
 <ng-template #caption>
     <p-iconfield iconPosition="left">
         <p-inputicon>
@@ -18,7 +21,7 @@ styleClass="w-full h-full"
 </ng-template>
 
 <ng-template #header>
-   
+
     <tr>
         <th class="w-[15%]">Username</th>
         <th class="w-[15%]">First Name</th>
@@ -134,3 +137,4 @@ styleClass="w-full h-full"
 </ng-template>
 
 </p-table>
+

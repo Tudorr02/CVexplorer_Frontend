@@ -10,7 +10,7 @@
                  <app-left-menu></app-left-menu>
             </div>
 
-            <div id="right-panel" class="w-2/3  h-full  py-[var(--right-panel-padding-y)]  px-[var(--right-panel-padding-x)] " [class.w-full]="isAdmin()">
+            <div id="right-panel" class="w-2/3  h-full  py-[var(--right-panel-padding-y)] px-[var(--right-panel-padding-x)] " [class.w-full]="isAdmin()">
                 <div class="w-full h-full flex flex-col overflow-hidden">
                     
                     <p-tabs [value]="currentTab()">
@@ -30,7 +30,7 @@
                     </p-tabs>
                     
                     <div class="flex overflow-hidden w-full h-full ">
-                        <p-tabpanels class="w-full h-full p-[1rem] flex1 border-2 ">
+                        <p-tabpanels class="w-full h-full p-[1rem] flex1 ">
                             <router-outlet></router-outlet>  
                         </p-tabpanels> 
                     </div>

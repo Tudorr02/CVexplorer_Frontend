@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { AdminService } from '../../_services/admin.service';
 import { NotificationService } from '../../_services/notification.service';
 import { CommonModule } from '@angular/common';
@@ -24,7 +24,14 @@ export class ManageCompaniesComponent implements OnInit {
   private notificationService = inject(NotificationService);
 
   @ViewChild('dtCompanies') dt!: Table; // Reference to PrimeNG Table
-  loadingCompanies: boolean = false;
+
+  cdr = inject(ChangeDetectorRef);
+  private ro?: ResizeObserver;   
+  @ViewChild('wrapper', { static: false })
+  wrapper!: ElementRef<HTMLElement>;
+  scrollHeight = '0px'; 
+
+
   companies: CompanyManagement[] = [];
   clonedCompanies: { [companyId: number]: CompanyManagement} = {};
   deletingCompanies: { [companyId: number]: boolean } = {};
@@ -34,6 +41,26 @@ export class ManageCompaniesComponent implements OnInit {
 
   ngOnInit() {
     this.loadCompanies();
+  }
+
+  ngAfterViewInit(): void {
+    this.updateHeight();
+
+    // dacă vrei să reacţionezi când utilizatorul redimensionează fereastra
+    this.ro = new ResizeObserver(() => this.updateHeight());
+    this.ro.observe(this.wrapper.nativeElement);
+  }
+
+  private updateHeight(): void {
+    if (!this.wrapper) return;
+    const h = this.wrapper.nativeElement.offsetHeight;  // pixeli incluşi padding
+    this.scrollHeight = `${Math.max(h - 49 - 16, 300)}px`;   
+    console.log('Scroll height updated:', h);
+    this.cdr.detectChanges();                           // forţează aplicaţia
+  }
+
+  ngOnDestroy(): void {
+    this.ro?.disconnect();   // curăţă observaţia de resize
   }
 
   addCompanyInit() {
@@ -65,9 +92,7 @@ export class ManageCompaniesComponent implements OnInit {
 
 
   loadCompanies() {
-    this.loadingCompanies = true;
     this.adminService.getCompanies()
-    .pipe(finalize(() => setTimeout(() => this.loadingCompanies = false, 1000)))
     .subscribe({
       next: (companies) => this.companies = companies.map(company => ({
         id: company.id,

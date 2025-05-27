@@ -12,7 +12,7 @@ export const roleGuard = (requiredRoles: string[]) => {
 
     // Check if user has at least one required role
     if (!requiredRoles.some(role => userRole === role)) {
-      router.navigate(['/dashboard']); //Redirect unauthorized users
+      router.navigate(['/not-found']); //Redirect unauthorized users
       return false;
     }
 

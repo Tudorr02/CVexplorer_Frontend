@@ -8,8 +8,9 @@ export const guestGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if (accountService.isLoggedIn()) {
+    accountService.isAdmin() ?
+      router.navigate(['/admin/manage-users']) : // Redirect to admin if user is admin
     router.navigate(['/dashboard']); // Redirect to dashboard 
-    // if already logged in
     return false;
   }
 

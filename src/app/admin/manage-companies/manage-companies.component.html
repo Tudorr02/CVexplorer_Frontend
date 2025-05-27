@@ -1,12 +1,17 @@
-
+<div class=" h-full w-full ">
+  <div #wrapper class="h-full">
     <p-table #dtCompanies 
+        *ngIf="this.scrollHeight !=='0px'"
         [value]="companies"  
         [scrollable]="true"
-        scrollHeight="flex"
-        dataKey="id"
-        [loading]="loadingCompanies"  
+        [scrollHeight]="scrollHeight"
+        dataKey="id"  
+         [rows]="16"
         [globalFilterFields]="['name']"
         editMode="row"
+        styleClass="w-full h-full"
+        [virtualScroll]="true" [virtualScrollItemSize]="80"
+        
     >
         
         <ng-template #caption >
@@ -104,3 +109,5 @@
         </ng-template>
 
     </p-table> 
+</div>
+</div>

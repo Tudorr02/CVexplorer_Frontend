@@ -1,4 +1,4 @@
-import { Component, OnInit , inject, ViewChild } from '@angular/core';
+import { Component, OnInit , inject, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { MessageService, SelectItem , ConfirmationService} from 'primeng/api';
 import { UserManagement } from '../../_models/userManagement';
 import { AdminService } from '../../_services/admin.service';
@@ -29,12 +29,17 @@ export class ManageUsersComponent implements OnInit{
 
   @ViewChild('dtUsers') dt!: Table; // Reference to PrimeNG Table
 
+  cdr = inject(ChangeDetectorRef);
+  private ro?: ResizeObserver;   
+  @ViewChild('wrapper', { static: false })
+  wrapper!: ElementRef<HTMLElement>;
+  scrollHeight = '0px'; 
+
   users: UserManagement[] = [];
   roles: { name: string ; disabled?: boolean }[] = [];
   companies: string[] = [];
  
-  
-  loadingUsers: boolean = false; // Control loading state
+
   globalFilter: string = '';
   clonedUsers: { [username: string]: UserManagement } = {};
   deletingUsers: { [userId: number]: boolean } = {}; // ✅ Track rows in delete mode
@@ -50,15 +55,33 @@ export class ManageUsersComponent implements OnInit{
     this.checkIfModerator();
   }
 
+  ngAfterViewInit(): void {
+    this.updateHeight();
+
+    // dacă vrei să reacţionezi când utilizatorul redimensionează fereastra
+    this.ro = new ResizeObserver(() => this.updateHeight());
+    this.ro.observe(this.wrapper.nativeElement);
+  }
+
+  private updateHeight(): void {
+    if (!this.wrapper) return;
+    const h = this.wrapper.nativeElement.offsetHeight;  // pixeli incluşi padding
+    this.scrollHeight = `${Math.max(h - 49 - 16, 300)}px`;   
+    console.log('Scroll height updated:', h);
+    this.cdr.detectChanges();                           // forţează aplicaţia
+  }
+
+  ngOnDestroy(): void {
+    this.ro?.disconnect();   // curăţă observaţia de resize
+  }
+
   private checkIfModerator() {
     const userRole =  this.accountService.currentUser()?.role || '';
     this.isModerator = ( userRole === 'Moderator' );
   }
 
   private loadUsers() {
-    this.loadingUsers = true;
     this.adminService.getUsers()
-    .pipe(finalize(() => setTimeout(() => this.loadingUsers = false, 1000)))
     .subscribe(
       (data) => {
         this.users = data;

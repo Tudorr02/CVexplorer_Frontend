@@ -75,6 +75,8 @@ export class LoginComponent {
     this.AccountServices.login(this.model).subscribe({
       next: () => {
         console.log('Login successful');
+        this.AccountServices.isAdmin() ?
+          this.Router.navigate(['/admin/manage-users']) :
         this.Router.navigate(['/dashboard']);
       },
       error: (error) => {

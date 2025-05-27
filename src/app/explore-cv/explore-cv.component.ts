@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CvService } from '../_services/cv.service';
 import { NotificationService } from '../_services/notification.service';
@@ -22,7 +22,7 @@ import { catchError, finalize } from 'rxjs/operators';
   templateUrl: './explore-cv.component.html',
   styleUrl: './explore-cv.component.css'
 })
-export class ExploreCvComponent implements OnInit{
+export class ExploreCvComponent implements OnInit , AfterViewInit , OnDestroy {
 
   private route = inject(ActivatedRoute);
   private cvService = inject(CvService);
@@ -46,16 +46,45 @@ export class ExploreCvComponent implements OnInit{
 
   @ViewChild('dtCVs') dt!: Table; // Reference to PrimeNG Table
   globalFilter: string = '';
+  
+  cdr = inject(ChangeDetectorRef);
+  private ro?: ResizeObserver;   
+  @ViewChild('wrapper', { static: false })
+  wrapper!: ElementRef<HTMLElement>;
+  scrollHeight = '0px'; 
+
   ngOnInit() {
 
     this.route.queryParamMap.subscribe(qp => {
         this.positionPublicId = qp.get('positionPublicId') ?? undefined;
         const dept = qp.get('departmentId');
-        this.departmentId = dept != null ? Number(dept) : undefined;
+        this.departmentId = dept != null ? Number(dept) : undefined;   
         this.loadCvs();
+        
     });
   }
 
+  
+
+  ngAfterViewInit(): void {
+    this.updateHeight();
+
+    // dacă vrei să reacţionezi când utilizatorul redimensionează fereastra
+    this.ro = new ResizeObserver(() => this.updateHeight());
+    this.ro.observe(this.wrapper.nativeElement);
+  }
+
+  private updateHeight(): void {
+    if (!this.wrapper) return;
+    const h = this.wrapper.nativeElement.offsetHeight;  // pixeli incluşi padding
+    this.scrollHeight = `${Math.max(h - 65, 500)}px`;   // -65 px header intern
+    this.cdr.detectChanges();                           // forţează aplicaţia
+  }
+
+  ngOnDestroy(): void {
+    this.ro?.disconnect();   // curăţă observaţia de resize
+  }
+ 
   private loadCvs() {
     this.cvService
       .getAllCVs(this.positionPublicId, this.departmentId)

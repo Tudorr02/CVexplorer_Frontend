@@ -22,15 +22,6 @@ import { NavComponent } from './navbar/nav/nav.component';
 export const routes: Routes = [
 
 
-    
-    ///// DE TEST
-
-    { path: 'lol', component: NavComponent},
-
-
-    
-
-
     {path : 'login', component: LoginComponent, canActivate : [guestGuard]},
     {
         path : 'admin',
@@ -42,27 +33,14 @@ export const routes: Routes = [
         ]
 
     },
-    {path : 'dashboard', component: DashboardComponent, canActivate: [authGuard]},
-
-    // { path: 'departments/:id', component: DashboardComponent, canActivate: [authGuard] },
-    // { path: 'positions/:publicId', component: DashboardComponent, canActivate: [authGuard] },
-    // { path: 'positions/:publicId/edit', component: EditPositionComponent, canActivate: [authGuard] },
-    // { path: 'positions/:publicId/cv-upload', component: UploadCvComponent, canActivate: [authGuard,tabGuard] },
-    //{ path: 'departments/:departmentId/create-position', component: CreatePositionComponent , canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]},
-    
-
+    {path : 'dashboard', component: DashboardComponent, canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]},
     { path: 'departments/:id',
         canActivate: [authGuard],
         children: [
             { path: 'create-position', 
                 component: CreateEditPositionComponent , 
                 canActivate: [ authGuard, roleGuard(['HRUser', 'HRLeader'])]
-            },
-            // {
-            //     path: 'cv-explore',
-            //     component: ExploreCvComponent,
-            //     canActivate: [authGuard]
-            // }
+            }    
         ]
     },
 

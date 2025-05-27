@@ -1,16 +1,17 @@
-<div class="flex flex-col h-full w-full  border-2">
-  <div class="flex-1 bg-white ">
+<div class=" h-full w-full ">
+  <div #wrapper class=" h-full">
     <p-table #dtCVs 
+        *ngIf="this.scrollHeight !=='0px'"
         [value]="cvs"
         [scrollable]="true"
-        scrollHeight="62vh"
+        [scrollHeight]="scrollHeight"
         dataKey="publicId"
         [rows]="16"
-        class="w-full h-full  "
+        class="w-full h-full"
         [globalFilterFields]="['fileName','uploadedeBy']"
         [sortOrder]="-1"
         [(selection)]="selectedCVs"
-        [virtualScroll]="true" [virtualScrollItemSize]="40"
+        [virtualScroll]="true" [virtualScrollItemSize]="65"
         >
 
         <ng-template #caption>
