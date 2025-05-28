@@ -1,11 +1,13 @@
 import { EducationLevel } from "../enums/education-level.enum";
 import { PositionLevel } from "../enums/position-level.enum";
+import { Position } from "./position";
 
 export interface Evaluation {
     fileData?: string;
     score?: number;
     evaluation : CvEvaluationResult;
     cvPublicId: string;
+    positionData: Position;
 }
 
 export interface ScoreScrapedField<TScraped> {

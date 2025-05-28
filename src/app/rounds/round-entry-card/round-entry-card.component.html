@@ -1,24 +1,31 @@
-<div class="card align-items-center" cdkDrag>
-    <p-avatar icon="pi pi-user" class="mr-2 w-1/4" size="large" shape="circle" />
-    <strong class="w-1/4 flex justify-center" >{{ entry.candidateName }}</strong>
-    <span class="w-1/4 flex justify-center"> {{ entry.score }} pts</span>
-    <p-button class="w-1/4" label="See Evaluation" size="small" variant="text" (onClick)="getEvaluationResult(entry.id)" />
-    
+
+<div class=" h-[5rem] rounded-3xl flex items-center px-2 gap-2 bg-[var(--p-content-background)]" cdkDrag>
+    <div  class="flex justify-center">
+        <p-avatar icon="pi pi-user" size="large" shape="circle" />
+    </div>
+    <div class="w-3/6 flex justify-start">
+        <strong  >{{ entry.candidateName }}</strong>
+    </div>
+    <div class="flex flex-col w-1/6 justify-center items-center">
+        <p class="text-sm font-medium">Points</p>
+        <span > {{ entry.score }}</span>
+    </div>  
+    <div class="flex flex-col w-1/6 justify-center items-center">
+        
+        <p-button label="See Evaluation" size="small" rounded="true" text="true" (onClick)="getEvaluationResult(entry.id)" />
+    </div>
 </div>
 
 <p-dialog 
+    header="Evaluation Result"
     [modal]="true" 
     [(visible)]="viewEvaluation"
     [modal]='true'
-    [style]="{'width': '100%', 'height': '100%'}"
+    styleClass=" shadow-9 w-dialog-lg h-dialog-lg border-none"
     (onHide)="onDialogHide()" 
 
    >
-    <ng-template pTemplate="header">
-        <div class="flex justify-between items-center">
-            <h4>Evaluation Result</h4>
-        </div>
-    </ng-template>
+  
 
     <div class="flex w-full h-full relative">
         <div class="flex w-1/2 h-full" >
@@ -29,8 +36,50 @@
             style="border:none;"
             ></iframe>
         </div>
-        <div class="flex w-1/2 h-full justify-center">
-            <div class="flex flex-col items-center gap-2" >
+        <div class="flex w-1/2 h-full">
+            <p-accordion styleClass="w-full" *ngIf="evaluationTabs.length">
+                @for (tab of evaluationTabs; track tab.title) {
+                    <p-accordion-panel  [value]="tab.value">
+                        <p-accordion-header class="font-medium">
+                            <div class="flex  w-full items-center">
+                                <p class="w-1/3  text-white">{{ tab.title }}</p>
+                                <p class="flex justify-start items-start">Similarity: {{tab.score}} %</p> 
+                            </div>
+                        </p-accordion-header>
+
+                        <p-accordion-content class="flex flex-col w-full">
+                            <!-- dacă body e array afișează fiecare element pe rând -->
+                            <!-- <ng-container *ngIf="Array.isArray(tab.body); else scalar">
+                            <ul class="list-disc list-inside ml-3">
+                                @for (item of tab.body; track $index) {
+                                <li>{{ item }}</li>
+                                }
+                            </ul>
+                            </ng-container> -->
+
+                            <div class="flex flex-col w-full gap-2">
+                                <div class="flex w-full flex-wrap gap-2 items-center">
+                                <p class="w-[6rem] font-medium">Candidate</p>   
+                                <p class="">{{ tab.body }} </p>
+                                </div>
+
+                                <div class="flex w-full flex-wrap gap-2 items-center">
+                                <p class="w-[6rem]  font-medium">Position</p>   
+                                <p class="">{{ tab.positionBody }}</p>
+                                </div>
+                            </div>
+                            
+                            
+                        </p-accordion-content>
+                    </p-accordion-panel>
+                }
+            </p-accordion>
+            
+        </div>
+        
+    </div>
+
+    <!-- <div class="flex flex-col items-center gap-2" >
         
                 <p class = "text-xl">CV Results</p>
                   
@@ -74,32 +123,28 @@
                     <textarea pTextarea rows="1" cols="50" [readOnly]="!editMode" [ngModel]="eval?.evaluation?.minimumEducationLevel?.value" ></textarea>
                     <p-inputnumber id="requiredSkillsScore"  [disabled]="!editMode"[inputStyle]="{ width: '5rem' , height: '3rem' }" [ngModel]="eval?.evaluation?.minimumEducationLevel?.score"/>
                 </div>
-            </div>
-        </div>
-        <div class="absolute bottom-4 right-4">
+            </div> -->
 
-            <!-- View-only: single Edit button -->
+    <!-- <div class="absolute bottom-4 right-4">
+\
+        <p-button
+            *ngIf="!editMode"
+            label="Edit Evaluation"
+            (click)="editEvaluation()">
+        </p-button>
+
+        <div *ngIf="editMode" class="flex gap-2">
             <p-button
-                *ngIf="!editMode"
-                label="Edit Evaluation"
-                (click)="editEvaluation()">
+                label="Cancel"
+                severity="secondary"
+                (click)="cancelEdit()">
             </p-button>
-          
-            <!-- Edit mode: Cancel + Update -->
-            <div *ngIf="editMode" class="flex gap-2">
-              <p-button
-                  label="Cancel"
-                  severity="secondary"
-                  (click)="cancelEdit()">
-              </p-button>
-          
-              <p-button
-                  label="Update"
-                  (click)="updateEvaluation(eval.cvPublicId, eval.evaluation)">
-              </p-button>
-            </div>
-          
-          </div>
+        
+            <p-button
+                label="Update"
+                (click)="updateEvaluation(eval.cvPublicId, eval.evaluation)">
+            </p-button>
         </div>
-
+        
+    </div> -->
 </p-dialog>

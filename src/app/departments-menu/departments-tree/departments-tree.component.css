@@ -3,6 +3,7 @@
 }
 ::ng-deep  .p-tree-node-label {
     width: 100%;
+    
 }
 
 :host ::ng-deep .p-inputicon {

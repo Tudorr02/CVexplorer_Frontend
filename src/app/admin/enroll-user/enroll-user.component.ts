@@ -45,6 +45,7 @@ export class EnrollUserComponent implements OnInit {
   ngOnInit() {
     this.loadRoles();
     this.checkIfModerator();
+    this.fetchCompanies();
   }
 
   private checkIfModerator() {

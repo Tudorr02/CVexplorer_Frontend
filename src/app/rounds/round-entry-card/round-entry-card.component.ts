@@ -14,9 +14,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumber } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
 import { EvaluationService } from '../../_services/evaluation.service';
+import { AccordionModule } from 'primeng/accordion';
+
 @Component({
   selector: 'app-round-entry-card',
-  imports: [TextareaModule,InputNumber,AvatarModule,DragDropModule, ButtonModule, Dialog, CommonModule, FormsModule,InputTextModule],
+  imports: [AccordionModule,TextareaModule,InputNumber,AvatarModule,DragDropModule, ButtonModule, Dialog, CommonModule, FormsModule,InputTextModule],
   templateUrl: './round-entry-card.component.html',
   styleUrl: './round-entry-card.component.css'
 })
@@ -28,22 +30,62 @@ throw new Error('Method not implemented.');
 
   @Input({ required: true }) entry!: RoundEntry;
 
+
   roundService = inject(RoundService);
-  notificationService = inject(NotificationService); // if you have a service to show notifications
-  evaluationService = inject(EvaluationService); // if you have a service to handle evaluations
-  eval! : Evaluation; // will hold the evaluation result
-  viewEvaluation = false; // will hold the evaluation result
+  notificationService = inject(NotificationService); 
+  evaluationService = inject(EvaluationService); 
+  eval! : Evaluation; 
+  viewEvaluation = false; 
   pdfUrl?: SafeResourceUrl;
   sanitizer= inject(DomSanitizer);
-  editMode : boolean= false; // flag to indicate if the edit mode is active
+  editMode : boolean= false;
+  evaluationTabs: {  score : number ,value : string , title: string; body: string | string[] | number ; positionBody: string | string[] | number }[] = [];
+
   getEvaluationResult( entryId: number) {
     this.roundService.getEvaluation(entryId).subscribe(
       {
         next: (evaluation) => {
-          this.eval = evaluation; // set the evaluation result
+          this.eval = evaluation; 
+          const ev = evaluation.evaluation;
+          const positionData = evaluation.positionData;
+          this.evaluationTabs = [
+          {
+            score: ev.requiredSkills.score,         // or 0
+            value : 'required-skills',                 // or 0
+            title : 'Required skills',
+            body  : ev.requiredSkills.scraped.length
+                    ? ev.requiredSkills.scraped
+                    : '— none —',
+            positionBody: positionData.requiredSkills.length
+                    ? positionData.requiredSkills
+                    : '— none —'
+          },
+          {
+            score: ev.niceToHave.score,             // or 1
+            value : 'nice-to-have',                    // or 1
+            title : 'Nice to have',
+            body  : ev.niceToHave.scraped.length
+                    ? ev.niceToHave.scraped
+                    : '— none —',
+            positionBody: positionData.niceToHave.length
+                    ? positionData.niceToHave
+                    : '— none —'
+
+          },
+          {score: ev.languages.score , value: 'languages',              title: 'Languages',          body: ev.languages.value , positionBody: positionData.languages.length
+                    ? positionData.languages : '— none —' },
+          {score:ev.certifications.score ,value: 'certifications',         title: 'Certifications',     body: ev.certifications.scraped, positionBody: positionData.certifications.length
+                    ? positionData.certifications : '— none —' },
+          {score:ev.responsibilities.score, value: 'responsibilities',       title: 'Responsibilities',   body: ev.responsibilities.scraped , positionBody: positionData.responsibilities.length
+                    ? positionData.responsibilities : '— none —' },
+          {score:ev.minimumExperienceMonths.score ,value: 'experience',             title: 'Minimum experience', body: ev.minimumExperienceMonths.value + ' months', positionBody: positionData.minimumExperienceMonths + ' months' },  
+          {score:ev.minimumEducationLevel.score ,value: 'education-level',        title: 'Education level',    body: ev.minimumEducationLevel.value , positionBody: positionData.minimumEducationLevel },
+          {score:ev.level.score, value: 'candidate-level',         title: 'Candidate level',     body: ev.level.value , positionBody: positionData.level }
+        ];
+
           const dataUrl = `data:application/pdf;base64,${evaluation.fileData}`;
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
-          this.viewEvaluation = true; // open the dialog
+          this.viewEvaluation = true; 
         },
         error: (error) => {
           console.error('Error loading evaluation', error);
@@ -53,18 +95,19 @@ throw new Error('Method not implemented.');
     
   }
 
+ 
   onDialogHide() {
     this.viewEvaluation = false;
     this.pdfUrl = undefined;
   }
 
   editEvaluation() {
-    this.editMode = true; // set the edit mode to true
+    this.editMode = true;
   }
 
   cancelEdit(): void {
-    this.editMode = false;   // go back to view-only mode
-    // optionally: reset the form here
+    this.editMode = false;
+
   }
 
   updateEvaluation(cvPublicId : string, dto : CvEvaluationResult): void {
@@ -72,9 +115,9 @@ throw new Error('Method not implemented.');
     {
       next: (response) => {
         this.notificationService.showSuccess('Evaluation updated successfully!');
-        this.editMode = false; // go back to view-only mode
+        this.editMode = false; 
         if (this.eval) {
-          this.eval.evaluation = response; // refresh the evaluation result
+          this.eval.evaluation = response; 
         }
       },
       error: (error) => {

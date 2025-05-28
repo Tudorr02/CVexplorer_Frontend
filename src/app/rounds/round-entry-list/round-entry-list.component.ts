@@ -9,9 +9,10 @@ import { CardModule } from 'primeng/card';
 import { AvatarModule } from 'primeng/avatar';
 import { RoundEntryCardComponent } from "../round-entry-card/round-entry-card.component";
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-round',
-  imports: [ScrollPanelModule,PickListModule, DragDropModule, AvatarModule, RoundEntryCardComponent],
+  imports: [CommonModule,ScrollPanelModule,PickListModule, DragDropModule, AvatarModule, RoundEntryCardComponent],
   templateUrl: './round-entry-list.component.html',
   styleUrl: './round-entry-list.component.css',
   
@@ -21,12 +22,12 @@ export class RoundEntryListComponent {
 
 
   private route = inject(ActivatedRoute);
-  private roundService = inject(RoundService); // if you have a service to load rounds
-  private notificationService = inject(NotificationService); // if you have a service to show notifications
+  private roundService = inject(RoundService); 
+  private notificationService = inject(NotificationService);
   
-  publicId!: string;   // will hold "R2dc4073c-2"
+  publicId!: string;
 
-  roundEntries: RoundEntry[] = []; // will hold the list of round entries
+  roundEntries: RoundEntry[] = []; 
   sourceEntries: RoundEntry[] = [];
   targetEntries: RoundEntry[] = [];
 
@@ -34,10 +35,9 @@ export class RoundEntryListComponent {
     // constructor logic here
   }
   ngOnInit() {
-    // subscribe so it also works if the user navigates to a different id
     this.route.paramMap.subscribe(p => {
-      this.publicId = p.get('publicId')!;   // non-null because route has it
-      this.loadRound(this.publicId);        // → call your API, set up picklist…
+      this.publicId = p.get('publicId')!;   
+      this.loadRound(this.publicId);        
     });
   }
 
@@ -46,9 +46,9 @@ export class RoundEntryListComponent {
     this.roundService.getRound(publicId).subscribe(
       {
         next: (roundEntries) => {
-          this.roundEntries = roundEntries; // set the list of round entries
+          this.roundEntries = roundEntries; 
           this.sourceEntries = roundEntries;
-          this.cdr.markForCheck(); // mark for check if you are using ChangeDetectionStrategy.OnPush
+          this.cdr.markForCheck(); 
         },
         error: (error) => {
           this.notificationService.showError('Error loading round entries');
@@ -71,6 +71,14 @@ export class RoundEntryListComponent {
         event.previousIndex,
         event.currentIndex);                              
     }
+
+    if (event.container.id === 'tgt') {
+      this.notificationService.showSuccess('Entries moved to target list');
+    }
+    else if (event.container.id === 'src') {
+      this.notificationService.showSuccess('Entries moved to source list');
+    }
+
   }
   
 }

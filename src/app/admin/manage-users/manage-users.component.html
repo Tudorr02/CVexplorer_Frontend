@@ -25,13 +25,13 @@
         <ng-template #header>
             <tr>
                 <th class="w-[10%]">Username</th>
-                <th class="w-[15%]">Company</th>
-                <th class="w-[10%]">First Name</th>
+                <th class="w-[15%] ">Company</th>
+                <th class="w-[15%]">First Name</th>
                 <th class="w-[15%]">Last Name</th>
-                <th class="w-[20%]">Email</th>
-                <th class="w-[10%]">Role</th>
-                <th class="w-[10%]"></th>
-                <th class="w-[10%]"></th>
+                <th class="w-[15%]">Email</th>
+                <th class="w-[14%]">Role</th>
+                <th class="w-[8%] "></th>
+                <th class="w-[8%]"></th>
             </tr>
         </ng-template>
         
@@ -46,7 +46,8 @@
                 <td >
                     <p-cellEditor>
                         <ng-template pTemplate="input">
-                            <p-select id="companyName" 
+                            <p-select id="companyName"
+                            class="w-5/6" 
                             [options]="companies"
                             [(ngModel)]="user.companyName"
                             [filter]="true"
@@ -94,7 +95,8 @@
                 <td>
                     <p-cellEditor>
                         <ng-template pTemplate="input">
-                            <input pInputText type="email" [(ngModel)]="user.email" required />
+                            <input pInputText type="email" class="w-5/6" [(ngModel)]="user.email" required />
+                            
                         </ng-template>
                         <ng-template pTemplate="output">
                             <span [ngClass]="{'grey-text': !user.email}">
@@ -114,7 +116,8 @@
                                 [optionLabel]="'name'"
                                 [optionValue]="'name'" 
                                 [optionDisabled]="'disabled'" 
-                                [style]="{'width':'70%'}"
+                                styleClass="w-4/6"
+                                
                                 placeholder="Select role">
                                 <ng-template let-role pTemplate="item">
                                     <p-tag [severity]="getRoleSeverity(role.name)">{{ role.name }}</p-tag>
@@ -137,7 +140,7 @@
                 </td>
                 
                 <!-- Actions -->
-                <td >
+                <td class="px-0">
                     <div class="flex items-center justify-center gap-2">
                         <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
                             icon="pi pi-pencil" (click)="onRowEditInit(user)" text rounded severity="secondary"></button>
@@ -148,7 +151,7 @@
                         
                     </div>
                 </td>
-                <td>
+                <td class="px-0">
                     <div class="flex items-center justify-center gap-2">
                         <!-- Default Mode: Show Trash Icon -->
                         <button *ngIf="!deletingUsers[user.id]" pButton pRipple type="button" 

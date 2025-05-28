@@ -9,12 +9,13 @@
   </div>
 
   
-    <div *ngIf="rounds.length > 0; else noRounds" class="flex-1 overflow-y-auto justify-center flex flex-wrap gap-8 p-2">  
+    <div *ngIf="rounds.length > 0; else noRounds" class="flex-1 overflow-y-auto  flex flex-wrap  gap-y-8 pt-2  justify-center gap-x-20">  
     
       @for(round of rounds; track round.publicId){
-        <div class="w-1/4 h-2/5">
+        <div class="w-[25rem] h-[8rem]">
           <app-round-card [round]="round">
           </app-round-card>
+
         </div>
       }
 

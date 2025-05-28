@@ -1,77 +1,66 @@
 
 <div class="w-full h-full flex flex-col gap-1 ">
-    <div class="w-full flex h-4/5">
+    <div class="w-full flex-col  px-[1rem] flex gap-4 overflow-y-auto">
 
-        <div class="w-1/2 px-[8vw] py-[4vh]">
-            <div class="border-custom w-full h-full flex flex-col items-center ">
-                <h2 class=" h-1/5 text-2xl font-semibold justify-center items-center flex w-full">Mandatory Fields</h2>
-                <div class=" h-4/5  flex flex-col gap-4 justify-center  p-6">
-                        <div class="flex items-center justify-between  gap-4">
-                            <label for="username" class="font-semibold">Username</label>
+        <div id="mandatory" class="flex w-full">
+            <div class="w-full flex flex-col items-start gap-4">
+                <h2 class="  text-2xl font-medium justify-start items-center flex w-full">Mandatory Fields</h2>
+                <div class="w-full flex flex-wrap gap-x-[4rem] gap-y-[1rem] justify-start px-8">
+                        <div class="flex flex-col items-start  gap-2">
+                            <label for="username" class="font-medium">Username</label>
                             <input pInputText id="username"  [(ngModel)]="userEnrollment.username"/>
                         </div>
 
-                        <div class="flex items-center justify-between  gap-4">
-                            <label for="password" class="font-semibold">Password</label>
-                            <input pInputText id="password" [(ngModel)]="userEnrollment.password"/>
+                        <div class="flex flex-col items-start  gap-2">
+                            <label for="password" class="font-medium">Password</label>
+                            <input pInputText id="password"  [(ngModel)]="userEnrollment.password"/>
                         </div>
 
-                        <div class="flex flex-col   gap-1">
-                            <div class="flex items-center justify-between  gap-4">
-                                <label class="font-semibold">Role</label>
-                                <p-selectButton
-                                    [options]="roles | slice:0:2"
-                                    [(ngModel)]="userEnrollment.userRole"
-                                    optionLabel="name"
-                                    optionValue="key"
-                                    aria-labelledby="basic1"
-                                    [ngStyle]="{ 'background-color': getRoleSeverity(userEnrollment.userRole) }"
-                                ></p-selectButton>
+                        <div class="flex flex-col items-start  gap-2">
+                            <label class="font-medium">Role</label>
+                            <p-selectButton
+                                [options]="roles"
+                                [(ngModel)]="userEnrollment.userRole"
+                                optionLabel="name"
+                                optionValue="key"
+                                [ngStyle]="{ 'background-color': getRoleSeverity(userEnrollment.userRole) }"
+                            ></p-selectButton>
 
-                            </div>
-                            <div class="flex items-center justify-between  gap-4">
-                                <label></label>
-                                    <p-selectButton
-                                        [options]="roles | slice:2:4"
-                                        [(ngModel)]="userEnrollment.userRole"
-                                        optionLabel="name"
-                                        optionValue="key"
-                                        aria-labelledby="basic2"
-                                        [ngStyle]="{ 'background-color': getRoleSeverity(userEnrollment.userRole) }"
-                                    ></p-selectButton>
-                            </div>
                         </div>
+                          
+                        
                 </div>
             </div>
         </div>
 
-        <div class="w-1/2 px-[8vw] py-[4vh]">
-            <div class="border-custom w-full  h-full flex flex-col items-center ">
-                <h2 class=" h-1/5 text-2xl font-semibold justify-center items-center flex w-full">Optional Fields</h2>
-                <div class=" h-4/5  flex flex-col gap-4 justify-center  p-6">
-                        <div class="flex items-center justify-between  gap-4">
-                            <label for="firstName" class="font-semibold">First Name</label>
+         <div id="optoinal" class="flex w-full ">
+            <div class="w-full  flex flex-col items-start gap-4">
+                <h2 class="  text-2xl font-medium justify-start items-center flex w-full">Optional Fields</h2>
+                <div class="flex flex-wrap gap-x-[4rem] gap-y-[1rem] justify-start px-8">
+                        <div class="flex flex-col items-start  gap-2">
+                            <label for="firstName" class="font-medium w-[6rem]">First Name</label>
                             <input pInputText id="firstName"  [(ngModel)]="userEnrollment.firstName"/>
                         </div>
 
-                        <div class="flex items-center justify-between  gap-4">
-                            <label for="lastName" class="font-semibold">Last Name</label>
-                            <input pInputText id="lastName" [(ngModel)]="userEnrollment.lastName"/>
+                       <div class="flex flex-col items-start  gap-2">
+                            <label for="lastName" class="font-medium">Last Name</label>
+                            <input pInputText id="lastName"  [(ngModel)]="userEnrollment.lastName"/>
                         </div>
 
-                        <div class="flex items-center justify-between  gap-4">
-                            <label for="email" class="font-semibold">Email</label>
-                            <input pInputText id="email" [(ngModel)]="userEnrollment.email"/>
+                        <div class="flex flex-col items-start  gap-2">
+                            <label for="email" class="font-medium">Email</label>
+                            <input pInputText id="email"   [(ngModel)]="userEnrollment.email"/>
                         </div>
 
-                        <div class="flex items-center justify-between  gap-4">
-                            <label for="companyName" class="font-semibold">Company</label>
+                        <div class="flex flex-col items-start  gap-2">
+                            <label for="companyName" class="font-medium">Company</label>
                             <p-select id="companyName" 
                               [(ngModel)]="userEnrollment.companyName"
+                              appendTo="body"
                               [options]="companies" 
                               [filter]="true"
                               placeholder="Select a Company"
-                              (click)="fetchCompanies()"
+                              [virtualScroll]="true"
                               [loading]="loadingCompanies"
                               [showClear]="true"    
                             >
@@ -81,12 +70,14 @@
                         
                 </div>
             </div>
+        </div> 
+
+        <div class="w-full flex items-center justify-center mt-4">
+        <p-button label="Enroll User" icon="pi pi-user-plus" variant="text" (onClick)="enrollUser()" />
         </div>
 
     </div>
-    <div class="w-full h-1/5 flex items-center justify-center">
-        <p-button label="Enroll User" icon="pi pi-user-plus" variant="text" (onClick)="enrollUser()" />
-    </div>
+    
 </div>
 
 

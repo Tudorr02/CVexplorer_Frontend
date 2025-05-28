@@ -1,43 +1,45 @@
 
-<div class="flex w-[100%] h-[100%] justify-center gap-8 p-10">
-  <div class="w-[50%]">
-    <h2>Pending candidates</h2>
-    <p-scrollpanel [style]="{height: '80%'}">
-      <div
-        cdkDropList
-        #src="cdkDropList"
-        [cdkDropListData]="sourceEntries"
-        [cdkDropListConnectedTo]="[tgt]"
-        class="list"
-        (cdkDropListDropped)="drop($event)">
-        
-        @for (e of sourceEntries; track e.id) {
-          <app-round-entry-card [entry]="e" ></app-round-entry-card>
-        }
-      </div>
-    </p-scrollpanel>
+<div class="flex w-full h-full justify-center ">
+  <div class="w-1/2 h-full justify-center items-center flex flex-col gap-2">
+    <p class="text-3xl font-medium ">Pending candidates</p>
+    <div class="flex px-4 w-full h-full">
+    <div
+      cdkDropList
+      id="src"
+      #src="cdkDropList"
+      [cdkDropListData]="sourceEntries"
+      [cdkDropListConnectedTo]="[tgt]"
+      class="border-custom h-full w-full gap-2 flex flex-col p-2"
+      (cdkDropListDropped)="drop($event)"
+      >
+      
+      @for (e of sourceEntries; track e.id) {
+        <app-round-entry-card [entry]="e" ></app-round-entry-card>
+      }
+    </div>
+    </div>
+    
   </div>
 
 
-  <div class="w-[50%] ">
-    <h2>Selected Candidates</h2>
-    <div
+  <div class="w-1/2 h-full justify-center items-center flex flex-col gap-2">
+    <p class="text-3xl font-medium ">Selected Candidates</p>
+    <div class="flex px-4 w-full h-full">
+      <div
       cdkDropList
+      id="tgt"
       #tgt="cdkDropList"
       [cdkDropListData]="targetEntries"
       [cdkDropListConnectedTo]="[src]"
-      class="list h-[80%] overflow-auto"
+      class="border-custom h-full w-full gap-2 flex flex-col p-2"
       (cdkDropListDropped)="drop($event)">
 
       @for (e of targetEntries; track e.id) {
-        <!-- <div class="card" style="border: 2px solid grey;" cdkDrag>
-          <strong>{{ e.candidateName }}</strong>
-          <span>{{ e.score }} pts</span>
-        </div> -->
         <app-round-entry-card [entry]="e" ></app-round-entry-card>
-
       }
     </div>
+    </div>
+    
   </div>
 </div>
 
