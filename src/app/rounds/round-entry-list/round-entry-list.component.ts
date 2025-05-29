@@ -10,6 +10,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { RoundEntryCardComponent } from "../round-entry-card/round-entry-card.component";
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { CommonModule } from '@angular/common';
+import { RoundEntriesService } from '../../_services/round-entries.service';
 @Component({
   selector: 'app-round',
   imports: [CommonModule,ScrollPanelModule,PickListModule, DragDropModule, AvatarModule, RoundEntryCardComponent],
@@ -24,10 +25,10 @@ export class RoundEntryListComponent {
   private route = inject(ActivatedRoute);
   private roundService = inject(RoundService); 
   private notificationService = inject(NotificationService);
+  private roundEntriesService = inject(RoundEntriesService)
   
   publicId!: string;
 
-  roundEntries: RoundEntry[] = []; 
   sourceEntries: RoundEntry[] = [];
   targetEntries: RoundEntry[] = [];
 
@@ -46,8 +47,8 @@ export class RoundEntryListComponent {
     this.roundService.getRound(publicId).subscribe(
       {
         next: (roundEntries) => {
-          this.roundEntries = roundEntries; 
-          this.sourceEntries = roundEntries;
+          this.sourceEntries = roundEntries.filter(e => !e.selected);
+          this.targetEntries = roundEntries.filter(e => e.selected);
           this.cdr.markForCheck(); 
         },
         error: (error) => {
@@ -60,25 +61,65 @@ export class RoundEntryListComponent {
   }
 
   drop(event: CdkDragDrop<RoundEntry[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data,
-                      event.previousIndex,
-                      event.currentIndex);                 
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);                              
-    }
-
-    if (event.container.id === 'tgt') {
-      this.notificationService.showSuccess('Entries moved to target list');
-    }
-    else if (event.container.id === 'src') {
-      this.notificationService.showSuccess('Entries moved to source list');
-    }
-
+  // 1) Same-container → just reorder
+  if (event.previousContainer === event.container) {
+    moveItemInArray(
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+    return;
   }
+
+  // 2) Different-container → optimistic transfer
+  const srcList = event.previousContainer.data;
+  const tgtList = event.container.data;
+  const moved = srcList[event.previousIndex];
+
+  // do the transfer in the UI
+  transferArrayItem(srcList, tgtList, event.previousIndex, event.currentIndex);
+
+  // if dropped into target, call API; otherwise (back to source) do nothing or call API(false)
+  if (event.container.id === 'tgt') {
+    this.roundEntriesService
+      .updateRoundEntry(moved.id, true)
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess(
+            'Entry selected for evaluation'
+          );
+          tgtList.sort((a, b) => b.score - a.score);
+        },
+        error: (err) => {
+          // revert the move
+          transferArrayItem(tgtList, srcList, event.currentIndex, event.previousIndex);
+          this.notificationService.showError(
+            'Error updating entry selection'
+          );
+          console.error(err);
+        }
+      });
+  } else if (event.container.id === 'src') {
+    // if you also want to notify the server that it was de-selected:
+    this.roundEntriesService
+      .updateRoundEntry(moved.id, false)
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess(
+            'Entry returned to source'
+          );
+          tgtList.sort((a, b) => b.score - a.score);
+        },
+        error: (err) => {
+          // revert the move
+          transferArrayItem(tgtList, srcList, event.currentIndex, event.previousIndex);
+          this.notificationService.showError(
+            'Error updating entry deselection'
+          );
+          console.error(err);
+        }
+      });
+  }
+}
   
 }

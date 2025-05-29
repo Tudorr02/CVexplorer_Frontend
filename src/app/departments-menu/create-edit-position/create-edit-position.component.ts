@@ -170,6 +170,7 @@ export class CreateEditPositionComponent implements OnInit {
   get responsibilities(): FormArray {
     return this.positionForm.get('responsibilities') as FormArray;
   }
+  
   addResponsibility() {
     this.responsibilities.push(this.fb.control(''));
   }
@@ -190,29 +191,44 @@ export class CreateEditPositionComponent implements OnInit {
       weights:         this.positionForm.value.weights as ScoreWeights
     };
 
-      const action$: Observable<Position> = this.isEditMode
-      ? this.positionService.updatePosition(this.positionId, dto)
-      : this.positionService.createPosition(this.departmentId, dto);
-
-      action$.subscribe({
-        next: (newPosition : Position) => {
-          
-          if(this.isEditMode) {
-            this.notificationService.showSuccess('Position updated successfully');
-          }else {
-            this.treeService.addPositionToTree({
-            departmentId: this.departmentId,
-            position: {publicId : newPosition.publicId! , name : newPosition.name} as PositionTreeNode
-            });
-            this.notificationService.showSuccess('Position created successfully');
-          }
-          
-          this.router.navigate(['/dashboard']); // sau oriunde vrei să redirecționezi
+    if (this.isEditMode) {
+    // --- UPDATE PATH ---
+    this.positionService
+      .updatePosition(this.positionId, dto)
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess('Position updated successfully');
+          this.router.navigate(['/dashboard']);
         },
         error: () => {
-          this.notificationService.showError('Failed to create position');
+          this.notificationService.showError('Failed to update position');
         }
       });
+    } 
+    else {
+      // --- CREATE PATH ---
+      this.positionService
+        .createPosition(this.departmentId, dto)
+        .subscribe({
+          next: (newPos) => {
+            // notify the tree & UX
+            this.treeService.addPositionToTree({
+              departmentId: this.departmentId,
+              position: {
+                publicId: newPos.publicId!,
+                name:     newPos.name
+              } as PositionTreeNode
+            });
+            this.notificationService.showSuccess('Position created successfully');
+            this.router.navigate(['/dashboard']);
+          },
+          error: () => {
+            this.notificationService.showError('Failed to create position');
+          }
+        });
+    }
+
+    
   }
 
   splitByComma(value: string | null): string[] {
@@ -259,7 +275,7 @@ export class CreateEditPositionComponent implements OnInit {
 
     if (allValid) {
       activate(step);
-  }
+    }
   }
   
     loadPosition(publicId: string) {
@@ -297,19 +313,7 @@ export class CreateEditPositionComponent implements OnInit {
       });
   }
 
-  onListInput(fieldName: keyof Position, event: FocusEvent) {
-    const input = (event.target as HTMLInputElement).value;
-  
-    // Split by comma, trim each item, and remove empty values
-    const values = input
-      .split(',')
-      .map(item => item.trim())
-      .filter(item => item.length > 0);
-  
-    // Set the array back to the form control
-    this.positionForm.get(fieldName)?.setValue(values);
-  }
-  
+
   removeResponsibility() {
     const total = this.responsibilities.length;
   

@@ -14,7 +14,10 @@
       >
       
       @for (e of sourceEntries; track e.id) {
-        <app-round-entry-card [entry]="e" ></app-round-entry-card>
+        <app-round-entry-card 
+        [entry]="e" 
+        (updated)="loadRound(publicId)"
+        ></app-round-entry-card>
       }
     </div>
     </div>

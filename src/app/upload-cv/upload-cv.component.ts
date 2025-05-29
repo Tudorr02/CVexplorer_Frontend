@@ -33,7 +33,7 @@ export class UploadCvComponent {
       originalEvent: event.originalEvent || null,
       files: event.files
     };
-    const file = event.files?.[0]; // only one file allowed
+    const file = event.files?.[0]; 
 
     if (!file) {
       this.notificationService.showError('No file selected');
