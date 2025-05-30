@@ -1,42 +1,87 @@
 
 <div class="flex h-1/5 w-full justify-between items-center  ">
     <div class="flex justify-start items-center gap-2">
-      <img [src]="outlookLogo" class="w-1/3"/>
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0,0,256,256" width="3rem" height="3rem" fill-rule="nonzero"><g fill="#34d399" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M15,4c-2.19733,0 -4,1.80267 -4,4v2.83203c-0.01785,0.10799 -0.01785,0.21818 0,0.32617v2.8418h-5c-2.19733,0 -4,1.80267 -4,4v14c0,2.19733 1.80267,4 4,4h3v6c0,2.19733 1.80267,4 4,4h31c2.19733,0 4,-1.80267 4,-4v-14c0,-1.29313 -0.84268,-2.39513 -2,-2.8125v-14.01953c0.01785,-0.10799 0.01785,-0.21818 0,-0.32617v-2.8418c0,-2.19733 -1.80267,-4 -4,-4zM15,6h27c1.11667,0 2,0.88333 2,2v2h-20.8457c-0.05615,-0.00939 -0.113,-0.01396 -0.16992,-0.01367c-0.04844,0.00105 -0.09675,0.00562 -0.14453,0.01367h-9.83984v-2c0,-1.11667 0.88333,-2 2,-2zM13,12h9v2.56055c-0.59163,-0.3469 -1.26931,-0.56055 -2,-0.56055h-7zM24,12h9v7h-9v-1zM35,12h9v7h-9zM6,16h14c1.11667,0 2,0.88333 2,2v3v11c0,1.11667 -0.88333,2 -2,2h-14c-1.11667,0 -2,-0.88333 -2,-2v-14c0,-1.11667 0.88333,-2 2,-2zM13,19c-3.516,0 -5.63477,2.686 -5.63477,6c0,3.314 2.11077,6 5.63477,6c3.525,0 5.63477,-2.68505 5.63477,-5.99805c0,-3.315 -2.11877,-6.00195 -5.63477,-6.00195zM24,21h9v7h-9zM35,21h9v7h-9zM13,21.02734c1.989,0 3.1875,1.78061 3.1875,3.97461c0,2.194 -1.1935,3.97266 -3.1875,3.97266c-1.995,0 -3.1875,-1.77766 -3.1875,-3.97266c0,-2.195 1.1985,-3.97461 3.1875,-3.97461zM24,30h9v3.75l-4.50195,1.875l-4.84375,-2.01758c0.21905,-0.49327 0.3457,-1.03601 0.3457,-1.60742zM35,30h6.99805l-6.99805,2.91602zM46,30.5v11.5c0,0.3026 -0.0707,0.58445 -0.1875,0.83984l-14.71484,-6.13086zM22.33984,35.22461l21.05859,8.77539h-30.39844c-1.11667,0 -2,-0.88333 -2,-2v-6h9c0.87449,0 1.67912,-0.29311 2.33984,-0.77539z"></path></g></g></svg>
       <p class="text-2xl font-medium">Outlook</p>
+      <p-tag *ngIf="sessionActive" severity="secondary" class="ml-2 text-sm overflow-hidden" rounded="true"  [value]="isProcessing  ? 'Processing' : 'Connected'" > 
+        <div class="w-[1rem] h-[1rem] rounded-[100%]  bg-[var(--p-primary-color)]"  [class.pulse]="isProcessing"></div> 
+      </p-tag>
     </div>
     <div class="flex justify-center">
+      <p-button *ngIf="sessionActive"   text="true" icon="pi pi-caret-right" label="Start" (onClick)="watch()" size="small"/>
       <p-menu #menu [model]="settings" [popup]="true" />
       <p-button *ngIf="sessionActive" icon="pi pi-cog" [rounded]="true" [text]="true" severity="secondary" (click)="menu.toggle($event)" size="large"/>
     </div>
 </div>
 
-<div class="flex h-4/5 w-full  flex-col justify-center items-center gap-0 px-6">
+<div class="flex h-4/5 w-full  flex-col justify-center items-center px-4">
 
-  <div class="flex w-full h-1/3 justify-center items-center  gap-2">
-    <p class="font-medium w-1/6 justify-start flex ">Step 1</p>
-    <p-button class=" w-5/6 flex justify-start " [disabled]="sessionActive"  label="Connect" (onClick)="connect()" [raised]="true" size="small"/>
-  </div>
-  <div class="flex w-full h-1/3 justify-center items-center  gap-2 ">
-    <p class="font-medium w-1/6 justify-start flex 2 ">Step 2</p>
-    <div class="w-5/6 flex justify-start ">
-      <p-multiSelect
-      [disabled]="!sessionActive"
-      class="ustify-start w-2/3"
-      styleClass="w-2/3"
-      [(ngModel)]="selectedFolders"
-      [options]="folders"
-      optionLabel="name"
-      optionValue="id"
-      placeholder="Select Folders"
-      [maxSelectedLabels]="1"
-      />
+  
+   @if(!sessionActive) {
+
+    <div class="h-full w-full flex flex-col justify-center items-center">
+      <div class="h-2/3 w-full flex  justify-center items-center gap-4">
+        <p class="text-lg font-medium justify-center flex items-center">Auto-process incoming CVs with Outlook integration</p>
+        <svg xmlns="http://www.w3.org/2000/svg" height="4rem" viewBox="0 -960 960 960" width="4rem" fill="var(--p-primary-color)">
+        <path d="M280-130q-78.77 0-134.38-55.62Q90-241.23 90-320q0-66.08 39.54-116.35 39.54-50.26 100.46-66.19v63q-35 14.31-57.5 46.85T150-320q0 53.85 38.08 91.92Q226.15-190 280-190t91.92-38.08Q410-266.15 410-320v-30h225.38q6.85-10.92 18.54-17.77 11.7-6.84 26.08-6.84 22.69 0 38.65 15.96 15.96 15.96 15.96 38.65 0 22.69-15.96 38.65-15.96 15.96-38.65 15.96-14.77 0-26.27-6.65T635.38-290H467.54q-11.69 71.31-65.04 115.65Q349.15-130 280-130Zm400 0q-49.08 0-89.96-22.89-40.88-22.88-67.27-61.72h81.61q15.16 11.53 34.85 18.07Q658.92-190 680-190q53.85 0 91.92-38.08Q810-266.15 810-320t-38.08-91.92Q733.85-450 680-450q-18.85 0-34.88 4.73-16.04 4.73-30.66 13.81l-117-194.93q-21-.53-36.54-15.57Q445.39-657 445.39-680q0-22.69 15.96-38.65 15.96-15.96 38.65-15.96 22.69 0 38.65 15.96 15.96 15.96 15.96 38.65 0 6.15-1.15 11.38-1.15 5.24-4.31 10.24L640-505.85q9.15-2 19.12-3.07Q669.08-510 680-510q78.77 0 134.38 55.62Q870-398.77 870-320t-55.62 134.38Q758.77-130 680-130ZM280-265.39q-22.69 0-38.65-15.96-15.96-15.96-15.96-38.65 0-21.23 14.57-36.85 14.58-15.61 36.89-16.76l98.23-163.31q-31.31-26.62-48.19-63.73Q310-637.77 310-680q0-78.77 55.62-134.38Q421.23-870 500-870t134.38 55.62Q690-758.77 690-680h-60q0-53.85-38.08-91.92Q553.85-810 500-810t-91.92 38.08Q370-733.85 370-680q0 42.62 24.08 75.5 24.07 32.88 63.3 46.89L328.54-342.62q3.15 5.39 4.61 10.93 1.46 5.54 1.46 11.69 0 22.69-15.96 38.65-15.96 15.96-38.65 15.96Z"/>
+        </svg>
+      </div>
+      <div class="h-1/3 w-full flex flex-col justify-center items-center">
+        <p-button  [disabled]="sessionActive"  label="Connect" (onClick)="connect()" [raised]="true" size="small"/>
+      </div>
     </div>
     
-  </div>
-  <div class="flex w-full h-1/3 justify-center items-center  gap-2 ">
-    <p class="font-medium w-1/6 justify-start flex ">Step 3</p>
-    <p-button class=" w-5/6 flex justify-start " [disabled]="!sessionActive"  icon="pi pi-caret-right" label="Start" (onClick)="watch()" size="small"/>
+    
+    
+  }  @else {
+
+    <div class="flex w-full h-2/6 justify-start items-center">
+      <p class="justify-start flex text-sm text-[var(--p-text-muted-color)] ">Connection expires on {{ outlookExpiry | date:'dd.MM.yyyy' }}</p>
+    </div>
+    
+    <div class="flex w-full h-2/6 justify-start items-center ">
+      <p class="font-medium w-2/6 justify-start flex ">Outlook Folders</p>
+      <div class="w-3/6 flex justify-start ">
+        <p-multiSelect
+        size="small"
+        [maxSelectedLabels]="1"
+        [disabled]="isProcessing"
+        class="justify-start w-full"
+        styleClass="w-full"
+        [(ngModel)]="selectedFolders"
+        [options]="folders"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select Folders"
+        />
+      </div>
+    </div>
+    <div class="flex w-full h-2/6 justify-start items-center">
+      <p class="font-medium w-2/6 justify-start flex ">Create Round</p>
+      <div class="w-3/6 flex justify-start gap-2">
+        <p-togglebutton [(ngModel)]="createRound" [disabled]="isProcessing" onLabel="Yes" offLabel="No" size="small" (onChange)="updateRoundCreation()" />
+        <p-select *ngIf="!createRound"
+          class="justify-start w-full"
+          styleClass="w-full"
+          [disabled]="isProcessing"
+          filter="true"
+          size="small"
+          [(ngModel)]="selectedRound"
+          [options]="rounds"
+          optionLabel="name"
+          
+          placeholder="Select Round"
+          />
+      </div>
+    </div>
+
+    <div class="flex w-full h-2/6 justify-center  items-center">
+    <p class=" font-medium w-2/6 justify-start flex">Processed CVs</p>
+    <p class=" font-medium w-4/6 justify-start flex">{{this.processedCVs}}</p>
 
   </div>
+
+
+  }
 
 </div>

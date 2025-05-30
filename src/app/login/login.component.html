@@ -17,7 +17,7 @@
             >
             
             <div class="row-span-1 flex items-center justify-center">
-                <h3 class="text-4xl font-regular">
+                <h3 class="text-4xl font-medium">
                     Member Login
                 </h3>
             </div>
@@ -26,14 +26,14 @@
 
             <form (ngSubmit)="login()"  class="row-span-3 w-full h-full grid grid-rows-3 gap-4">
                 <div class="flex flex-col items-start gap-2 w-4/5 mx-auto">
-                    <label for="username"  class="self-start text-lg font-light">Username</label>
+                    <label for="username"  class="self-start text-lg font-medium ">Username</label>
                     <input type="text" pInputText id="username" autocomplete="username"
                             [(ngModel)]="model.username" name="username" required 
                             class="w-full" />
                 </div>
     
                 <div class="flex flex-col items-start gap-2 w-4/5 mx-auto">
-                    <label for="password"  class="self-start text-lg font-light">Password</label>      
+                    <label for="password"  class="self-start text-lg  font-medium ">Password</label>      
                     <p-password [feedback]="false" id="password" [toggleMask]="true" autocomplete="current-password"
                                 [(ngModel)]="model.password" name="password" required
                                 fluid="true"
@@ -43,7 +43,7 @@
                 </div>
                 
                 <div class="flex flex-col justify-center  mx-auto login-button">
-                    <p-button label="Log In" type="submit"  />
+                    <p-button label="Log In" size="small" type="submit"  />
                 </div>
                 
             </form>

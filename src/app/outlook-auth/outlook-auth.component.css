@@ -1,6 +1,14 @@
-
-:host {
-    height: 100%;
-    width: 100%;
-
+.pulse {
+  animation: pulse-animation 2s infinite;
 }
+
+ @keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px var(--pulse-shadow-color);
+  }
+  100% {
+    box-shadow: 0 0 0 0.75rem rgba(0, 0, 0, 0);
+  }
+} 
+
+

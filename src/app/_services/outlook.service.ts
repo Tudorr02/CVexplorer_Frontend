@@ -3,6 +3,17 @@ import { inject, Injectable, NgZone } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
+export interface SessionData {
+  processedCVs: number;
+  expiry: string;  
+  isProcessing : boolean;  // ISO-string sau null
+  processingRoundId? :string ; // ID-ul rundei de procesare sau null
+}
+
+export interface SessionResponse {
+  sessionActive: boolean;
+  data: SessionData;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -33,7 +44,7 @@ export class OutlookService {
             observer.next();
             observer.complete();
           });
-          popup?.close();
+          //popup?.close();
           window.removeEventListener('message', handler);
         }
       };
@@ -44,7 +55,7 @@ export class OutlookService {
       // 4) Cleanup la unsubscribe
       return () => {
         window.removeEventListener('message', handler);
-        popup?.close();
+        //popup?.close();
       };
     });
   }
@@ -57,8 +68,11 @@ export class OutlookService {
   );
   }
 
-  isOutlookSession(): Observable<{sessionActive: boolean }> {
-    return this.http.get<{sessionActive: boolean }>(`${this.apiUrl}/Session`, { withCredentials: true });
+  isOutlookSession(publicId: string): Observable<SessionResponse> {
+    let params = new HttpParams();
+    params = params.set('publicId', publicId);
+
+    return this.http.get<SessionResponse>(`${this.apiUrl}/Session`, { withCredentials: true , params});
   }
 
     loadFolders(positionId : string): Observable<{ id: string; name: string ; isSubscribed: boolean}[]> 
@@ -72,15 +86,17 @@ export class OutlookService {
   }
 
   
-  watchFolder(folderIds: string[], positionId: string): Observable<{
+  watchFolder(folderIds: string[], positionId: string, roundId? : string): Observable<{
     id: string; 
     name: string ; 
     isSubscribed: boolean
   }[]> {
      
-    const params = new HttpParams()
+    let params = new HttpParams()
           .set('publicPosId', positionId);
-    
+     if (roundId !== undefined) {
+      params = params.set('roundId', roundId);
+    }
         return this.http.post<{
           id: string; 
           name: string ; 

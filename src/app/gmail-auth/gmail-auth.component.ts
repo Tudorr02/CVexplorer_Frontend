@@ -32,19 +32,22 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
 
   labels: { id: string; name: string ; isSubscribed: boolean}[] = [];
   selectedLabels: string[] = []; 
-  gmailLogo : string ='logos/icons8-gmail.svg';
+
   positionId!: string;
   settings: MenuItem[] = [];
 
   gmailExpiry: Date | null = null;
   processedCVs: number = 0;
+  isProcessing: boolean = false;
 
   createRound : boolean = false;
   selectedRound : Round | null = null;
   rounds : Round[] = [];
+  selectedRoundId: string | null = null;
 
   private messageHandler!: (event: MessageEvent) => void;
   private connectSub?: Subscription;
+
 
   sessionActive = false; 
 
@@ -117,10 +120,14 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
     this.gmailService.isGmailSession(this.positionId).subscribe({
         next: (res) => {
           this.sessionActive = res.sessionActive;
-          this.gmailExpiry =  new Date(res.data.expiry);
-          this.processedCVs = res.data.processedCVs;
-          if (this.sessionActive)
-          this.loadGmailData();
+          if(this.sessionActive){
+            this.gmailExpiry =  new Date(res.data.expiry) || null;
+            this.processedCVs = res.data.processedCVs;
+            this.isProcessing = res.data.isProcessing;
+            this.selectedRoundId = res.data.processingRoundId || null;
+            this.loadGmailData();
+          }
+          
         },
         error: (err) => {
           this.sessionActive = false
@@ -146,7 +153,9 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
     this.roundService.getAllRounds(undefined, this.positionId).subscribe({
       next: rounds => {
         this.rounds = rounds;
-        
+        if( this.selectedRoundId) {
+          this.selectedRound = rounds.find(r => r.publicId === this.selectedRoundId) || null;
+        }
       },
       error: () => {
         this.notificationService.showError('Failed to load rounds!');
@@ -160,13 +169,15 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
       this.notificationService.showError('Choose at least one label to watch');
       return;
     }
-    this.gmailService.watchLabel(this.selectedLabels, this.positionId)
+    this.gmailService.watchLabel(this.selectedLabels, this.positionId , this.selectedRound?.publicId)
     .subscribe({
     next: lbls => {
+      this.createRound = false;
+      
       this.labels = lbls;
       this.selectedLabels = lbls.filter(label => label.isSubscribed).map(label => label.id);
-      
-      this.notificationService.showSuccess('Watch started successfully!');
+      this.isProcessing = true;
+      this.notificationService.showSuccess('Watch started successfully!');      
     },
     error: () => this.notificationService.showError('Failed to start watch!')
     });
@@ -181,6 +192,9 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
     this.processedCVs = 0;
     this.createRound = false;
     this.selectedRound = null;
+    this.isProcessing = false;
+    this.selectedRoundId = null;
+
   }
 
   disconnect() {
@@ -198,6 +212,8 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
       next: () => {
         this.selectedLabels = []
         this.notificationService.showSuccess('Unsubscribed from Gmail successfully!');
+        this.isProcessing = false;
+        this.selectedRound = null;
       },
       error: () => this.notificationService.showError('Failed to unsubscribe from Gmail!')
     });

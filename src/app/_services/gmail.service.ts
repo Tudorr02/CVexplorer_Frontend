@@ -6,7 +6,9 @@ import { Observable } from 'rxjs';
 
 export interface SessionData {
   processedCVs: number;
-  expiry: string;    // ISO-string sau null
+  expiry: string;  
+  isProcessing : boolean;  // ISO-string sau null
+  processingRoundId? :string ; // ID-ul rundei de procesare sau null
 }
 
 export interface SessionResponse {
@@ -65,7 +67,7 @@ export class GmailService {
             observer.next();
             observer.complete();
           });
-          popup?.close();
+          //popup?.close();
           window.removeEventListener('message', handler);
         }
       };
@@ -75,7 +77,7 @@ export class GmailService {
     
       return () => {
         window.removeEventListener('message', handler);
-        popup?.close();
+       // popup?.close();
       };
     });
   }
@@ -97,14 +99,18 @@ export class GmailService {
   }
 
 
-  watchLabel(labelIds: string[], positionId: string): Observable<{
+  watchLabel(labelIds: string[], positionId: string , roundId? : string): Observable<{
     id: string; 
     name: string ; 
     isSubscribed: boolean
   }[]> {
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('positionPublicId', positionId);
 
+    if (roundId !== undefined) {
+      params = params.set('roundId', roundId);
+    }
+      
     return this.http.post<{
       id: string; 
       name: string ; 
