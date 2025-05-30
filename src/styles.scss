@@ -49,10 +49,12 @@ body , app-root,html{
 
 .my-app-light {
   background-color: var(--light-background-color);
+  --pulse-shadow-color: rgba(0, 0, 0, 0.3);
 }
 
 .my-app-dark {
   background-color: var(--dark-background-color);
+  --pulse-shadow-color: rgba(255, 255, 255, 0.4);
 }
 html {
   transition: background-color 0.5s ease, color 0.5s ease, opacity 0.5s ease;

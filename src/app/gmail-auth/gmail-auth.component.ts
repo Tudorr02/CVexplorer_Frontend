@@ -11,11 +11,15 @@ import { ActivatedRoute } from '@angular/router';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { MenuItem } from 'primeng/api';
 import { Menu } from 'primeng/menu';
-
+import { ToggleButton } from 'primeng/togglebutton';
+import { SelectModule } from 'primeng/select';
+import { RoundService } from '../_services/round.service';
+import { Round } from '../_models/round';
+import { Tag } from 'primeng/tag';
 
 @Component({
   selector: 'app-gmail-auth',
-  imports: [CommonModule, ButtonModule, ToastModule, FormsModule, MultiSelectModule, Menu],
+  imports: [Tag,SelectModule,ToggleButton,CommonModule, ButtonModule, ToastModule, FormsModule, MultiSelectModule, Menu],
   templateUrl: './gmail-auth.component.html',
   styleUrl: './gmail-auth.component.css'
 })
@@ -24,11 +28,20 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
   private gmailService = inject(GmailService);
   private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
+  private roundService = inject(RoundService);
+
   labels: { id: string; name: string ; isSubscribed: boolean}[] = [];
   selectedLabels: string[] = []; 
   gmailLogo : string ='logos/icons8-gmail.svg';
   positionId!: string;
   settings: MenuItem[] = [];
+
+  gmailExpiry: Date | null = null;
+  processedCVs: number = 0;
+
+  createRound : boolean = false;
+  selectedRound : Round | null = null;
+  rounds : Round[] = [];
 
   private messageHandler!: (event: MessageEvent) => void;
   private connectSub?: Subscription;
@@ -37,20 +50,20 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
 
   ngOnInit() {
     this.positionId = this.route.snapshot.paramMap.get('publicId')!;
-
-    this.gmailService.isGmailSession().subscribe({
-        next: (res) => {
-          this.sessionActive = res.sessionActive;
-          if (this.sessionActive)
-          this.loadGmailData();
-        },
-        error: (err) => {
-          this.sessionActive = false
-        }
-      });
-   
-   
+    this.syncConnection();
+    
   }
+
+  updateRoundCreation() {
+    console.log(this.createRound);
+    if (this.createRound) {
+      this.selectedRound = null;
+      return;
+    }
+  }
+
+  
+
 
   ngOnDestroy() {
     window.removeEventListener('message', this.messageHandler);
@@ -72,11 +85,17 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
             label: 'Disconnect',
             icon: 'pi pi-sign-out',
             command: () => this.disconnect()
+          },
+          {
+            label: 'Sync Connection',
+            icon: 'pi pi-sync',
+            command: () => this.syncConnection()
           }
         ]
       }
     ];
     this.loadLabels();
+    this.loadRounds();
   }
 
   connect() {
@@ -94,6 +113,22 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
 
   }
 
+  syncConnection() {
+    this.gmailService.isGmailSession(this.positionId).subscribe({
+        next: (res) => {
+          this.sessionActive = res.sessionActive;
+          this.gmailExpiry =  new Date(res.data.expiry);
+          this.processedCVs = res.data.processedCVs;
+          if (this.sessionActive)
+          this.loadGmailData();
+        },
+        error: (err) => {
+          this.sessionActive = false
+        }
+      });
+  }
+
+
   private loadLabels() {
     // 3. după ce popup-ul s-a închis, obține folderele
     this.gmailService.loadFolders(this.positionId).subscribe({
@@ -103,6 +138,18 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
       },
       error: err => {
         this.notificationService.showError('Failed to load Gmail Folders!');
+      }
+    });
+  }
+
+  private loadRounds() {
+    this.roundService.getAllRounds(undefined, this.positionId).subscribe({
+      next: rounds => {
+        this.rounds = rounds;
+        
+      },
+      error: () => {
+        this.notificationService.showError('Failed to load rounds!');
       }
     });
   }
@@ -130,6 +177,10 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
     this.settings = [];
     this.labels = [];
     this.selectedLabels = [];
+    this.gmailExpiry = null;
+    this.processedCVs = 0;
+    this.createRound = false;
+    this.selectedRound = null;
   }
 
   disconnect() {

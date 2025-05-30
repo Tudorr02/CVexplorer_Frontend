@@ -1,45 +1,25 @@
-h1{
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20%;
 
+
+.green{
+  background: var(--p-primary-color);
 }
 
-.card-animated {
-  /* 1) Dimensiuni și stil container */
-  width: 200px;
-  height: 200px;
-  background: #1c1f2b;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  position: relative;
-  overflow: hidden;
-  font-size: 1.2rem;
+.circle {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 100%;
+  
 }
 
-/* 2) Pseudo-elementul pătrat, dublu ca dimensiune și rotativ */
-.card-animated::before {
-  content: "";
-  position: absolute;
-  /* Poziționăm centrul pătratului peste centrul containerului */
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, #ff6ec4, #7873f5, #4ADE80, #ff6ec4);
-  /* Asigură rotație în jurul centrului pseudo-elementului */
-  transform-origin: center center;
-  animation: spin 4s linear infinite;
-  z-index: -1;
+.pulse {
+  animation: pulse-animation 2s infinite;
 }
 
-/* 3) Keyframes pentru rotație */
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
+ @keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px var(--pulse-shadow-color);
+  }
+  100% {
+    box-shadow: 0 0 0 0.75rem rgba(0, 0, 0, 0);
+  }
+} 

@@ -3,6 +3,16 @@ import { inject, Injectable, NgZone } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
+
+export interface SessionData {
+  processedCVs: number;
+  expiry: string;    // ISO-string sau null
+}
+
+export interface SessionResponse {
+  sessionActive: boolean;
+  data: SessionData;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +22,7 @@ export class GmailService {
   private zone = inject(NgZone);
   private apiUrl = `${environment.apiBaseUrl}/Gmail`;
   
-
+  
   loadFolders(positionId : string): Observable<{ id: string; name: string ; isSubscribed: boolean}[]> 
   {
     const params = new HttpParams()
@@ -80,8 +90,10 @@ export class GmailService {
 
 
 
-  isGmailSession(): Observable<{sessionActive : boolean}> {
-    return this.http.get<{sessionActive : boolean}>(`${this.apiUrl}/Session`, { withCredentials: true });
+  isGmailSession(publicId: string): Observable<SessionResponse> {
+    let params = new HttpParams();
+    params = params.set('publicId', publicId);
+    return this.http.get<SessionResponse>(`${this.apiUrl}/Session`, { withCredentials: true , params});
   }
 
 

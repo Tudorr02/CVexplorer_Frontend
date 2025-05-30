@@ -1,27 +1,47 @@
 <div class="flex h-1/5 w-full justify-between items-center  ">
-    <div class="flex justify-start items-center gap-2">
-      <img [src]="gmailLogo" class="w-1/3"/>
+    <div class=" w-3/5 flex justify-start items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0,0,256,256" width="3rem" height="3rem" fill-rule="nonzero"><g fill="#34d399" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M43.75391,6.40234c-1.2177,-0.05335 -2.45911,0.31055 -3.48242,1.06641l-2.74609,2.02734l-12.52539,9.25977l-12.4082,-9.17187c-0.17292,-0.16897 -0.4012,-0.26957 -0.64258,-0.2832h0.25l-2.46484,-1.82422c-1.02397,-0.75773 -2.26723,-1.12367 -3.48633,-1.07031c-1.2191,0.05336 -2.4131,0.52522 -3.33984,1.43945c-1.17726,1.16068 -1.9082,2.78413 -1.9082,4.56445v3.43359c-0.01457,0.09777 -0.01457,0.19715 0,0.29492v23.36133c0,1.92119 1.57881,3.5 3.5,3.5h7.5c0.55226,-0.00006 0.99994,-0.44774 1,-1v-16.62695l11.40625,8.43164c0.353,0.26043 0.8345,0.26043 1.1875,0l11.40625,-8.43164v16.62695c0.00006,0.55226 0.44774,0.99994 1,1h7.5c1.92119,0 3.5,-1.57881 3.5,-3.5v-23.38086c0.01129,-0.08622 0.01129,-0.17355 0,-0.25977v-3.44922c0,-1.75846 -0.70954,-3.37437 -1.87109,-4.53711c-0.03357,-0.03357 -0.04482,-0.04287 -0.03125,-0.0293c-0.00194,-0.00196 -0.0039,-0.00391 -0.00586,-0.00586c-0.92656,-0.91221 -2.12019,-1.3822 -3.33789,-1.43555zM43.64453,8.40039c0.7563,0.02965 1.48952,0.3165 2.04492,0.86328c0.01891,0.01867 0.03272,0.03277 0.02344,0.02344c0.79645,0.79726 1.28711,1.9015 1.28711,3.12305v3.08594l-8,5.91211v-10.4082c0.00042,-0.0339 -0.00088,-0.0678 -0.00391,-0.10156l2.46289,-1.82031c0.00065,0 0.0013,0 0.00195,0c0.64864,-0.47915 1.42729,-0.70739 2.18359,-0.67773zM6.35742,8.40625c0.75715,-0.02964 1.53847,0.19746 2.1875,0.67773l2.45898,1.81836c-0.00289,0.03247 -0.0042,0.06506 -0.00391,0.09766v10.4082l-8,-5.91211v-3.08594c0,-1.23567 0.50176,-2.3413 1.3125,-3.14062c0.55526,-0.54776 1.28777,-0.83364 2.04492,-0.86328zM37,12.37109v10.51563l-12,8.86914l-12,-8.86914v-10.51367l11.40625,8.43164c0.353,0.26043 0.8345,0.26043 1.1875,0zM3,17.98242l8,5.91406v17.10352h-6.5c-0.84081,0 -1.5,-0.65919 -1.5,-1.5zM47,17.98242v21.51758c0,0.84081 -0.65919,1.5 -1.5,1.5h-6.5v-17.10352z"></path></g></g></svg>
       <p class="text-2xl font-medium">Gmail</p>
+      <p-tag *ngIf="sessionActive" severity="secondary" class="ml-2 text-sm overflow-hidden" rounded="true" value="Processing" > <div class="w-[1rem] h-[1rem] rounded-[100%]  pulse bg-[var(--p-primary-color)]"></div> </p-tag>
     </div>
-    <div class="flex justify-center">
+
+    <div class="flex justify-center items-center">
+      <p-button *ngIf="sessionActive"   text="true" icon="pi pi-caret-right" label="Start" (onClick)="watch()" size="small"/>
       <p-menu #menu [model]="settings" [popup]="true" />
       <p-button *ngIf="sessionActive" icon="pi pi-cog" [rounded]="true"  [text]="true" severity="secondary" (click)="menu.toggle($event)" size="large"/>
     </div>
 </div>
 
-<div class="flex h-4/5 w-full  flex-col justify-center items-center gap-0 px-6">
+<div class="flex h-4/5 w-full  flex-col justify-center items-center  px-4">
 
-  <div class="flex w-full h-1/3 justify-center items-center  gap-2">
-    <p class=" font-medium w-1/6 justify-start flex ">Step 1</p>
-    <p-button class=" w-5/6 flex justify-start " [disabled]="sessionActive"  label="Connect" (onClick)="connect()" [raised]="true" size="small"/>
+  @if(!sessionActive) {
+
+    <div class="h-full w-full flex flex-col justify-center items-center">
+      <div class="h-2/3 w-full flex  justify-center items-center gap-4">
+        <p class="text-lg font-medium justify-center flex items-center">Auto-process incoming CVs with Gmail integration</p>
+        <svg xmlns="http://www.w3.org/2000/svg" height="4rem" viewBox="0 -960 960 960" width="4rem" fill="var(--p-primary-color)">
+        <path d="M280-130q-78.77 0-134.38-55.62Q90-241.23 90-320q0-66.08 39.54-116.35 39.54-50.26 100.46-66.19v63q-35 14.31-57.5 46.85T150-320q0 53.85 38.08 91.92Q226.15-190 280-190t91.92-38.08Q410-266.15 410-320v-30h225.38q6.85-10.92 18.54-17.77 11.7-6.84 26.08-6.84 22.69 0 38.65 15.96 15.96 15.96 15.96 38.65 0 22.69-15.96 38.65-15.96 15.96-38.65 15.96-14.77 0-26.27-6.65T635.38-290H467.54q-11.69 71.31-65.04 115.65Q349.15-130 280-130Zm400 0q-49.08 0-89.96-22.89-40.88-22.88-67.27-61.72h81.61q15.16 11.53 34.85 18.07Q658.92-190 680-190q53.85 0 91.92-38.08Q810-266.15 810-320t-38.08-91.92Q733.85-450 680-450q-18.85 0-34.88 4.73-16.04 4.73-30.66 13.81l-117-194.93q-21-.53-36.54-15.57Q445.39-657 445.39-680q0-22.69 15.96-38.65 15.96-15.96 38.65-15.96 22.69 0 38.65 15.96 15.96 15.96 15.96 38.65 0 6.15-1.15 11.38-1.15 5.24-4.31 10.24L640-505.85q9.15-2 19.12-3.07Q669.08-510 680-510q78.77 0 134.38 55.62Q870-398.77 870-320t-55.62 134.38Q758.77-130 680-130ZM280-265.39q-22.69 0-38.65-15.96-15.96-15.96-15.96-38.65 0-21.23 14.57-36.85 14.58-15.61 36.89-16.76l98.23-163.31q-31.31-26.62-48.19-63.73Q310-637.77 310-680q0-78.77 55.62-134.38Q421.23-870 500-870t134.38 55.62Q690-758.77 690-680h-60q0-53.85-38.08-91.92Q553.85-810 500-810t-91.92 38.08Q370-733.85 370-680q0 42.62 24.08 75.5 24.07 32.88 63.3 46.89L328.54-342.62q3.15 5.39 4.61 10.93 1.46 5.54 1.46 11.69 0 22.69-15.96 38.65-15.96 15.96-38.65 15.96Z"/>
+        </svg>
+      </div>
+      <div class="h-1/3 w-full flex flex-col justify-center items-center">
+        <p-button  [disabled]="sessionActive"  label="Connect" (onClick)="connect()" [raised]="true" size="small"/>
+      </div>
+    </div>
+    
+    
+    
+  } @else {
+      
+  <div class="flex w-full h-2/6 justify-start items-center">
+    <p class="justify-start flex text-sm text-[var(--p-text-muted-color)] ">Connection expires on {{ gmailExpiry | date:'dd.MM.yyyy' }}</p>
   </div>
-  <div class="flex w-full h-1/3 justify-center items-center  gap-2 ">
-    <p class=" font-medium w-1/6 justify-start flex 2 ">Step 2</p>
-    <div class="w-5/6 flex justify-start ">
+  <div class="flex w-full h-2/6 justify-center items-center ">
+    <p class=" font-medium w-2/6 justify-start flex  ">Gmail Folders</p>
+    <div class="w-4/6 flex justify-start ">
       <p-multiSelect
-      [disabled]="!sessionActive"
       class="justify-start w-2/3"
       styleClass="w-2/3"
+      size="small"
       [maxSelectedLabels]="1"
       [(ngModel)]="selectedLabels"
       [options]="labels"
@@ -33,9 +53,30 @@
     </div>
     
   </div>
-  <div class="flex w-full h-1/3 justify-center items-center  gap-2 ">
-    <p class="font-medium w-1/6 justify-start flex ">Step 3</p>
-    <p-button class=" w-5/6 flex justify-start " [disabled]="!sessionActive"  icon="pi pi-caret-right" label="Start" (onClick)="watch()" size="small"/>
+  <div class="flex w-full h-2/6 justify-center  items-center">
+    <p class=" font-medium w-2/6 justify-start flex">Create Round</p>
+    <div class="w-4/6 flex justify-start gap-2">
+     <p-togglebutton [(ngModel)]="createRound" onLabel="Yes" offLabel="No" size="small" (onChange)="updateRoundCreation()" />
+     <p-select *ngIf="!createRound"
+      class="justify-start w-2/3"
+      styleClass="w-2/3"
+      filter="true"
+      size="small"
+      [(ngModel)]="selectedRound"
+      [options]="rounds"
+      optionLabel="name"
+      optionValue="publicId"
+      placeholder="Select Round"
+      />
+    </div>
+    
   </div>
+  <div class="flex w-full h-2/6 justify-center  items-center">
+    <p class=" font-medium w-2/6 justify-start flex">Processed CVs</p>
+    <p class=" font-medium w-4/6 justify-start flex">{{this.processedCVs}}</p>
 
+  </div>
+  }
+
+  
 </div>
