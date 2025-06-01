@@ -6,7 +6,7 @@ export interface Evaluation {
     fileData?: string;
     score?: number;
     evaluation : CvEvaluationResult;
-    cvPublicId: string;
+    // cvPublicId: string;
     positionData: Position;
 }
 

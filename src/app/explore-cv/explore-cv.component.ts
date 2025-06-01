@@ -16,9 +16,11 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { timer, forkJoin, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
+import { CvEvaluationComponent } from '../cv-evaluation/cv-evaluation.component';
+import { Tag } from 'primeng/tag';
 @Component({
   selector: 'app-explore-cv',
-  imports: [ProgressSpinner,DialogModule,TableModule, ButtonModule, CommonModule, IconField, InputIcon, InputTextModule, FormsModule],
+  imports: [Tag,CvEvaluationComponent,ProgressSpinner, DialogModule, TableModule, ButtonModule, CommonModule, IconField, InputIcon, InputTextModule, FormsModule, CvEvaluationComponent],
   templateUrl: './explore-cv.component.html',
   styleUrl: './explore-cv.component.css'
 })
@@ -36,12 +38,10 @@ export class ExploreCvComponent implements OnInit , AfterViewInit , OnDestroy {
 
   cvs: CV[] = [];
   selectedCVs: CV[] = [];
+  evaluatedCv?: CV; // For the evaluation dialog
 
-  viewCV: boolean = false; // For the dialog
+  viewCvEvaluation: boolean = false; // For the dialog
   viewDeleteDialog: boolean = false; // For the delete dialog
-  inspectedCV: CV | undefined; // For the dialog
-
-  pdfUrl?: SafeResourceUrl;
 
 
   @ViewChild('dtCVs') dt!: Table; // Reference to PrimeNG Table
@@ -77,7 +77,7 @@ export class ExploreCvComponent implements OnInit , AfterViewInit , OnDestroy {
   private updateHeight(): void {
     if (!this.wrapper) return;
     const h = this.wrapper.nativeElement.offsetHeight;  // pixeli incluşi padding
-    this.scrollHeight = `${Math.max(h - 65, 500)}px`;   // -65 px header intern
+    this.scrollHeight = `${Math.max(h - 65, 200)}px`;   // -65 px header intern
     this.cdr.detectChanges();                           // forţează aplicaţia
   }
 
@@ -98,6 +98,8 @@ export class ExploreCvComponent implements OnInit , AfterViewInit , OnDestroy {
         }
       });
   }
+
+
 
   filterGlobal() {
     this.dt.filterGlobal(this.globalFilter, 'contains');
@@ -150,30 +152,18 @@ export class ExploreCvComponent implements OnInit , AfterViewInit , OnDestroy {
       });
   }
 
-  getCV(cvPublicId: string) {
-    this.cvService.getCV(cvPublicId).subscribe({
-      next: cv => {
-        console.log('CV details:', cv);
-        // Handle the CV details as needed
-        this.inspectedCV = cv; // Set the inspected CV
-        const dataUrl = `data:application/pdf;base64,${cv.fileData}`;
-        this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
-        this.viewCV = true; // Open the dialog
-
-      },
-      error: err => {
-        console.error('Error loading CV', err);
-        this.notificationService.showError('Failed to load CV');
-      }
-    });
+  openEvaluationDialog(cv: CV) { 
+    this.evaluatedCv = cv;
+    this.viewCvEvaluation = true;
+   
   }
 
   onDialogHide() {
-    this.viewCV = false;
     this.viewDeleteDialog = false;
     this.globalFilter = '';
-    this.inspectedCV = undefined;
-    this.pdfUrl = undefined;
+    this.selectedCVs = [];
+    this.viewCvEvaluation = false;
+    this.evaluatedCv = undefined;
   }
 
   openDeleteDialog() {
@@ -181,6 +171,7 @@ export class ExploreCvComponent implements OnInit , AfterViewInit , OnDestroy {
       this.notificationService.showError('Select at least one CV to delete');
       return;
    }
+
     this.viewDeleteDialog = true;
   }
 }

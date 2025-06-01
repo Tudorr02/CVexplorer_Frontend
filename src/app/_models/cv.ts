@@ -5,4 +5,5 @@ export interface CV {
     uploadedBy?: string;
     fileData?: string;
     score?: number;
+    uploadMethod?: string;
 }

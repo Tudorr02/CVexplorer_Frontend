@@ -35,9 +35,5 @@ export class RoundService {
   getRound(publicId: string): Observable<RoundEntry[]> {
     return this.http.get<RoundEntry[]>(`${this.apiUrl}/${publicId}`);
   }
-
-  getEvaluation( entryId : number) :Observable<Evaluation> {
-    return this.http.get<Evaluation>(`${environment.apiBaseUrl}/RoundEntries/${entryId}`);
-  }
   
 }

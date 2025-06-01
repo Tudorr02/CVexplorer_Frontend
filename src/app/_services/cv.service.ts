@@ -40,9 +40,6 @@ export class CvService {
   }
 
 
-  getCV(cvPublicId: string): Observable<CV> {
-    return this.http.get<CV>(`${this.apiUrl}/${cvPublicId}`);
-  }
 
   deleteCVs(
     cvPublicIds: string[],

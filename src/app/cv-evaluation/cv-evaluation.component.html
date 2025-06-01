@@ -1,0 +1,107 @@
+<div class="flex w-full h-full relative">
+        <div class="flex w-1/2 h-full" >
+            <iframe 
+            *ngIf="pdfUrl"
+            [src]="pdfUrl"
+            class="w-full h-full"
+            style="border:none;"
+            ></iframe>
+        </div>
+        <div class="flex flex-col pl-[1.25rem] w-1/2 h-full " >
+            <div class="overflow-y-auto h-[90%]">
+                <p-accordion   styleClass="w-full" [multiple]="true" *ngIf="evaluationTabs.length" >
+                @for (tab of evaluationTabs; track tab.title) {
+                    <p-accordion-panel  [value]="tab.value">
+                        <p-accordion-header class="font-medium p-0 ">
+                            <div class="flex  w-full items-center ">
+                                <p class="w-1/3  text-white my-[1.125rem]">{{ tab.title }}</p>
+                                <!-- <p class="flex justify-start items-start">Similarity: {{tab.score}} %</p>  -->
+                                <div class="w-1/4 flex justify-start items-center">
+                                    <div *ngIf="!editMode">
+                                    Similarity: {{ evaluation.evaluation[tab.key].score }} %
+                                    </div>
+
+                                    <!-- numeric input when editing -->
+                                    <div *ngIf=" editMode " class="flex items-center gap-1">
+                                    Similarity:
+                                    <p-inputNumber
+                                        [(ngModel)]="tempCardData.evaluation[tab.key].score"
+                                        [min]="0"
+                                        [max]="100"
+                                        allowEmpty="false"
+                                        maxlength="3"
+                                        [showButtons]="false"
+                                        inputStyleClass="w-3"
+                                        styleClass="w-3"
+                                        size="small"
+                                        class="w-3"
+                                        [step]="1"    
+                                    ></p-inputNumber>
+                                    %
+                                    </div>
+                                </div>
+                                <div *ngIf="(evaluation.evaluation[tab.key].score! > 100) ">
+                                    <small>Score must be between 0 and 100</small>
+                                </div>
+                            </div>
+
+                           
+                        </p-accordion-header>
+
+                        <p-accordion-content class="flex flex-col w-full">
+                            
+                            <div class="flex flex-col w-full gap-2">
+                                <div class="flex w-full flex-wrap gap-2 items-center">
+                                <p class="w-[6rem] font-medium">Candidate</p>   
+                                <p class="">{{ tab.body }} </p>
+                                </div>
+
+                                <div class="flex w-full flex-wrap gap-2 items-center">
+                                <p class="w-[6rem]  font-medium">Position</p>   
+                                <p class="">{{ tab.positionBody  }}</p>
+                                </div>
+                            </div>
+                            
+                            
+                        </p-accordion-content>
+                    </p-accordion-panel>
+                }
+                </p-accordion>
+            </div>
+            
+            <div class="h-[10%] border-top-1 border-[var(--p-form-field-border-color)] flex justify-between items-center">
+                <div class=" justify-start items-center flex gap-4">
+                    <div class="flex items-center gap-2">
+                        <p class="text-xl font-medium">Score</p>
+                        <span *ngIf="!editMode" class="text-xl font-medium flex " > {{ cv.score }}</span>
+                        <span *ngIf="editMode" class="text-xl font-medium flex " > {{ tempCardData.score }}</span>
+
+                    </div>
+                    <p-button *ngIf="editMode" label="Recalculate" variant="text" size="small" icon="pi pi-refresh" (onClick)="recalculateScore()"/>
+                </div>
+                <div class="justify-end flex items-center">
+                    <p-button
+                        *ngIf="!editMode"
+                        label="Edit Evaluation"
+                        (click)="editEvaluation()">
+                    </p-button>
+
+                    <div *ngIf="editMode" class="flex gap-3">
+                        <p-button
+                            label="Cancel"
+                            severity="secondary"
+                            (click)="cancelEdit()">
+                        </p-button>
+                    
+                        <p-button
+                            label="Update"
+                            (click)="updateEvaluation(this.cv.publicId!  , this.tempCardData.evaluation)">
+                        </p-button>
+                    </div>
+                </div>
+              
+            </div>
+            
+        </div>
+        
+    </div>
