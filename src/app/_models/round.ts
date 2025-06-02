@@ -3,4 +3,6 @@ export interface Round{
     name: string;
     createdAt: Date;
     candidatesNumber: number; 
+    stage: string;
+    positionName?: string;
 }

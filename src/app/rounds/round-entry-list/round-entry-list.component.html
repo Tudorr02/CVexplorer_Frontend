@@ -1,59 +1,91 @@
 
-<div class="flex w-full h-full justify-center">
-  <div class="w-1/2 h-full justify-center items-center flex flex-col gap-2">
-    <p class="text-3xl font-medium ">Pending candidates</p>
-    <div class="flex px-4 w-full h-[90%] ">
-    <div
-      cdkDropList
-      id="src"
-      #src="cdkDropList"
-      [cdkDropListData]="sourceEntries"
-      [cdkDropListConnectedTo]="[tgt]"
-      class="border-custom h-full w-full  overflow-hidden"
-      (cdkDropListDropped)="drop($event)"
-      >
-      
-      
+<div class=" w-full h-full  gap-2 overflow-x-auto">
+  <div class="flex flex-nowrap h-full  items-center ">
+   
 
-     <div class=" p-2 flex flex-col h-full gap-2 overflow-y-auto">
-
-     
-      @for (e of sourceEntries; track e.id) {
-        <app-round-entry-card 
-        [entry]="e" 
-        (updated)="loadRound(publicId)"
-        ></app-round-entry-card>
-      }
-
-      </div>
-     
-    </div>
-    </div>
     
-  </div>
-
-
-  <div class="w-1/2 h-full justify-center items-center flex flex-col gap-2">
-    <p class="text-3xl font-medium ">Selected Candidates</p>
-    <div class="flex px-4 w-full h-[90%] ">
+    <div *ngFor="let zone of zones ; let i = index ; let isLast = last" class="flex-none w-1/2 h-full px-4 items-center flex flex-col ">
+      <!-- <div class="h-[5%] flex items-center justify-between w-full px-4">
+        <p class="text-3xl font-medium   ">{{zone.label}}</p>
+        <p-button  icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" />
+      </div> -->
+      <div class="h-[5%] relative w-full px-4 ">
+        <p class="text-3xl font-medium absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 ">{{zone.label}}</p>
+        <p-button *ngIf="isLast && i!==0" class="absolute right-8 top-1/2 transform -translate-y-1/2" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="showDeleteDialog(zone.ordinal)" />
+      </div>
+      <div class="flex  py-2 justify-center w-full h-[95%] ">
       <div
-      cdkDropList
-      id="tgt"
-      #tgt="cdkDropList"
-      [cdkDropListData]="targetEntries"
-      [cdkDropListConnectedTo]="[src]"
-      class="border-custom h-full w-full  overflow-hidden"
-      (cdkDropListDropped)="drop($event)">
+        cdkDropList
+        [id]="zone.id"
+        [cdkDropListData]="entriesByZone[i]"
+        [cdkDropListConnectedTo]="getConnectedZoneIds(zone.id)"
+        #src="cdkDropList"
+
+        class="border-custom h-full w-full  overflow-hidden"
+        (cdkDropListDropped)="drop($event)"
+        >
+        
+        
 
       <div class=" p-2 flex flex-col h-full gap-2 overflow-y-auto">
-      @for (e of targetEntries; track e.id) {
-        <app-round-entry-card [entry]="e" ></app-round-entry-card>
-      }
+
+        <ng-container *ngFor="let entry of entriesByZone[i]; trackBy: trackByEntryIdx">
+          <app-round-entry-card 
+            [entry]="entry"
+          ></app-round-entry-card>
+        </ng-container>
+
+      </div>
+      
+      </div>
       </div>
     </div>
-    </div>
-    
+
+     <div class="flex-none w-1/2 h-full  justify-end items-center flex flex-col ">
+      
+      <div class="flex px-4 py-2 justify-center w-full h-[95%] ">
+      <div id="dashed-area" class="border-custom h-full w-full border-dashed justify-center flex items-center" (click)="addStage=true ">
+        <p *ngIf="!addStage" class="font-medium text-2xl text-[var(--p-text-muted-color)] ">Add Evaluation Stage</p>
+        <div *ngIf="addStage" class="flex flex-col justify-center items-center gap-2" >
+          <div class="flex flex-col justify-center items-start">
+            <label for="stageInput">Name of the Stage</label>
+            <input id="stageInput" type="text" pInputText [(ngModel)]="newStageName" placeholder="Enter the name" />
+          </div>
+           <div class="flex  justify-center items-center">
+            <p-button label="Cancel" severity="secondary" variant="text" icon="pi pi-times" size="small" (click)="addStage = false; $event.stopPropagation()"/>
+            <p-button label="Create" variant="text" icon="pi pi-plus" size="small" (onClick)="addStageToRound()"/>
+          </div>
+         
+        </div>
+      </div>
+      </div>
+    </div> 
+
+
   </div>
+
 </div>
 
-  
+
+<p-dialog 
+  header="Delete Stage" 
+  [(visible)]="viewDeleteDialog"
+  [modal]="true" 
+  styleClass=" shadow-9 w-dialog-m h-dialog-xs border-none"
+  (onHide)="viewDeleteDialog = false">
+
+ <div class="h-full w-full flex flex-col">
+  <div class=" h-2/3 flex flex-col gap-3 px-4 justify-center">
+      <p>Are you sure you want to delete the stage ? All entries currently in this stage will be moved to the last existing stage. </p>
+  </div>
+    
+  <div class="h-1/3 flex justify-end items-center gap-3 ">
+      @if(loading){
+        <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '3vh', height: '3vh' }" />
+      }
+      <p-button label="Cancel" (click)="cancelDelete()" severity="secondary"></p-button>
+      <p-button label="Delete" (click)="confirmDelete()" severity="danger" [disabled]="loading"></p-button>
+    </div>
+  </div>
+
+</p-dialog>

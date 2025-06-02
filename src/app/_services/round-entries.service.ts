@@ -11,8 +11,8 @@ export class RoundEntriesService {
   private http =  inject(HttpClient);
   private apiUrl = `${environment.apiBaseUrl}/RoundEntries`;
 
-  updateRoundEntry(entryId: number, selected : boolean): Observable<void> {
-    const params = new HttpParams().set('selected', String(selected));
+  updateRoundEntry(entryId: number, targetOrdinal : number): Observable<void> {
+    const params = new HttpParams().set('targetOrdinal', targetOrdinal);
 
     return this.http.put<void>(
       `${this.apiUrl}/${entryId}`,

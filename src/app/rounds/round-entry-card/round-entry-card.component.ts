@@ -16,17 +16,19 @@ import { TextareaModule } from 'primeng/textarea';
 import { EvaluationService } from '../../_services/evaluation.service';
 import { AccordionModule } from 'primeng/accordion';
 import { Position } from '../../_models/position';
-
+import { CvEvaluationComponent } from '../../cv-evaluation/cv-evaluation.component';
 @Component({
   selector: 'app-round-entry-card',
-  imports: [AccordionModule,TextareaModule,InputNumberModule,AvatarModule,DragDropModule, ButtonModule, CommonModule, FormsModule,InputTextModule],
+  imports: [CvEvaluationComponent,Dialog,AccordionModule,TextareaModule,InputNumberModule,AvatarModule,DragDropModule, ButtonModule, CommonModule, FormsModule,InputTextModule],
   templateUrl: './round-entry-card.component.html',
   styleUrl: './round-entry-card.component.css'
 })
 export class RoundEntryCardComponent {
 
-
+  viewCv: boolean = false;
   @Input({ required: true }) entry!: RoundEntry;
 
-  
+  onDialogHide() {
+    this.viewCv = false;
+  }
 }

@@ -20,9 +20,10 @@ import { CV } from '../_models/cv';
 })
 export class CvEvaluationComponent implements OnChanges{
 
-   @Input({ required: true }) cv!: CV;
-
-  
+    @Input() cv!: CV;
+    @Input() seeEvaluation: boolean = true;
+    @Input() roundEntry!: RoundEntry;
+    
     roundService = inject(RoundService);
     notificationService = inject(NotificationService); 
     evaluationService = inject(EvaluationService); 
@@ -40,10 +41,14 @@ export class CvEvaluationComponent implements OnChanges{
     sanitizer= inject(DomSanitizer);
     editMode : boolean= false;
 
-     ngOnChanges(changes: SimpleChanges): void {
+    ngOnChanges(changes: SimpleChanges): void {
     if (changes['cv'] && this.cv) {
       // cv a primit o valoare nouă, apelăm backend-ul
       this.getEvaluationResult(this.cv.publicId!);
+    }
+    if (changes['roundEntry'] && this.roundEntry) {
+      // roundEntry a primit o valoare nouă, apelăm backend-ul
+      this.getEvaluationResult(this.roundEntry.publicCvId);
     }
   }
   
@@ -53,7 +58,9 @@ export class CvEvaluationComponent implements OnChanges{
         {
           next: (evaluation) => {
             this.evaluation = evaluation;
+            if(this.seeEvaluation) {
             this.loadEvaluationTabs(this.evaluation.evaluation, this.evaluation.positionData);
+            }
   
             const dataUrl = `data:application/pdf;base64,${evaluation.fileData}`;
             this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);

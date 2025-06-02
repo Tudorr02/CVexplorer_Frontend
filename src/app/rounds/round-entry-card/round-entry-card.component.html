@@ -9,7 +9,30 @@
     <div class="flex flex-col w-1/6 justify-center items-center">
         <p class="text-sm font-medium">Score</p>
         <span > {{ entry.score }}</span>
+       
+    </div>  
+     <div class="flex flex-col w-1/6 justify-center items-center">
+    <p-button 
+        icon="pi pi-file-pdf" 
+        [rounded]="true" 
+        severity="danger"
+        [text]="true"
+        (onClick)="viewCv = true" 
+        />
     </div>  
   
 </div>
 
+
+<p-dialog 
+    header="Evaluation Result"
+    [modal]="true" 
+    [(visible)]="viewCv"
+    styleClass=" shadow-9 w-dialog-lg h-dialog-lg border-none"
+    (onHide)="onDialogHide()" 
+
+  >
+  <app-cv-evaluation  [roundEntry]="entry" [seeEvaluation]="false" (onHide)="onDialogHide()"></app-cv-evaluation>
+ 
+
+</p-dialog>

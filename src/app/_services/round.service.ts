@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Round } from '../_models/round';
 import { RoundEntry } from '../_models/round-entry';
 import { CvEvaluationResult, Evaluation } from '../_models/evaluation';
+import { RoundStage } from '../_models/round-stage';
 
 @Injectable({
   providedIn: 'root'
@@ -32,8 +33,17 @@ export class RoundService {
     return this.http.delete<void>(`${this.apiUrl}/${publicId}`);
   }
   
-  getRound(publicId: string): Observable<RoundEntry[]> {
-    return this.http.get<RoundEntry[]>(`${this.apiUrl}/${publicId}`);
+  getRound(publicId: string): Observable<RoundStage[]> {
+    return this.http.get<RoundStage[]>(`${this.apiUrl}/${publicId}`);
+  }
+
+  addStage(publicId: string, stageName: string): Observable<RoundStage> {
+    const params = new HttpParams().set('name', stageName);
+    return this.http.post<RoundStage>(`${this.apiUrl}/${publicId}/RoundStages`, null, { params });
+  }
+
+  deleteStage(publicId: string, stageOrdinal: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${publicId}/RoundStages/${stageOrdinal}`);
   }
   
 }

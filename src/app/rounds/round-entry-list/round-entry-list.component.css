@@ -1,0 +1,16 @@
+
+#dashed-area {
+
+  border-color: var(--p-text-muted-color);
+  transition: border-color 0.2s ease;
+}
+
+#dashed-area:hover {
+  border-color: var(--p-text-color) !important;
+  cursor: pointer;
+}
+
+#dashed-area:hover p {
+  color: white;
+  transition: color 0.2s ease;
+}
