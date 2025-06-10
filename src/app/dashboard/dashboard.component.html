@@ -1,1 +1,14 @@
-<p>mereeeeeeeeeeeeeeege!</p>
+<div class="w-full h-full flex">
+
+    <div class="w-1/2 h-full flex flex-col justify-center items-center ">
+        <p class="h-[10%] flex justify-center items-end w-full font-medium text-2xl text-[var(--p-text-muted-color)] ">Candidate Seniority</p>
+        <p-chart type="doughnut" [data]="chart1Data" [options]="chart1Options" class="w-full h-[90%]" responsive="true" />
+    </div>
+    <div class="w-1/2 h-full flex flex-col justify-center items-center ">
+        <p class="h-[10%] flex justify-center items-end w-full font-medium text-2xl text-[var(--p-text-muted-color)] ">Score Density</p>
+        <div class="w-full h-[90%] flex justify-center items-center">
+            <p-chart class="w-full " type="bar" [data]="chart2Data" [options]="chart2Options" responsive="true" />
+        </div>
+    </div>
+
+</div>
