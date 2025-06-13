@@ -19,6 +19,7 @@ const MyPreset = definePreset(Aura, {
                     weight : '500',
                     }
                 }
+            
             },
             datatable: {
                 column:{
@@ -354,7 +355,7 @@ const MyPreset = definePreset(Aura, {
         primary: {
             50: "#ecfdf5",
             100: "#d1fae5",
-            200: "#a7f3d0",
+            200: "#a7f3d0",  //"#a7f3d0"
             300: "#6ee7b7",
             400: "#34d399",
             500: "#10b981",

@@ -1,6 +1,6 @@
 <div class="h-full w-full flex flex-col gap-4 justify-center ">
 
-  <div id="dashed-area" class="h-1/2 border-custom border-dashed w-full overflow-hidden ">
+  <div  [attr.id]="!fileSelected ? 'dashed-area' : null" class="h-1/2 border-custom border-dashed w-full overflow-hidden ">
     <p-fileUpload
     #fu
     name="file"
@@ -78,11 +78,17 @@
           </div>
         
         </div>
-        <div class="flex items-center justify-center  gap-4">          
-          <p-button label="Upload" variant="text" icon="pi pi-upload" size="large" (onClick)="fu.upload()"/>
-          <p-button label="Cancel" variant="text" severity="danger" icon="pi pi-times" size="large" (onClick)="fu.remove($event,index)" />   
-        </div>
-        
+          <ng-container *ngIf="!uploading; else loadingTpl">
+            <div class="flex items-center justify-center  gap-4">          
+              <p-button label="Upload" variant="text" icon="pi pi-upload" size="large" (onClick)="fu.upload()"/>
+              <p-button label="Cancel" variant="text" severity="danger" icon="pi pi-times" size="large" (onClick)="fu.remove($event,index); fileSelected = false" />   
+            </div>
+          </ng-container>
+          <ng-template #loadingTpl>
+            <div class="flex items-center justify-center  gap-4">  
+              <p-progressSpinner strokeWidth="8" fill="transparent" animationDuration=".5s" styleClass="w-3rem h-3rem"></p-progressSpinner>
+            </div>
+          </ng-template>
       </div>
       
     </ng-template>

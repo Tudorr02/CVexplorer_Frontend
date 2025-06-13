@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { ToastModule } from 'primeng/toast';
 import { NotificationService } from '../_services/notification.service';
-import { FileUploadEvent, FileUploadModule } from 'primeng/fileupload';
+import { FileUpload, FileUploadEvent, FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
 import { CvService } from '../_services/cv.service';
 import { ActivatedRoute } from '@angular/router';
@@ -10,22 +10,27 @@ import { GmailAuthComponent } from '../gmail-auth/gmail-auth.component';
 import { OutlookAuthComponent } from '../outlook-auth/outlook-auth.component';
 import JSZip from 'jszip';
 import { Tag } from 'primeng/tag';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 
 @Component({
   selector: 'app-upload-cv',
-  imports: [OutlookAuthComponent,CommonModule,FileUploadModule, ButtonModule, ToastModule, GmailAuthComponent, Tag],
+  imports: [ProgressSpinnerModule ,OutlookAuthComponent,CommonModule,FileUploadModule, ButtonModule, ToastModule, GmailAuthComponent, Tag],
   templateUrl: './upload-cv.component.html',
   styleUrl: './upload-cv.component.css'
 })
 export class UploadCvComponent {
 
-
+  @ViewChild('fu') fu!: FileUpload;
   private route = inject(ActivatedRoute);
   private cvService = inject(CvService);
   private notificationService = inject(NotificationService);  
 
   positionPublicId: string = this.route.snapshot.paramMap.get('publicId')!;
   cvCount = 0;
+  fileSelected: boolean = false;
+  uploading = false;
+
 
 
   onUpload(event: any) {
@@ -39,13 +44,22 @@ export class UploadCvComponent {
       this.notificationService.showError('No file selected');
       return;
     }
-  
+    
+    this.uploading = true;
+    this.notificationService.showInfo('Uploading...');
+
     this.cvService.uploadCV(this.positionPublicId, file).subscribe({
       next: () => {
         this.notificationService.showSuccess('CV uploaded successfully!');
+        this.fu.clear();
+        this.fileSelected = false;
+        this.uploading = false;
       },
       error: () => {
         this.notificationService.showError('CV upload failed!');
+        this.fu.clear();
+        this.fileSelected = false;
+        this.uploading = false;
       }
     });
   }
@@ -56,6 +70,7 @@ export class UploadCvComponent {
     if (!file) 
       return;
 
+    this.fileSelected = true;
 
     const name = file.name.toLowerCase();
     if (file.type === 'application/pdf' || name.endsWith('.pdf')) {
@@ -81,6 +96,7 @@ export class UploadCvComponent {
   onChoose(event: Event, callback: () => void): void {
     event.preventDefault();
     callback();
+    
   }
   
 

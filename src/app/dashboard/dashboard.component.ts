@@ -53,7 +53,8 @@ export class DashboardComponent implements OnInit {
     this.chartsService
       .getScoreDistribution(positionPublicId, departmentId)
       .subscribe((data: ChartCounts) => {
-        const labels = Object.keys(data);
+        const rawLabels = Object.keys(data);
+        const labels = rawLabels.map(l => `Score ${l}`);
         const values = Object.values(data);
 
         // Colors from CSS tokens
@@ -197,7 +198,7 @@ export class DashboardComponent implements OnInit {
                 label: (context: { dataIndex: any; dataset: { rawData: { [x: string]: any; }; }; label: any; }) => {
                   const idx = context.dataIndex;
                   const raw = context.dataset.rawData[idx];
-                  return `${context.label}: ${raw}`;
+                  return `${raw}`;
                 }
               }
             },
