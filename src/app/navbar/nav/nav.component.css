@@ -1,0 +1,7 @@
+::ng-deep p-button-outlined.p-button-danger{
+   border-color: #b91c1c ;
+}
+::ng-deep .p-button-outlined{
+   border-color: #047857 ;
+}
+

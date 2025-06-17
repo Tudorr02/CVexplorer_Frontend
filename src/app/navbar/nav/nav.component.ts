@@ -84,6 +84,7 @@ export class NavComponent implements OnInit {
     element?.classList.toggle('my-app-light', !isDark);
     this.logoPath = isDark ? 'logos/CVexplorerDark.svg' : 'logos/CVexplorerLight.svg';
     this.iconClass = isDark ? 'pi pi-moon' : 'pi pi-sun';
+    
   }
 
   isLogin(): boolean {

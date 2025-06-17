@@ -1,4 +1,4 @@
-import { Component , OnInit , inject , computed, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { Component , OnInit , inject , computed, PLATFORM_ID, ChangeDetectorRef, ViewChild, HostListener } from '@angular/core';
 
 import { SplitterModule } from 'primeng/splitter';
 
@@ -7,7 +7,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AccountService } from '../_services/account.service';
 import { ChartModule } from 'primeng/chart';
 import { ChartCounts, ChartsService } from '../_services/charts.service';
-import { min } from 'rxjs';
+import { combineLatest, min } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +16,9 @@ import { min } from 'rxjs';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
+
+  @ViewChild('chart1') chart1: any;
+  @ViewChild('chart2') chart2: any;
 
   AccountService = inject(AccountService);
   Router = inject(Router);
@@ -27,19 +30,29 @@ export class DashboardComponent implements OnInit {
   chart1Data: any;
   chart1Options: any;
 
-  cd = inject(ChangeDetectorRef);
+
   private route = inject(ActivatedRoute);
   positionPublicId?: string;
   departmentId?:     number;
  
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe(qp => {
-        this.positionPublicId = qp.get('positionPublicId') ?? undefined;
-        const dept = qp.get('departmentId');
-        this.departmentId = dept != null ? Number(dept) : undefined;   
-        this.loadSeniorityChart(this.positionPublicId!, this.departmentId!);  
+    // this.route.queryParamMap.subscribe(qp => {
+    //     this.positionPublicId = qp.get('positionPublicId') ?? undefined;
+    //     const dept = qp.get('departmentId');
+    //     this.departmentId = dept != null ? Number(dept) : undefined;   
+    //     this.loadSeniorityChart(this.positionPublicId!, this.departmentId!);  
+    //     this.loadScoresChart(this.positionPublicId, this.departmentId);
+    // });
+
+    combineLatest([this.route.paramMap, this.route.queryParamMap]).subscribe(
+      ([paramMap, qp]) => {
+        this.departmentId = paramMap.get('id') ? +paramMap.get('id')! : undefined;
+        this.positionPublicId = paramMap.get('publicId') ?? undefined;
+        
+        this.loadSeniorityChart(this.positionPublicId!, this.departmentId!);
         this.loadScoresChart(this.positionPublicId, this.departmentId);
-    });
+      }
+    );
   }
 
 
@@ -115,13 +128,13 @@ export class DashboardComponent implements OnInit {
                   size: 15,
                   weight: 'bold',
                   family: 'Lexend'
-                }
+                },
+                
               },
               grid: { color: surfaceBorder }
             }
           }
         };
-        this.cd.markForCheck();
       });
   }
 
@@ -129,11 +142,33 @@ export class DashboardComponent implements OnInit {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--p-text-muted-color');
 
+    const noDataBgColor = documentStyle.getPropertyValue('--p-gray-300');
+    const noDataHoverColor = documentStyle.getPropertyValue('--p-gray-400');
+
+
     this.chartsService
       .getSeniorityDistribution(positionPublicId, departmentId)
       .subscribe((data: ChartCounts) => {
         const labels = Object.keys(data);
         const rawValues = Object.values(data);
+        const totalRaw = rawValues.reduce((sum, v) => sum + v, 0);
+
+
+      if (totalRaw === 0 || labels.length === 0) {
+        // Nu există date: afișăm doughnut gri complet și legendă “No Data Available”
+        this.chart1Data = {
+          labels: ['No Data Available'],
+          datasets: [
+            {
+              data: [1], // o valoare unică pentru a umple tot doughnut-ul
+              backgroundColor: [noDataBgColor],
+              hoverBackgroundColor: [noDataHoverColor],
+              rawData: [] // nu folosește rawData în tooltip, putem lăsa array gol
+            }
+          ]
+        };
+        
+      } else {
 
         const backgroundColor = [
           documentStyle.getPropertyValue('--p-cyan-500'),
@@ -151,7 +186,7 @@ export class DashboardComponent implements OnInit {
           documentStyle.getPropertyValue('--p-purple-400')
         ];
 
-         const total = rawValues.reduce((sum, v) => sum + v, 0);
+        const total = rawValues.reduce((sum, v) => sum + v, 0);
         const minPercent = 0.02; // 2%
         const minValue = total * minPercent;
         let adjusted = rawValues.map(v => (v > 0 && v < minValue) ? minValue : v);
@@ -171,14 +206,14 @@ export class DashboardComponent implements OnInit {
           ]
         };
 
-        this.chart1Options = {
+       
+      }
+       this.chart1Options = {
           responsive: true,
           cutout: '60%',
           radius: '80%',
           plugins: {
-             
             legend: {
-              
               position: 'top',
               align: 'center',
               labels: {
@@ -211,9 +246,20 @@ export class DashboardComponent implements OnInit {
             }
             
           }
-        }
-        this.cd.markForCheck();
+      }
+
       });
+  }
+
+   @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    // forțează redimensionare: primeNG păstrează obiectul Chart în proprietate .chart
+    if (this.chart1 && this.chart1.chart) {
+      this.chart1.chart.resize();
+    }
+    if (this.chart2 && this.chart2.chart) {
+      this.chart2.chart.resize();
+    }
   }
 }
 

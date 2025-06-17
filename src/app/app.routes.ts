@@ -33,15 +33,24 @@ export const routes: Routes = [
         ]
 
     },
-    {path : 'dashboard', component: DashboardComponent, canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]},
-    { path: 'departments/:id',
+    {   path : 'dashboard', 
+        component: DashboardComponent, 
+        canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]
+    },
+    {  
+        path: 'departments/:id',
+        component: DashboardComponent,
         canActivate: [authGuard],
-        children: [
-            { path: 'create-position', 
-                component: CreateEditPositionComponent , 
-                canActivate: [ authGuard, roleGuard(['HRUser', 'HRLeader'])]
-            }    
-        ]
+    },
+     {
+        path: 'positions/:publicId',
+        component:DashboardComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'departments/:id/create-position',
+        component: CreateEditPositionComponent,
+        canActivate: [authGuard, roleGuard(['HRUser','HRLeader'])]
     },
 
     {
@@ -49,7 +58,6 @@ export const routes: Routes = [
         component: ExploreCvComponent,
         canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]
     },
-
     {
         path: 'evaluation-rounds',
         component: RoundsListComponent,
@@ -61,16 +69,14 @@ export const routes: Routes = [
         canActivate: [authGuard, roleGuard(['HRUser', 'HRLeader'])]
     },
     {
-        path: 'positions/:publicId',
-        canActivate: [authGuard],
-        children: [
-          { path: 'edit-position',component: CreateEditPositionComponent },
-          {
-            path: 'cv-upload',
-            component: UploadCvComponent,
-            canActivate: [authGuard, tabGuard]
-          },
-        ]
+        path: 'positions/:publicId/cv-upload',
+        component:UploadCvComponent,
+        canActivate: [authGuard, tabGuard],
+    },
+    {
+        path: 'positions/:publicId/edit-position',
+        component:CreateEditPositionComponent,
+        canActivate: [authGuard, tabGuard],
     },
     { path: 'oauth-callback', component: OAuthCallbackComponent },
 
