@@ -12,3 +12,14 @@
 } 
 
 
+@media (max-width: 1536px) {
+  /* Targetează clasa p-tag-secondary direct */
+  ::ng-deep #right-panel > div > div > p-tabpanels > app-upload-cv > div > div.h-1\/2.flex.gap-4 > div:nth-child(2) > app-outlook-auth > div.flex.h-1\/5.w-full.justify-between.items-center > div.w-4\/5.flex.justify-start.items-center.gap-2 > p-tag > span{
+    font-size: small;
+  }
+
+  .p{
+    font-size: small;
+  }
+
+}

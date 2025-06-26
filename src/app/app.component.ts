@@ -68,7 +68,6 @@ export class AppComponent  {
     { label: 'Manage Users', route: 'admin/manage-users', icon: 'pi pi-users' },
     { label: 'Manage Companies', route: 'admin/manage-companies', icon: 'pi pi-building' },
     { label: 'Enroll User', route: 'admin/enroll-user', icon: 'pi pi-user-plus' },
-    { label: 'Logs', route: '/logs', icon: 'pi pi-file' }
   ];
 
   isAdmin(): boolean {

@@ -44,8 +44,8 @@
         <ng-template #header>
           <tr>
             <th class="w-[5%]"><p-tableHeaderCheckbox /></th>
-            <th class="w-[25%]">File Name</th>
-            <th class="w-[25%]">
+            <th class="w-[30%]">File Name</th>
+            <th class="w-[20%]">
                 Uploaded At
                 <p-columnFilter type="date" field="uploadedAt" display="menu"   />
             </th>
@@ -61,7 +61,7 @@
         <ng-template #body let-cv>
           <tr >
             <td><p-tableCheckbox [value]="cv" /></td>
-            <td>{{ cv.fileName }}</td>
+            <td >{{ cv.fileName }}</td>
             <td>{{ cv.uploadedAt | date:'dd/MM/yyyy' }}</td>
            
             <td> <p-tag    [severity]="

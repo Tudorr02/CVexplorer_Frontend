@@ -36,14 +36,16 @@
 
 html {
   font-family:   'Lexend',Helvetica, sans-serif;
-  font-weight: 300; 
+  font-weight: 300;
 }
 
 body , app-root,html{
- margin: 0;
- padding: 0;
- height: 100%;
- width: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  min-width: 1450px;
+  min-height: 700px;
 }
 
 
@@ -61,4 +63,14 @@ html {
 }
 
 
+ @media (max-width: 1699px) {
+    html{
+      zoom: 0.9;
+    }
+  }
 
+  @media (min-width: 2500px) {
+    html{
+      zoom: 1.1;
+    }
+  }
