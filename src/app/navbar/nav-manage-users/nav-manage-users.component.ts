@@ -5,8 +5,6 @@ import { RoleService } from '../../_services/role.service';
 import { NotificationService } from '../../_services/notification.service';
 import { MessageService } from 'primeng/api';
 import { User } from '../../_models/user';
-import { finalize } from 'rxjs/operators';
-// PrimeNG Modules
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -29,18 +27,12 @@ import { Select } from 'primeng/select';
 })
 export class NavManageUsersComponent  {
   @ViewChild('dtUsers') dt!: Table;
-
-  
-  // ✅ Dialog visibility
   visibleManageUsers: boolean = false;
-
-  // ✅ Services
   UserService = inject(UserService);
   RoleService = inject(RoleService);
   NotificationService = inject(NotificationService);
   MessageService = inject(MessageService);
 
-  // ✅ Data
   users: User[] = [];
 
   roles: string[] = [];
@@ -48,14 +40,12 @@ export class NavManageUsersComponent  {
   clonedUsers: { [userId: number]: User } = {};
   deletingUsers: { [userId: number]: boolean } = {};
 
-
+  
   init(): void {
     this.loadUsers();
     this.loadRoles();
   }
 
-
-  // ✅ Load Users & Roles
   loadUsers(): void {
     this.UserService.getUsers()
     .subscribe({
@@ -71,7 +61,6 @@ export class NavManageUsersComponent  {
     });
   }
 
-  // ✅ User Management Actions
   onRowEditInit(user: User): void {
     if (user.id !== undefined) {
       this.clonedUsers[user.id] = { ...user };
@@ -131,7 +120,6 @@ export class NavManageUsersComponent  {
     this.dt.filterGlobal(this.globalFilter, 'contains');
   }
 
-  // ✅ Role badge color based on role
   getRoleSeverity(role: string) {
     switch (role) {
       case 'Admin':return 'danger';

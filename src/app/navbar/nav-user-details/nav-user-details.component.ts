@@ -3,8 +3,6 @@ import { UserService } from '../../_services/user.service';
 import { NotificationService } from '../../_services/notification.service';
 import { UserDetails } from '../../_models/userDetails';
 import { finalize } from 'rxjs/operators';
-
-// PrimeNG UI Components
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -14,31 +12,25 @@ import { ProgressSpinner } from 'primeng/progressspinner';
 @Component({
   selector: 'app-nav-user-details',
   standalone: true,
-  imports: [
-    CommonModule, FormsModule, ButtonModule, InputTextModule, ProgressSpinner
-  ],
+  imports: [CommonModule, FormsModule, ButtonModule, InputTextModule, ProgressSpinner],
   templateUrl: './nav-user-details.component.html',
   styleUrl: './nav-user-details.component.css'
 })
 export class NavUserDetailsComponent implements OnInit {
-  // ✅ Dialog visibility
   visibleDetails: boolean = false;
   isEditing: boolean = false;
   loading: boolean = false;
-
-  // ✅ Services
   UserService = inject(UserService);
   NotificationService = inject(NotificationService);
-
-  // ✅ User Data
   userDetails: UserDetails = this.createEmptyUserDetails();
   userDetailsBackup: UserDetails = { ...this.userDetails };
 
   ngOnInit(): void {
-    this.loadUserDetails();
+    if(this.UserService.currentUser()) {
+      this.loadUserDetails();
+    }
   }
 
-  // ✅ Fetch User Details
   loadUserDetails(): void {
     this.UserService.getUserDetails().subscribe({
       next: (data) => {
@@ -49,7 +41,6 @@ export class NavUserDetailsComponent implements OnInit {
     });
   }
 
-  // ✅ Open/Close Dialog
   showDetails(): void {
     this.visibleDetails = true;
   }
@@ -58,7 +49,6 @@ export class NavUserDetailsComponent implements OnInit {
     this.visibleDetails = false;
   }
 
-  // ✅ Edit & Update User Details
   editFields(): void {
     this.isEditing = true;
   }

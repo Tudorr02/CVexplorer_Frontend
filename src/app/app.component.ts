@@ -1,6 +1,6 @@
 import { Component, inject , computed, signal} from '@angular/core';
 import { NavigationEnd, RouterOutlet } from '@angular/router';
-import { NavComponent } from './navbar/nav/nav.component'; // Ensure this path is correct and the file exists
+import { NavComponent } from './navbar/nav/nav.component';
 import { Toast } from 'primeng/toast';
 import { SplitterModule } from 'primeng/splitter';
 import { DepartmentsTreeComponent } from './departments-menu/departments-tree/departments-tree.component';
@@ -24,7 +24,7 @@ import { Tab } from './_models/tab';
 })
 export class AppComponent  {
 
-  currentTab = signal<string>('/dashboard'); // Default value
+  currentTab = signal<string>('/dashboard');
   AccountService = inject(AccountService);
   Router = inject(Router);
   NodeSelectionService = inject(NodeSelectionService);
@@ -80,9 +80,9 @@ export class AppComponent  {
 
     if (isAdmin) return this.adminTabs;
 
-    const selectedNode = this.NodeSelectionService.getSelectedNode(); // ← signal() version preferred
+    const selectedNode = this.NodeSelectionService.getSelectedNode(); 
     const publicId = selectedNode?.data?.publicId;
-    const departmentId = selectedNode?.data?.type==="department"? selectedNode?.data?.id : null; // Get departmentId from selected node
+    const departmentId = selectedNode?.data?.type==="department"? selectedNode?.data?.id : null; 
     
     return this.userTabs.map(tab => {
       if (tab.label === 'Upload' && publicId) {

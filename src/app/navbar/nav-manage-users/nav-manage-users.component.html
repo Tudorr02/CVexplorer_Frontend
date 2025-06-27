@@ -2,15 +2,12 @@
 <p-table #dtUsers 
 [value]="users" 
 [scrollable]="true"
-[rows]="16"
-scrollHeight="calc(50rem - 80px - 49px - 16px - 16px)"  
+[scrollHeight]="'flex'"  
 dataKey="id"  
 editMode="row" 
 class="w-full flex flex-col h-full"
 [globalFilterFields]="['username', 'firstName', 'lastName', 'email', 'userRole']"
-[virtualScroll]="true" [virtualScrollItemSize]="80"
 >
-<!-- [loading]="loadingUsers" -->
 <ng-template #caption>
     <p-iconfield iconPosition="left">
         <p-inputicon>
@@ -37,11 +34,7 @@ class="w-full flex flex-col h-full"
 <ng-template #body let-user let-editing="editing">
     
     <tr class="h-20" [pEditableRow]="user">
-
-    <!-- Username (Read-Only) -->
     <td>{{ user.username }}</td>
-
-    <!-- First Name (Editable) -->
     <td >
         <p-cellEditor >
             <ng-template pTemplate="input">
@@ -52,8 +45,6 @@ class="w-full flex flex-col h-full"
             </ng-template>
         </p-cellEditor>
     </td>
-
-    <!-- Last Name (Editable) -->
     <td >
         <p-cellEditor>
             <ng-template pTemplate="input">
@@ -64,8 +55,6 @@ class="w-full flex flex-col h-full"
             </ng-template>
         </p-cellEditor>
     </td>
-
-    <!-- Email (Editable) -->
     <td>
         <p-cellEditor>
             <ng-template pTemplate="input">
@@ -76,8 +65,6 @@ class="w-full flex flex-col h-full"
             </ng-template>
         </p-cellEditor>
     </td>
-
-    <!-- Roles (Editable Dropdown) -->
     <td >
         <p-cellEditor >
             <ng-template pTemplate="input" >
@@ -99,8 +86,6 @@ class="w-full flex flex-col h-full"
             </ng-template>
         </p-cellEditor>
     </td>
-    
-    <!-- Actions -->
     <td >
         <div class="flex items-center justify-center gap-2">
             <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
@@ -111,8 +96,6 @@ class="w-full flex flex-col h-full"
                 icon="pi pi-times" (click)="onRowEditCancel(user)" text rounded severity="secondary"></button>
         </div>
     </td>
-
-    <!-- Delete Actions -->
     <td >
         <div class="flex items-center justify-center gap-2">
         <button *ngIf="!deletingUsers[user.id]" pButton pRipple type="button" 

@@ -1,6 +1,6 @@
 <div class="w-full h-full">
-  <p-stepper [value]="1" [linear]="true" class="flex flex-col w-full h-full justify-center items-center "  >
-    <p-step-list class="w-full" >
+  <p-stepper [value]="1" [linear]="true" class="flex flex-col w-full h-full justify-start items-center  "  >
+    <p-step-list class="w-full flex h-[10%]" >
         <p-step [value]="1">General Details</p-step>
         <p-step [value]="2">Candidate Profile</p-step>
         <p-step [value]="3">Evaluation Weights</p-step>
@@ -13,7 +13,7 @@
          
         <p-step-panel [value]="1">
           <ng-template #content let-activateCallback="activateCallback"  >
-            <div class="flex  w-[50vw]  h-[50vh] border-custom py-4 ">
+            <div class="flex w-[50rem]  2xl:w-[60rem] h-[23rem]  [@media(min-height:900px)]:h-[28rem] border-custom py-4 ">
 
               <div class="flex flex-col border-right-1 border-[var(--p-form-field-border-color)] px-4  gap-4 w-1/2 ">
                 
@@ -37,17 +37,32 @@
 
                 </div>
                     
-
-                
                 <div class="flex flex-col gap-2">
 
                   <label class="font-medium">Level</label>
-                  <p-selectButton
+                  <div class="flex flex-col  h-full w-full ">
+                    <p-selectButton
                     formControlName="level"
                     [options]="positionLevels"
                     optionLabel="label"
                     optionValue="value"
-                  />
+                    styleClass="max-[1700px]:hidden"
+                    />
+                    <div class="min-[1700px]:hidden">
+                      <p-select
+                      formControlName="level"
+                      [options]="positionLevels"
+                      optionLabel="label"
+                      optionValue="value"
+                      placeholder="Select level"
+                      panelStyleClass="w-2/3"
+                      styleClass="w-2/3"
+                      />
+                    </div>
+                  </div>
+                  
+                 
+
                 </div>
 
               </div>
@@ -107,7 +122,7 @@
         <p-step-panel [value]="2">
           <ng-template #content let-activateCallback="activateCallback">
            
-            <div class="flex  w-[50vw]  h-[50vh] border-custom py-4 ">
+            <div class="flex w-[50rem]  2xl:w-[60rem] h-[23rem]  [@media(min-height:900px)]:h-[28rem] border-custom py-4 ">
             
               <div class="flex flex-col border-right-1 border-[var(--p-form-field-border-color)] px-4  gap-4 w-1/2 ">
                 <div class="flex flex-col gap-2 ">
@@ -139,28 +154,42 @@
         
                 <div class="flex flex-col gap-2 ">
                   <label class="font-medium">Minimum Education Level</label>
+                  <div class="flex flex-col w-full">                 
                   <p-selectButton
                     formControlName="minimumEducationLevel"
                     [options]="educationLevels"
                     optionLabel="label"
                     optionValue="value"
+                    styleClass="max-[1850px]:hidden"
                   />
+
+                  <div class="min-[1850px]:hidden">
+                      <p-select
+                        formControlName="minimumEducationLevel"
+                        [options]="educationLevels"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Select education level"
+                        panelStyleClass="w-2/3"
+                        styleClass="w-2/3"
+                      ></p-select>
+                  </div>
+                  </div>
                 </div>
               </div>
               
-              <div class="gap-4 w-1/2 px-4 flex flex-col">
+              <div class="gap-4 w-1/2 px-4 flex flex-col h-full">
                   <div class="flex flex-col gap-2 ">
-                    <label class="font-medium">Soft Skills (comma-separated)</label>
+                    <label class="font-medium">Certifications (comma-separated)</label>
                     <textarea
                       rows="3"
-                      placeholder="e.g. Unit Testing, Docker, TailwindCSS"
+                      placeholder="e.g. AWS Certified Developer, Scrum Master"
                       pTextarea
                       [autoResize]="false"
-                      class="resize-none"
-                      formControlName="niceToHave"
+                      class="resize-none "
+                      formControlName="certifications"
                     ></textarea>
                   </div>
-          
                   
                   <div class="flex flex-col gap-2">
                     <label class="font-medium">Known Languages</label>
@@ -175,19 +204,20 @@
                       placeholder="Select languages"
                     ></p-multiSelect>
                   </div>
-          
-               
-                  <div class="flex flex-col gap-2">
-                    <label class="font-medium">Certifications (comma-separated)</label>
+                  
+                  <div class="flex flex-col flex-1 gap-2 min-h-1 overflow-auto">
+                    <label class="font-medium">Soft Skills (comma-separated)</label>
                     <textarea
-                      rows="3"
-                      placeholder="e.g. AWS Certified Developer, Scrum Master"
+                      
+                      placeholder="e.g. Unit Testing, Docker, TailwindCSS"
                       pTextarea
                       [autoResize]="false"
-                      class="resize-none"
-                      formControlName="certifications"
+                      class="resize-none flex-1 min-h-1"
+                      formControlName="niceToHave"
                     ></textarea>
                   </div>
+               
+                  
               </div>
             </div>
 
@@ -212,8 +242,8 @@
 
         <p-step-panel [value]="3">
             <ng-template #content let-activateCallback="activateCallback">
-              <div formGroupName="weights" class="flex  w-[50vw]  h-[50vh] border-custom py-4 ">
-                <div  class="flex flex-col border-right-1 border-[var(--p-form-field-border-color)] px-4  gap-4 w-1/2 ">
+              <div formGroupName="weights" class="flex w-[50rem]  2xl:w-[60rem] h-[23rem] [@media(min-height:900px)]:h-[28rem]  border-custom py-4 ">
+                <div  class="flex flex-col border-right-1 border-[var(--p-form-field-border-color)] px-4 gap-3  w-1/2 ">
                 
                   <ng-container *ngFor="let field of weightFields | slice: 0:4" >
                       <label class="font-medium">
@@ -227,7 +257,7 @@
                   </ng-container>
                   
                     <!-- Knob showing the total sum -->
-                  <div class="flex flex-col justify-center items-center ">
+                  <div class="flex  justify-start gap-2 mt-0  items-center">
                     <p-knob
                       formControlName="totalWeight"
                       [min]="0"
@@ -238,15 +268,17 @@
                       [valueColor]="sumWeights > 100 ? 'red' : 'var(--p-primary-color)'"
                       valueTemplate="{value}%"
                       [readonly]="true"
+                      [size]="80"
+                      textColor="var(--p-text-color)"
                     ></p-knob>
-                    <small *ngIf="positionForm.get('weights')?.hasError('sumNotOne') && positionForm.get('weights')?.touched" >
-                    All weights must sum to 100%
+                    <small *ngIf="positionForm.get('weights')?.hasError('sumNotOne') && positionForm.get('weights')?.touched" style="color: red;">
+                       All weights must sum to 100%
                     </small>
 
                   </div>
                 </div>
                 
-                <div class="flex flex-col gap-4 w-1/2 px-4">
+                <div class="flex flex-col gap-3 w-1/2 px-4">
 
                   <ng-container *ngFor="let field of weightFields | slice: 4:8" >
                       <label class="font-medium">

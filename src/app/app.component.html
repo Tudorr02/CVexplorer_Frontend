@@ -5,7 +5,7 @@
 @if(isUserLoggedIn()) {
     <div  class=" h-[var(--home-container-height)] px-[var(--home-container-padding-x)] py-[var(--home-container-padding-y)] flex justify-center items-center w-full">
     
-        <div id="main-panel" class="w-full h-full  flex py-[var(--main-panel-padding-y)]  px-[var(--main-panel-padding-x)]  bg-[var(--p-primary-contrast-color)] border-round-3xl shadow-9 ">
+        <div id="main-panel" class="w-full h-full min-h-[30rem]  flex py-[var(--main-panel-padding-y)]  px-[var(--main-panel-padding-x)]  bg-[var(--p-primary-contrast-color)] border-round-3xl shadow-9 ">
             <div id="left-panel" class="w-1/3  h-full  py-[var(--left-panel-padding-y)]  px-[var(--left-panel-padding-x)] overflow-hidden" *appHasRole="['HRUser','HRLeader'] ">
                  <app-left-menu></app-left-menu>
             </div>

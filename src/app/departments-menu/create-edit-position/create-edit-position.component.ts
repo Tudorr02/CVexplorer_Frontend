@@ -22,10 +22,10 @@ import { DepartmentTreeEventService } from '../../_services/department-tree-even
 import { PositionTreeNode } from '../../_models/positionTreeNode';
 import { Slider } from 'primeng/slider';
 import { SliderModule } from 'primeng/slider';
-import { Observable } from 'rxjs';
-import { Knob } from 'primeng/knob';
 import { KnobModule } from 'primeng/knob';
-import { TagModule } from 'primeng/tag';
+import { Select } from 'primeng/select';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-create-position',
   imports: [
@@ -41,7 +41,8 @@ import { TagModule } from 'primeng/tag';
     TextareaModule,
     MultiSelectModule,
     Slider,SliderModule,
-    KnobModule    
+    KnobModule  ,
+    Select  
   ],
 
   templateUrl: './create-edit-position.component.html',
@@ -49,8 +50,12 @@ import { TagModule } from 'primeng/tag';
 })
 export class CreateEditPositionComponent implements OnInit {
  
+  // bp = inject(BreakpointObserver);
   
-  
+  //  is2xl$ = this.bp
+  //   .observe('(min-height: 800px)')
+  //   .pipe(map(state => state.matches));
+
   positionForm!: FormGroup;
   isEditMode = false;
   private departmentId!: number;

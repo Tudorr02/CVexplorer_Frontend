@@ -24,12 +24,10 @@ export class LoginComponent {
   model = { username: '', password: '' };
 
    rootStyles = getComputedStyle(document.documentElement);
-    // conținutul semantic background → poate fi var(--p-surface-0) sau var(--p-surface-900)
     bgCssVar = this.rootStyles
     .getPropertyValue('--dark-background-color')
     .trim() || '#222222';
 
-     // 2) Transformă "#rrggbb" într-un 0xrrggbb:
      bgColorNum = parseInt(this.bgCssVar.replace('#', ''), 16);
 
   ngAfterViewInit(): void {
