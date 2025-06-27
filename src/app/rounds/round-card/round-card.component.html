@@ -6,16 +6,16 @@
     <img src='card-image.svg' alt="" width="100%" height="100%" class="object-cover" >
     
     <span class="absolute font-medium text-2xl text-white flex flex-col gap-2 items-center">
+    <p *ngIf="round.positionName?.length"  class="text-xs"> {{round.positionName}}</p>
     {{ round.name }}
      <i class="pi pi-trophy" style="font-size: 1.5rem" ></i>
     </span>
   </div>
 
-  <div class="w-3/6 h-full flex flex-col justify-center items-start  px-2">
+  <div class="w-3/6 h-full flex flex-col justify-center items-start gap-1 px-2">
     <p class="font-medium">Created: {{ round.createdAt | date:'dd/MM/yyyy' }}</p>
     <p class="font-medium">Candidates: {{round.candidatesNumber}}</p>
-    <p class="font-medium">Stage: {{round.stage}}</p>
-
+    <p class="font-medium">Stage: <p-tag [severity]="'secondary'"  value="{{round.stage}}" rounded="true" styleClass="text-xs"/></p>
   </div>
   <div class="w-1/6 h-full flex items-center justify-center">
     <p-button

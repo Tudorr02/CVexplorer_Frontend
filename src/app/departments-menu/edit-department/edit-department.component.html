@@ -1,11 +1,11 @@
 <div class="h-full w-full flex flex-col">
   <div class=" h-4/5 flex flex-col gap-3 px-4 justify-center">
       <div class="flex  items-center  justify-between ">
-        <label for="departmentName" class="font-semibold w-24">Department Name</label>
+        <label for="departmentName" class="font-medium w-24">Department Name</label>
         <input pInputText id="departmentName" [(ngModel)]="department.name" autocomplete="off" class="w-2/3" />
       </div>
       <div class="flex  items-center  justify-between ">
-        <label for="departmentAcess" class="font-semibold w-24">Grant Access</label>
+        <label for="departmentAcess" class="font-medium w-24">Grant Access</label>
         <p-multiselect [options]="this.department.departmentAccesses" 
         [(ngModel)]="selectedUsers" 
         optionLabel="userName"

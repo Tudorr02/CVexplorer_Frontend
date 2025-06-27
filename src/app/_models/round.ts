@@ -5,4 +5,5 @@ export interface Round{
     candidatesNumber: number; 
     stage: string;
     positionName?: string;
+    displayLabel?: string;
 }

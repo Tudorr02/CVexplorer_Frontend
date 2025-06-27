@@ -6,9 +6,10 @@ import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router';
+import { Tag } from 'primeng/tag';
 @Component({
   selector: 'app-round-card',
-  imports: [CardModule, CommonModule, ButtonModule],
+  imports: [Tag,CardModule, CommonModule, ButtonModule],
   templateUrl: './round-card.component.html',
   styleUrl: './round-card.component.css'
 })

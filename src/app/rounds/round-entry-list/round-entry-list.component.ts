@@ -142,6 +142,12 @@ export class RoundEntryListComponent {
   }
 
   addStageToRound(){
+
+    if(this.newStageName.length >18){
+      this.notificationService.showWarning('Stage name cannot exceed 18 characters.');
+      return;
+    }
+    
     this.roundService.addStage(this.publicId, this.newStageName).subscribe({
       next: (stage) => {
         this.stages.push(stage);

@@ -5,13 +5,9 @@
 
     
     <div *ngFor="let zone of zones ; let i = index ; let isLast = last" class="flex-none w-1/2 h-full px-4 items-center flex flex-col ">
-      <!-- <div class="h-[5%] flex items-center justify-between w-full px-4">
-        <p class="text-3xl font-medium   ">{{zone.label}}</p>
-        <p-button  icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" />
-      </div> -->
-      <div class="h-[5%] relative w-full px-4 ">
-        <p class="text-3xl font-medium absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 ">{{zone.label}}</p>
-        <p-button *ngIf="isLast && i!==0" class="absolute right-8 top-1/2 transform -translate-y-1/2" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="showDeleteDialog(zone.ordinal)" />
+      <div class="relative h-[5%]  w-full px-4  flex items-center">
+            <p class="text-3xl font-medium flex justify-center w-full">{{zone.label}}</p>
+            <p-button *ngIf="isLast && i!==0" class="absolute right-4 top-1/2 transform -translate-y-1/2" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="showDeleteDialog(zone.ordinal)" /> 
       </div>
       <div class="flex  py-2 justify-center w-full h-[95%] ">
       <div

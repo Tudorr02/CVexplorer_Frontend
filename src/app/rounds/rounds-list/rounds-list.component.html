@@ -1,23 +1,30 @@
 <div class=" flex flex-col h-full  w-full">
-  <div class="p-datatable-header">
-  <p-iconfield iconPosition="left">
-    <p-inputicon>
-        <i class="pi pi-search"></i>
-    </p-inputicon>
-    <input pInputText type="text"  placeholder="Search document..." />
-  </p-iconfield>
+  <div class="p-datatable-header flex justify-between items-center w-full">
+    <p-iconfield iconPosition="left">
+      <p-inputicon>
+          <i class="pi pi-search"></i>
+      </p-inputicon>
+      <input pInputText type="text"  [(ngModel)]="searchText" placeholder="Search round..." />
+    </p-iconfield>
+     <p-button 
+        icon="pi pi-trash" 
+        [rounded]="true" 
+        [text]="true" 
+        severity="danger" 
+        
+        (click)="openDeleteDialog()"
+        size="large"
+      />
   </div>
 
   
-    <div *ngIf="rounds.length > 0; else noRounds" class="flex-1 overflow-y-auto  flex flex-wrap  gap-y-8 pt-2  justify-center gap-x-20">  
+    <div *ngIf="rounds.length > 0; else noRounds" class="overflow-y-auto  flex flex-wrap  gap-y-8 pt-2  justify-center gap-x-20">  
     
-      @for(round of rounds; track round.publicId){
+       <ng-container *ngFor="let round of filteredRounds; trackBy: trackById">
         <div class="w-[25rem] h-[8rem]">
-          <app-round-card [round]="round">
-          </app-round-card>
-
+          <app-round-card [round]="round"></app-round-card>
         </div>
-      }
+      </ng-container>
 
     </div>
     <ng-template #noRounds>
@@ -27,3 +34,47 @@
 
 </div>
 
+
+
+
+<p-dialog 
+    [modal]="true" 
+    [(visible)]="viewDeleteDialog"
+    styleClass=" shadow-9 w-dialog-m h-dialog-sm border-none"
+    (onHide)="onDialogHide()" 
+    header="Delete Round"
+
+   >
+  <div class="h-full w-full flex flex-col">
+    <div class=" h-4/5 flex flex-col gap-3 px-4 justify-center">
+      
+      <p >Are you sure you want to delete a round? To confirm, select the round and type the name of the last created stage.</p>
+      <div class="flex items-center  justify-between ">
+        <label for="roundName" class="font-medium w-24">Round</label>
+        <p-select
+        [filter]="true"
+        [options]="this.rounds" 
+        [(ngModel)]="deletionRoundId" 
+        optionLabel="displayLabel"
+        optionValue="publicId" 
+        placeholder="Select Round"
+        appendTo="body" 
+        styleClass="w-2/3"/>
+      </div>
+      <div class="flex  items-center  justify-between ">
+        <label for="roundStage" class="font-medium w-24">Stage</label>
+        <input pInputText id="roundStage" [(ngModel)]="deletionStage" autocomplete="off" class="w-2/3" />
+      </div>
+    </div>
+      
+    <div class="h-1/5 flex justify-end items-center gap-3 ">
+        @if(loading){
+          <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration="0.5s" [style]="{ width: '3vh', height: '3vh' }" />
+        }
+        <p-button label="Cancel" (click)="onDialogHide()" severity="secondary"></p-button>
+        <p-button label="Delete" (click)="deleteRound()" severity="danger" [disabled]="loading"></p-button>
+    </div>
+  </div>
+   
+
+</p-dialog>
