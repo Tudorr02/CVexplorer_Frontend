@@ -40,47 +40,7 @@
         </div>
         
 
-
-    
-    
-
-
       </div>
-
-      <!-- <div class="flex-1">
-        <p-tree 
-        (onNodeExpand)="onNodeExpand($event)"
-        (onNodeCollapse)="onNodeCollapse($event)"
-        scrollHeight="flex"
-        [filter]="true" 
-        filterPlaceholder="Search Departments or Positions..." 
-        [value]="treeData"
-        [style]="{fontSize:'1.25rem'}"
-        selectionMode="single"
-        [(selection)]="selectedNode"
-        [metaKeySelection]="true"
-        (onNodeSelect)="onNodeSelect($event)"
-        emptyMessage="-"
-        styleClass="h-full w-full" 
-        >
-          
-          <ng-template pTemplate="default" let-node >
-            <div class=" flex items-center justify-between px-2">
-                <span >{{ node.label }}</span>
-                <p-button 
-                  icon="pi pi-ellipsis-v" 
-                  (click)="openNodeOptions($event, node)" 
-                  rounded="true" 
-                  [text]="true" 
-                  severity="secondary" />
-                  
-            </div>
-            
-          </ng-template>
-          
-        </p-tree> 
-      </div> -->
-      
     }
     @else {
     <div class="flex-1">
@@ -96,7 +56,6 @@
       [(selection)]="selectedNode"
       [metaKeySelection]="true"
       (onNodeSelect)="onNodeSelect($event)"
-      emptyMessage="-"
       styleClass="h-full w-full" 
       >
         
@@ -113,6 +72,14 @@
           </div>
           
         </ng-template>
+
+        <ng-template pTemplate="empty">
+          <div class="flex flex-col items-center justify-center mt-4">
+            <i class="pi pi-folder-open text-4xl mb-2 text-[var(--p-text-muted-color)]"></i>
+            <span class="text-lg font-medium text-[var(--p-text-muted-color)]">No departments or positions found</span>
+            <small class="text-sm font-medium text-[var(--p-text-muted-color)]">Add a department or wait for access if you’re a user.</small>
+          </div>
+        </ng-template>
         
       </p-tree> 
     </div>
@@ -120,11 +87,7 @@
   </div>
 </div>
 
-
-<!-- ✅ Menu for Parent Departments -->
 <p-menu #parentMenu [model]="parentNodeActions" [popup]="true" />
-
-<!-- ✅ Menu for Leaf Items -->
 <p-menu #leafMenu [model]="leafNodeActions" [popup]="true" />
 
 

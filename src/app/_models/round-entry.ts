@@ -3,4 +3,5 @@ export interface RoundEntry {
   candidateName: string;
   score: number;
   publicCvId: string;
+  details: string;
 }

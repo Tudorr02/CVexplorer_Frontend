@@ -16,8 +16,19 @@ export class RoundEntriesService {
 
     return this.http.put<void>(
       `${this.apiUrl}/${entryId}`,
-      null,               // no request body
-      { params }         // selected goes in the query string
+      null,               
+      { params }         
     );
   }
+
+  updateRoundEntryDetails(entryId: number, details:string): Observable<string> {
+    const params = new HttpParams().set('details', details);
+    return this.http.put(
+      `${this.apiUrl}/${entryId}/Details`,
+      null,               
+      { params , responseType: 'text' } // Specify response type as text,
+        
+    );
+  }
+
 }

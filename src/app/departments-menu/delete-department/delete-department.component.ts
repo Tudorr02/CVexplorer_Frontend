@@ -5,7 +5,8 @@ import { DepartmentService } from '../../_services/department.service';
 import { NotificationService } from '../../_services/notification.service';
 import { finalize } from 'rxjs';
 import { ProgressSpinner } from 'primeng/progressspinner';
-
+import { Router } from '@angular/router';
+import { NodeSelectionService } from '../../_services/node-selection.service';
 @Component({
   selector: 'app-delete-department',
   imports: [ProgressSpinner, ButtonModule],
@@ -20,6 +21,8 @@ export class DeleteDepartmentComponent {
   departmentService = inject(DepartmentService);
   notificationService = inject(NotificationService);
   loading: boolean = false;
+  private router = inject(Router);
+  nodeService = inject(NodeSelectionService);
 
   deleteDepartment() {
     if (!this.departmentNode || !this.departmentNode.key) {
@@ -35,6 +38,8 @@ export class DeleteDepartmentComponent {
       .subscribe({
         next: () => {
           this.notificationService.showSuccess('Department deleted successfully');
+          this.router.navigate(['/dashboard']);
+          this.nodeService.setSelectedNodeNull(); // ✅ Clear selected node after deletion
         },
         error: (err) => {
           this.notificationService.showError('Failed to delete department. ' + err.error.message);

@@ -4,9 +4,18 @@ import { environment } from '../../environments/environment';
 import { map, Observable } from 'rxjs';
 import { CV } from '../_models/cv';
 
+
+export interface DeleteCvResult {
+  success: boolean;
+  message?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
+
+
+
 export class CvService {
   private http =  inject(HttpClient);
   private apiUrl = `${environment.apiBaseUrl}/CVs`;
@@ -41,11 +50,12 @@ export class CvService {
 
 
 
+
   deleteCVs(
     cvPublicIds: string[],
     positionPublicId?: string,
     departmentId?: number
-  ): Observable<boolean> {
+  ): Observable<DeleteCvResult> {
     // Construim query-params
     let params = new HttpParams();
     if (positionPublicId) {
@@ -56,10 +66,10 @@ export class CvService {
     }
 
     // Angular HttpClient suportă DELETE cu body din v7+:
-    return this.http.delete<boolean>(this.apiUrl, {
+    return this.http.delete<DeleteCvResult>(this.apiUrl, {
       params,
-      body: cvPublicIds
-    });
+      body: cvPublicIds,
+  }); 
   }
 
   

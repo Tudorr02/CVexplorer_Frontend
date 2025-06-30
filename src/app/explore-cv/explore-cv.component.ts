@@ -18,9 +18,11 @@ import { timer, forkJoin, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { CvEvaluationComponent } from '../cv-evaluation/cv-evaluation.component';
 import { Tag } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
+import { DeleteCvResult } from '../_services/cv.service'; // Import the interface for delete result
 @Component({
   selector: 'app-explore-cv',
-  imports: [Tag,CvEvaluationComponent,ProgressSpinner, DialogModule, TableModule, ButtonModule, CommonModule, IconField, InputIcon, InputTextModule, FormsModule, CvEvaluationComponent],
+  imports: [TooltipModule,Tag,CvEvaluationComponent,ProgressSpinner, DialogModule, TableModule, ButtonModule, CommonModule, IconField, InputIcon, InputTextModule, FormsModule, CvEvaluationComponent],
   templateUrl: './explore-cv.component.html',
   styleUrl: './explore-cv.component.css'
 })
@@ -38,13 +40,13 @@ export class ExploreCvComponent implements OnInit , AfterViewInit , OnDestroy {
 
   cvs: CV[] = [];
   selectedCVs: CV[] = [];
-  evaluatedCv?: CV; // For the evaluation dialog
+  evaluatedCv?: CV;
 
-  viewCvEvaluation: boolean = false; // For the dialog
-  viewDeleteDialog: boolean = false; // For the delete dialog
+  viewCvEvaluation: boolean = false;
+  viewDeleteDialog: boolean = false;
 
 
-  @ViewChild('dtCVs') dt!: Table; // Reference to PrimeNG Table
+  @ViewChild('dtCVs') dt!: Table;
   globalFilter: string = '';
   
   cdr = inject(ChangeDetectorRef);
@@ -68,21 +70,19 @@ export class ExploreCvComponent implements OnInit , AfterViewInit , OnDestroy {
 
   ngAfterViewInit(): void {
     this.updateHeight();
-
-    // dacă vrei să reacţionezi când utilizatorul redimensionează fereastra
     this.ro = new ResizeObserver(() => this.updateHeight());
     this.ro.observe(this.wrapper.nativeElement);
   }
 
   private updateHeight(): void {
     if (!this.wrapper) return;
-    const h = this.wrapper.nativeElement.offsetHeight;  // pixeli incluşi padding
-    this.scrollHeight = `${Math.max(h - 65, 200)}px`;   // -65 px header intern
-    this.cdr.detectChanges();                           // forţează aplicaţia
+    const h = this.wrapper.nativeElement.offsetHeight;
+    this.scrollHeight = `${Math.max(h - 65, 200)}px`;
+    this.cdr.detectChanges();                         
   }
 
   ngOnDestroy(): void {
-    this.ro?.disconnect();   // curăţă observaţia de resize
+    this.ro?.disconnect();
   }
  
   private loadCvs() {
@@ -114,37 +114,36 @@ export class ExploreCvComponent implements OnInit , AfterViewInit , OnDestroy {
     this.loading = true;
     const toDelete = this.selectedCVs.map(cv => cv.publicId!);
 
-    // 1) stream-ul HTTP, cu catchError pentru a emite false în loc de eroare
     const delete$ = this.cvService
       .deleteCVs(toDelete, this.positionPublicId, this.departmentId)
       .pipe(
         catchError(err => {
-          // notificăm eroarea, dar continuăm stream-ul cu `false`
-          this.notificationService.showError('Failed to delete CVs');
-          return of(false);
+          this.notificationService.showError(`Failed to delete Documents`);
+          return of({ success: false } as DeleteCvResult);
         })
       );
 
-    // 2) timer-ul care emite după MIN_SPINNER_MS și apoi se completează
     const spinnerMin$ = timer(this.MIN_SPINNER_MS);
 
-    // 3) așteptăm ambele să se termine
     forkJoin([delete$, spinnerMin$])
       .pipe(
         finalize(() => {
-          // se execută când *ambele* s-au completat
           this.loading = false;
         })
       )
-      .subscribe(([success]) => {
-        // notificăm rezultatul delete$
-        if (success) {
-          this.notificationService.showSuccess('Documents deleted successfully');
+      .subscribe(([result]) => {
+        if (result.success) {
+
+          if(!result.message) {
+            this.notificationService.showSuccess('Documents deleted successfully');
+          }
+          else {
+            this.notificationService.showWarning(result.message);
+          }
         } else {
           this.notificationService.showInfo('No documents were deleted');
         }
 
-        // cleanup-ul comun
         this.selectedCVs = [];
         this.loadCvs();
         this.dt.clear();

@@ -1,26 +1,38 @@
 
 <div class=" h-[5rem] rounded-3xl flex items-center px-2 gap-2 bg-[var(--p-content-background)]" cdkDrag>
-    <div  class="flex justify-center">
+    <div class="w-[60%] flex justify-start items-center gap-2">
         <p-avatar icon="pi pi-user" size="large" shape="circle" />
+        <strong  >{{ entry.candidateName}}</strong>
     </div>
-    <div class="w-3/6 flex justify-start">
-        <strong  >{{ entry.candidateName }}</strong>
-    </div>
-    <div class="flex flex-col w-1/6 justify-center items-center">
+    <div class="flex flex-col w-[20%] justify-center items-center">
         <p class="text-sm font-medium">Score</p>
         <span > {{ entry.score }}</span>
        
     </div>  
-     <div class="flex flex-col w-1/6 justify-center items-center">
-    <p-button 
-        icon="pi pi-file-pdf" 
-        [rounded]="true" 
-        severity="danger"
-        [text]="true"
-        (onClick)="viewCv = true" 
-        />
-    </div>  
-  
+ 
+    <div class="flex flex-col w-[10%] justify-center items-center">
+        <p-toast />
+        <p-confirmpopup  key="entryDetails" appendTo="body">
+        <ng-template #content let-message >
+            <div class="flex flex-col gap-2 font-medium">
+                <p>Candidate Details</p>
+                <textarea rows="3" cols="30" pTextarea [(ngModel)]="entry.details" [autoResize]="true"></textarea>
+            </div>
+        </ng-template>
+        </p-confirmpopup>
+        <p-button #editBtn (onClick)="confirm($event)" icon="pi pi-file-edit" [rounded]="true" [text]="true" severity="secondary" />
+    </div>
+
+    <div class="flex flex-col w-[10%]  justify-center items-center">
+        <p-button 
+            icon="pi pi-file-pdf" 
+            [rounded]="true" 
+            severity="danger"
+            [text]="true"
+            (onClick)="viewCv = true" 
+            />
+    </div> 
+    
 </div>
 
 
@@ -36,3 +48,5 @@
  
 
 </p-dialog>
+
+

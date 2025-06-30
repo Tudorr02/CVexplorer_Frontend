@@ -1,9 +1,6 @@
 
 <div class=" w-full h-full  gap-2 overflow-x-auto">
-  <div class="flex flex-nowrap h-full  items-center ">
-   
-
-    
+  <div class="flex flex-nowrap h-full  items-center ">    
     <div *ngFor="let zone of zones ; let i = index ; let isLast = last" class="flex-none w-1/2 h-full px-4 items-center flex flex-col ">
       <div class="relative h-[5%]  w-full px-4  flex items-center">
             <p class="text-3xl font-medium flex justify-center w-full">{{zone.label}}</p>
@@ -21,8 +18,6 @@
         (cdkDropListDropped)="drop($event)"
         >
         
-        
-
       <div class=" p-2 flex flex-col h-full gap-2 overflow-y-auto">
 
         <ng-container *ngFor="let entry of entriesByZone[i]; trackBy: trackByEntryIdx">

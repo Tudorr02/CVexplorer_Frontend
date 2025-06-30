@@ -17,6 +17,7 @@
 
         <div class="flex gap-[var(--nav-items-gap)]">
             <p-button
+            *ngIf="!isLoginRoute"
             label="{{ username() }}"
             [size]="'small'"
             variant="text"
@@ -41,12 +42,14 @@
                 [size]="'small'"
                 (onClick)="openEnrollUserDialog()"
             ></p-button>
+
             <p-button
                 [icon]="'pi ' + (isDarkMode ? 'pi-sun' : 'pi-moon')"
                 variant="outlined"
                 [size]="'small'"
                 (onClick)="toggleTheme()"/>
             <p-button
+                *ngIf="!isLoginRoute"
                 label="Sign Out"
                 [size]="'small'"
                 severity="danger"

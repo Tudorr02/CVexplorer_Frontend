@@ -5,6 +5,8 @@ import { PositionService } from '../../_services/position.service';
 import { NotificationService } from '../../_services/notification.service';
 import { finalize } from 'rxjs';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { Router } from '@angular/router';
+import { NodeSelectionService } from '../../_services/node-selection.service';
 
 @Component({
   selector: 'app-delete-position',
@@ -20,6 +22,8 @@ export class DeletePositionComponent {
   positionService = inject(PositionService);
   notificationService = inject(NotificationService);
   loading: boolean = false;
+   private router = inject(Router);
+    nodeService = inject(NodeSelectionService);
 
   confirmDelete() {
     if (!this.positionNode?.data?.publicId) {
@@ -38,6 +42,8 @@ export class DeletePositionComponent {
       .subscribe({
         next: () => {
           this.notificationService.showSuccess('Position deleted successfully');
+          this.router.navigate(['/dashboard']);
+          this.nodeService.setSelectedNodeNull(); 
         },
         error: (err) => {
           this.notificationService.showError('Failed to delete position. ' + err.error?.message);

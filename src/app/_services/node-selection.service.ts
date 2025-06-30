@@ -11,6 +11,10 @@ export class NodeSelectionService {
     this.selectedNodeSignal.set(node); // ✅ call .set()
   }
 
+  setSelectedNodeNull() {
+    this.selectedNodeSignal.set(null); // ✅ call .set()
+  }
+
   getSelectedNode(): TreeNode | null {
     return this.selectedNodeSignal(); // ✅ call the signal as a function
   }

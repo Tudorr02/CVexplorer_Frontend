@@ -50,12 +50,14 @@ body , app-root,html{
 
 
 .my-app-light {
-  background-color: white;
+  --bg-color: var(--light-background-color);
+  background-color: var(--bg-color);
   --pulse-shadow-color: rgba(0, 0, 0, 0.3);
 }
 
 .my-app-dark {
-  background-color: var(--dark-background-color);
+  --bg-color:  var(--dark-background-color);
+  background-color: var(--bg-color);
   --pulse-shadow-color: rgba(255, 255, 255, 0.4);
 }
 html {

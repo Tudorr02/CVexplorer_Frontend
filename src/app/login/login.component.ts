@@ -14,8 +14,6 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   
-  value1: string | undefined;
-
   @ViewChild('vantaBackground', { static: true }) vantaRef!: ElementRef;
 
   AccountServices = inject(AccountService);
@@ -23,14 +21,12 @@ export class LoginComponent {
 
   model = { username: '', password: '' };
 
-   rootStyles = getComputedStyle(document.documentElement);
-    bgCssVar = this.rootStyles
-    .getPropertyValue('--dark-background-color')
-    .trim() || '#222222';
-
-     bgColorNum = parseInt(this.bgCssVar.replace('#', ''), 16);
+  rootStyles = getComputedStyle(document.documentElement);
+  bgCssVar = this.rootStyles.getPropertyValue('--dark-background-color').trim() || '#222222';
+  bgColorNum = parseInt(this.bgCssVar.replace('#', ''), 16);
 
   ngAfterViewInit(): void {
+
     this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js')
       .then(() => this.loadScript('https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.halo.min.js'))
       .then(() => {
@@ -88,16 +84,16 @@ export class LoginComponent {
   }
 
   triggerButtonAnimation() {
-    const button = document.querySelector('.login-button'); // Target the whole button
-    const label = document.querySelector('.login-button .p-button-label'); // Target only the text
+    const button = document.querySelector('.login-button');
+    const label = document.querySelector('.login-button .p-button-label');
   
     if (button && label) {
-      button.classList.add('shake'); // Apply shake to the button
-      label.classList.add('text-red'); // Change text color
+      button.classList.add('shake'); 
+      label.classList.add('text-red');
   
       setTimeout(() => {
-        button.classList.remove('shake'); // Remove shake after animation
-        label.classList.remove('text-red'); // Reset text color
+        button.classList.remove('shake');
+        label.classList.remove('text-red'); 
       }, 500);
     }
   }
