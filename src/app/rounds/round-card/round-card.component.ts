@@ -20,8 +20,6 @@ export class RoundCardComponent implements OnInit {
   private roundService = inject(RoundService);
   private notificationService = inject(NotificationService);
   router = inject(Router);
-  
-  //loading = true;
   error?: string;
 
   ngOnInit(): void {
@@ -29,7 +27,6 @@ export class RoundCardComponent implements OnInit {
   }
 
   openRound(id: string) {
-    // navigates to /round/{publicId}
     this.router.navigate(['/evaluation-rounds', id]);
   }
 }

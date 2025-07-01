@@ -26,7 +26,7 @@ export class RoundEntriesService {
     return this.http.put(
       `${this.apiUrl}/${entryId}/Details`,
       null,               
-      { params , responseType: 'text' } // Specify response type as text,
+      { params , responseType: 'text' } 
         
     );
   }

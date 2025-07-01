@@ -33,7 +33,6 @@ export class AdminService {
     return this.http.get<string[]>(`${this.apiUrl}/Roles`);
   }
 
-  // ✅ COMPANIES MANAGEMENT
   getCompanies(): Observable<CompanyManagement[]> {
     return this.http.get<CompanyManagement[]>(`${this.apiUrl}/Companies`);
   }

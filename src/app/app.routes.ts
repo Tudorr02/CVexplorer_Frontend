@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { AppComponent } from './app.component';
 import { authGuard } from './_guards/auth.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { roleGuard } from './_guards/role.guard';
@@ -15,10 +13,8 @@ import { UploadCvComponent } from './upload-cv/upload-cv.component';
 import { tabGuard } from './_guards/tab.guard';
 import { ExploreCvComponent } from './explore-cv/explore-cv.component';
 import { RoundsListComponent } from './rounds/rounds-list/rounds-list.component';
-import { Round } from './_models/round';
 import { RoundEntryListComponent } from './rounds/round-entry-list/round-entry-list.component';
 import { OAuthCallbackComponent } from './oauth-callback/oauth-callback.component';
-import { NavComponent } from './navbar/nav/nav.component';
 export const routes: Routes = [
 
 
@@ -79,29 +75,8 @@ export const routes: Routes = [
         canActivate: [authGuard, tabGuard],
     },
     { path: 'oauth-callback', component: OAuthCallbackComponent },
-
-
-
-
-
-
-
-
-
-
-
-
-
     { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
-    { path: 'not-found', component: NotFoundComponent }, // ✅ Define a separate route for the 404 page
-    { path: '**',redirectTo:'/not-found', pathMatch: 'full' } ,//  Catch-all route for 404 pages
-
-
-
-
-
-
-
-    
+    { path: 'not-found', component: NotFoundComponent }, 
+    { path: '**',redirectTo:'/not-found', pathMatch: 'full' } 
 
 ];

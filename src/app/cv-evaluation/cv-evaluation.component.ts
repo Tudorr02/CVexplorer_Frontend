@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Evaluation, CvEvaluationResult } from '../_models/evaluation';
 import { Position } from '../_models/position';
@@ -43,11 +43,9 @@ export class CvEvaluationComponent implements OnChanges{
 
     ngOnChanges(changes: SimpleChanges): void {
     if (changes['cv'] && this.cv) {
-      // cv a primit o valoare nouă, apelăm backend-ul
       this.getEvaluationResult(this.cv.publicId!);
     }
     if (changes['roundEntry'] && this.roundEntry) {
-      // roundEntry a primit o valoare nouă, apelăm backend-ul
       this.getEvaluationResult(this.roundEntry.publicCvId);
     }
   }

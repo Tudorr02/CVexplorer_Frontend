@@ -20,15 +20,14 @@ import { DepartmentAccess } from '../../_models/department-access';
 })
 export class EditDepartmentComponent {
 
-  @Input() departmentNode!: TreeNode; // ✅ Input: Selected department to edit
-  @Output() departmentEdited = new EventEmitter<void>(); // ✅ Output: Notify parent when Edit is done
-
+  @Input() departmentNode!: TreeNode;
+  @Output() departmentEdited = new EventEmitter<void>();
   notificationService = inject(NotificationService);
   departmentService = inject(DepartmentService);
 
   loading: boolean = false;
   department: Department = { name: '', departmentAccesses: [] };
-  selectedUsers:  number[] = []; // ✅ Store selected user IDs
+  selectedUsers:  number[] = []; 
 
   
   init() {
@@ -62,11 +61,10 @@ export class EditDepartmentComponent {
       return;
     }
 
-    // ✅ Assign selected users to departmentAccesses
     department.departmentAccesses = this.selectedUsers.map(userId => ({
       userId,
       userName: this.department.departmentAccesses?.find(user => user.userId === userId)?.userName || '',
-      hasAccess: true, // ✅ Mark as having access
+      hasAccess: true, 
     }));
 
     this.loading = true;
@@ -85,7 +83,6 @@ export class EditDepartmentComponent {
 
   }
 
-  // ✅ Helper method to check if department access changed
 isAccessUnchanged(): boolean {
   const currentAccess = (this.department.departmentAccesses ?? []).filter(da => da.hasAccess).map(da => da.userId).sort();
   const selectedAccess = [...this.selectedUsers].sort();

@@ -18,11 +18,9 @@ interface PositionPayload {
 
 export class DepartmentTreeEventService {
 
-   // 🔁 Stream pentru adăugarea unei poziții
    private addPositionSubject = new Subject<PositionPayload>();
    addPosition$ = this.addPositionSubject.asObservable();
  
-   // 🔔 Emitere semnal pentru adăugare poziție
    addPositionToTree(payload: PositionPayload) {
     this.addPositionSubject.next(payload);
   }

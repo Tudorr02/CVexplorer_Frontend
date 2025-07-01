@@ -7,7 +7,6 @@ import { finalize } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Department } from '../../_models/department';
-import { DepartmentAccess } from '../../_models/department-access';
 import { MultiSelect } from 'primeng/multiselect';
 
 @Component({
@@ -21,7 +20,7 @@ export class AddDepartmentComponent {
   notificationService = inject(NotificationService);
   departmentService = inject(DepartmentService);
   loading: boolean = false;
-  selectedUsers: number[] = []; // ✅ Stores only selected users by ID
+  selectedUsers: number[] = []; 
 
   department:Department = { name: '', departmentAccesses: [] };
   @Output() departmentAdded = new EventEmitter<void>();
@@ -40,11 +39,10 @@ export class AddDepartmentComponent {
       return;
     }
 
-    // ✅ Assign selected users to departmentAccesses
     this.department.departmentAccesses = this.department.departmentAccesses?.map(user => ({
       userId: user.userId,
       userName: user.userName,
-      hasAccess: this.selectedUsers.includes(user.userId) // ✅ True if in selectedUsers
+      hasAccess: this.selectedUsers.includes(user.userId) 
     }));
 
     

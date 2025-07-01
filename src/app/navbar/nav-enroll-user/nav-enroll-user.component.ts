@@ -3,7 +3,6 @@ import { UserService } from '../../_services/user.service';
 import { NotificationService } from '../../_services/notification.service';
 import { RoleService } from '../../_services/role.service';
 import { UserEnrollmentCompany } from '../../_models/userEnrollmentCompany';
-// PrimeNG UI Components
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -24,19 +23,16 @@ import { SelectButton } from 'primeng/selectbutton';
   styleUrl: './nav-enroll-user.component.css'
 })
 export class NavEnrollUserComponent  {
-  // ✅ Dialog visibility
 
   @Output() userEnrolled: EventEmitter<void> = new EventEmitter();
   
   visibleEnrollUser: boolean = false;
   loading: boolean = false;
 
-  // ✅ Services
   UserService = inject(UserService);
   RoleService = inject(RoleService);
   NotificationService = inject(NotificationService);
 
-  // ✅ User Enrollment Data
   roles: string[] = [];
   userEnrollment: UserEnrollmentCompany = {
     username: '',
@@ -49,7 +45,6 @@ export class NavEnrollUserComponent  {
     this.resetForm();
   }
 
-  // ✅ Load Available Roles
   loadRoles(): void {
     this.RoleService.getRoles().subscribe({
       next: (roles) => this.roles = roles,
@@ -57,14 +52,10 @@ export class NavEnrollUserComponent  {
     });
   }
 
-
-
-  // ✅ Reset Form
   private resetForm(): void {
     this.userEnrollment = { username: '', password: '', userRole: '' };
   }
 
-  // ✅ Enroll User
   enrollUser(): void {
     if (!this.userEnrollment.username || !this.userEnrollment.password || this.userEnrollment.userRole === '') {
       this.NotificationService.showError('All fields are required.');
@@ -84,7 +75,6 @@ export class NavEnrollUserComponent  {
     });
   }
 
-   // ✅ Role badge color based on role
    getRoleSeverity(role: string) {
     switch (role) {
       case 'Admin':return 'danger';

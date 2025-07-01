@@ -154,12 +154,10 @@
                 </td>
                 <td class="px-0">
                     <div class="flex items-center justify-center gap-2">
-                        <!-- Default Mode: Show Trash Icon -->
                         <button *ngIf="!deletingUsers[user.id]" pButton pRipple type="button" 
                             icon="pi pi-trash" (click)="onRowDeleteInit(user.id)" text rounded severity="danger">
                         </button>
 
-                        <!-- Delete Mode: Show Confirm & Cancel -->
                         <ng-container *ngIf="deletingUsers[user.id]">
                             <button pButton pRipple type="button" pSaveEditableRow 
                                 icon="pi pi-check" (click)="onRowDeleteConfirm(user.id,user.username)" 

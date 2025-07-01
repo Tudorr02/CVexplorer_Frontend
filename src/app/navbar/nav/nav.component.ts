@@ -57,7 +57,6 @@ export class NavComponent implements OnInit {
     this.applyTheme(localStorage.getItem('theme') === 'dark');
   }
 
-  // ✅ Apply Theme
   toggleTheme(): void {
     this.applyTheme(!this.isDarkMode);
     localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');

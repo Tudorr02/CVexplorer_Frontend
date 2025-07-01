@@ -19,22 +19,18 @@ export class DepartmentService {
     return this.http.get<DepartmentTreeNode[]>(`${this.apiUrl}/DepartmentsTree`);
   }
 
-  /** ✅ Get the list of departments (Requires HRLeader role) */
   getDepartments(): Observable<Department[]> {
     return this.http.get<Department[]>(`${this.apiUrl}`);
   }
 
-  /** ✅ Create a new department */
   createDepartment(dto : Department): Observable<Department> {
     return this.http.post<Department>(`${this.apiUrl}`, dto);
   }
 
-  /** ✅ Update an existing department */
   updateDepartment(departmentId: number, dto: Department): Observable<Department> {
     return this.http.put<Department>(`${this.apiUrl}/${departmentId}`, dto);
   }
 
-  /** ✅ Delete a department */
   deleteDepartment(departmentId: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${departmentId}`);
   }

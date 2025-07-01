@@ -1,4 +1,4 @@
-import { Component, OnInit , ViewChild, inject } from '@angular/core';
+import { Component, OnInit , inject } from '@angular/core';
 import { PositionLevel } from '../../enums/position-level.enum';
 import { EducationLevel } from '../../enums/education-level.enum';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -24,8 +24,7 @@ import { Slider } from 'primeng/slider';
 import { SliderModule } from 'primeng/slider';
 import { KnobModule } from 'primeng/knob';
 import { Select } from 'primeng/select';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { map } from 'rxjs/operators';
+
 @Component({
   selector: 'app-create-position',
   imports: [
@@ -50,12 +49,6 @@ import { map } from 'rxjs/operators';
 })
 export class CreateEditPositionComponent implements OnInit {
  
-  // bp = inject(BreakpointObserver);
-  
-  //  is2xl$ = this.bp
-  //   .observe('(min-height: 800px)')
-  //   .pipe(map(state => state.matches));
-
   positionForm!: FormGroup;
   isEditMode = false;
   private departmentId!: number;
@@ -103,7 +96,6 @@ export class CreateEditPositionComponent implements OnInit {
         .entries(vals)
         .filter(([key]) => key !== 'totalWeight')
         .reduce((acc, [, v]) => acc + Number(v), 0);
-      // push into totalWeight _without_ retriggering valueChanges
       weightsGroup.get('totalWeight')!
                   .setValue(sum, { emitEvent: false });
     });
@@ -267,7 +259,6 @@ export class CreateEditPositionComponent implements OnInit {
         break;
     }
   
-    // 2) Marchează fiecare control ca touched și recalculăm validarea
     fields.forEach(path => {
       const ctrl = this.positionForm.get(path);
       if (ctrl) {
@@ -323,7 +314,7 @@ export class CreateEditPositionComponent implements OnInit {
     const total = this.responsibilities.length;
   
     if (total > 1) {
-      this.responsibilities.removeAt(total - 1); // removes the last one
+      this.responsibilities.removeAt(total - 1); 
     } else {
       this.notificationService.showWarning('At least one responsibility is required');
     }

@@ -15,8 +15,8 @@ import { NodeSelectionService } from '../../_services/node-selection.service';
 })
 export class DeleteDepartmentComponent {
 
-  @Input() departmentNode?: TreeNode; // ✅ Input: Selected department to delete
-  @Output() departmentDeleted = new EventEmitter<void>(); // ✅ Output: Notify parent when deleted
+  @Input() departmentNode?: TreeNode; 
+  @Output() departmentDeleted = new EventEmitter<void>(); 
 
   departmentService = inject(DepartmentService);
   notificationService = inject(NotificationService);
@@ -30,7 +30,7 @@ export class DeleteDepartmentComponent {
       return;
     }
 
-    const departmentId = Number(this.departmentNode.key); // ✅ Convert key to number
+    const departmentId = Number(this.departmentNode.key); 
 
     this.loading = true;
     this.departmentService.deleteDepartment(departmentId)
@@ -39,7 +39,7 @@ export class DeleteDepartmentComponent {
         next: () => {
           this.notificationService.showSuccess('Department deleted successfully');
           this.router.navigate(['/dashboard']);
-          this.nodeService.setSelectedNodeNull(); // ✅ Clear selected node after deletion
+          this.nodeService.setSelectedNodeNull();
         },
         error: (err) => {
           this.notificationService.showError('Failed to delete department. ' + err.error.message);

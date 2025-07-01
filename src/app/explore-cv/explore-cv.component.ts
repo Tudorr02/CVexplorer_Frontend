@@ -19,7 +19,7 @@ import { catchError, finalize } from 'rxjs/operators';
 import { CvEvaluationComponent } from '../cv-evaluation/cv-evaluation.component';
 import { Tag } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-import { DeleteCvResult } from '../_services/cv.service'; // Import the interface for delete result
+import { DeleteCvResult } from '../_services/cv.service'; 
 @Component({
   selector: 'app-explore-cv',
   imports: [TooltipModule,Tag,CvEvaluationComponent,ProgressSpinner, DialogModule, TableModule, ButtonModule, CommonModule, IconField, InputIcon, InputTextModule, FormsModule, CvEvaluationComponent],

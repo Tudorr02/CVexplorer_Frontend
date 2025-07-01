@@ -11,7 +11,6 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { Table } from 'primeng/table';
 import { CompanyManagement } from '../../_models/companyManagement';
-import { finalize } from 'rxjs';
 @Component({
   selector: 'app-manage-companies',
   imports: [IconField,InputIcon,CommonModule, FormsModule, TableModule, ToastModule, ButtonModule, InputTextModule],
@@ -23,7 +22,7 @@ export class ManageCompaniesComponent implements OnInit {
   private adminService = inject(AdminService);
   private notificationService = inject(NotificationService);
 
-  @ViewChild('dtCompanies') dt!: Table; // Reference to PrimeNG Table
+  @ViewChild('dtCompanies') dt!: Table; 
 
   cdr = inject(ChangeDetectorRef);
   private ro?: ResizeObserver;   
@@ -46,21 +45,20 @@ export class ManageCompaniesComponent implements OnInit {
   ngAfterViewInit(): void {
     this.updateHeight();
 
-    // dacă vrei să reacţionezi când utilizatorul redimensionează fereastra
     this.ro = new ResizeObserver(() => this.updateHeight());
     this.ro.observe(this.wrapper.nativeElement);
   }
 
   private updateHeight(): void {
     if (!this.wrapper) return;
-    const h = this.wrapper.nativeElement.offsetHeight;  // pixeli incluşi padding
+    const h = this.wrapper.nativeElement.offsetHeight;  
     this.scrollHeight = `${Math.max(h - 49 - 16, 300)}px`;   
     console.log('Scroll height updated:', h);
-    this.cdr.detectChanges();                           // forţează aplicaţia
+    this.cdr.detectChanges();                           
   }
 
   ngOnDestroy(): void {
-    this.ro?.disconnect();   // curăţă observaţia de resize
+    this.ro?.disconnect();  
   }
 
   addCompanyInit() {

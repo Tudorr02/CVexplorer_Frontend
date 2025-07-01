@@ -27,17 +27,14 @@ export class UserService {
     return this.http.put<UserDetails>(`${this.apiUrl}/Me`, userDetails);
   }
   
-  // ✅ Fetch all users (HR Leaders only)
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}`);
   }
 
-  // ✅ Update a specific user (HR Leaders only)
   updateUser(userId: number, dto: User): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${userId}`, dto);
   }
 
-  // ✅ Delete a specific user (HR Leaders only)
   deleteUser(userId: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${userId}`);
   }

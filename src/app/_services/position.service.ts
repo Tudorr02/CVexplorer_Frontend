@@ -18,17 +18,14 @@ export class PositionService {
     return this.http.post<Position>(url, dto);
   }
 
-  // ✅ Get a position by publicId
   getPosition(publicId: string): Observable<Position> {
     return this.http.get<Position>(`${this.apiUrl}/${publicId}`);
   }
 
-  // ✅ Update a position
   updatePosition(publicId: string, dto: Position): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${publicId}`, dto);
   }
 
-  // ✅ Delete a position
   deletePosition(publicId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${publicId}`);
   }

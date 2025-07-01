@@ -5,7 +5,6 @@ import { RoundService } from '../../_services/round.service';
 import { RoundEntry } from '../../_models/round-entry';
 import { NotificationService } from '../../_services/notification.service';
 import { PickListModule } from 'primeng/picklist';
-import { CardModule } from 'primeng/card';
 import { AvatarModule } from 'primeng/avatar';
 import { RoundEntryCardComponent } from "../round-entry-card/round-entry-card.component";
 import { ScrollPanelModule } from 'primeng/scrollpanel';

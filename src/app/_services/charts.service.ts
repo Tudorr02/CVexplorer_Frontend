@@ -31,7 +31,6 @@ export class ChartsService {
     if (departmentId != null) {
       params = params.set('departmentId', departmentId.toString());
     }
-    // Execute HTTP request outside Angular zone to reduce change detection cycles
     return this.zone.runOutsideAngular(() =>
       this.http.get<ChartCounts>(`${this.apiUrl}/GetCandidatesSeniority`, { params })
     );

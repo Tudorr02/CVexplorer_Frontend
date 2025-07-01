@@ -22,8 +22,6 @@ import { finalize, timeout } from 'rxjs';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { DepartmentTreeEventService } from '../../_services/department-tree-event.service';
-import { Position } from '../../_models/position';
-import { PositionTreeNode } from '../../_models/positionTreeNode';
 import { DeletePositionComponent } from '../delete-position/delete-position.component';
 import { NodeSelectionService } from '../../_services/node-selection.service';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -56,7 +54,6 @@ export class DepartmentsTreeComponent implements OnInit {
   selectedNode!: TreeNode;
   parentNodeActions: MenuItem[] = [];
 
-// ✅ Actions for Leaf Positions
   leafNodeActions: MenuItem[] = [
       {label: 'Edit Position', icon: 'pi pi-pencil' , command: () => this.editPosition(this.selectedNode) },
       {label: 'Delete Position', icon: 'pi pi-trash', command: () => this.openDeletePositionDialog(this.selectedNode)}
@@ -74,7 +71,7 @@ export class DepartmentsTreeComponent implements OnInit {
   ngOnInit() {
     this.fetchTreeData();
     this.setupContextMenu();
-    this.subscribeToPositionAdditions(); // Subscribe to position additions
+    this.subscribeToPositionAdditions();
   
   }
 
@@ -96,7 +93,7 @@ export class DepartmentsTreeComponent implements OnInit {
     });
   }
 
-  // ✅ Function to build context menu based on user role
+
 setupContextMenu() {
   const userRole = this.accountService.currentUser()?.role || '';
 
@@ -104,7 +101,7 @@ setupContextMenu() {
     { label: 'Add Position', icon: 'pi pi-plus', command: () => this.addPosition(this.selectedNode)  }
   ];
 
-  // ✅ Add "Rename" and "Delete" only if user has 'HRLeader' role
+  
   if (userRole === "HRLeader") {
     this.parentNodeActions.push(
       { label: 'Edit Department', icon: 'pi pi-pencil', command: () => this.openEditDepartmentDialog(this.selectedNode!) },
@@ -147,7 +144,7 @@ setupContextMenu() {
             label: department.name,  
             icon: 'pi pi-folder',
             data: {id : department.id, type: 'department'},
-            expanded: !!this.expandedNodesKey[department.id.toString()], // ✅ aici e magia
+            expanded: !!this.expandedNodesKey[department.id.toString()],
             children: department.positions.map(position => ({
                 label: position.name,  
                 icon: 'pi pi-inbox',
@@ -166,10 +163,8 @@ setupContextMenu() {
     this.selectedNode = node;  
 
     if (node.children ) {
-        // ✅ Open Parent Menu
         this.parentMenu.toggle(event);
     } else {
-        // ✅ Open Leaf Menu
         this.leafMenu.toggle(event);
     }
   }
@@ -188,10 +183,6 @@ setupContextMenu() {
 
   }
 
-
-
-  //Features for Department Actions
-
   openAddDepartmentDialog() {
     this.addDepartmentComponent.init();
     this.visibleAddDepartmentDialog = true;
@@ -202,11 +193,9 @@ setupContextMenu() {
   }
 
   onDepartmentAdded() {
-    this.loadTree(); // ✅ Refresh tree when department is added
-    this.closeAddDepartmentDialog(); // ✅ Close dialog after successful addition
+    this.loadTree(); 
+    this.closeAddDepartmentDialog(); 
   }
-
-  // Edit Department
 
   openEditDepartmentDialog(node: TreeNode) {
     this.selectedNode = node;
@@ -220,12 +209,9 @@ setupContextMenu() {
   }
 
   onDepartmentEdit() {
-    this.loadTree(); // ✅ Refresh tree when department is added
-    this.closeEditDepartmentDialog(); // ✅ Close dialog after successful addition
+    this.loadTree(); 
+    this.closeEditDepartmentDialog();
   }
-
-
-  // Delete Department
 
   openDeleteDepartmentDialog(node: TreeNode) {
     this.selectedNode = node;
@@ -257,10 +243,9 @@ setupContextMenu() {
     this.visibleDeletePositionDialog = false;
   }
   onPositionDeleted() {
-    this.loadTree(); // ✅ Refresh tree when position is deleted
-    this.closeDeletePositionDialog(); // ✅ Close dialog after successful deletion
+    this.loadTree();
+    this.closeDeletePositionDialog();
   }
-
 
   onNodeExpand(event: TreeNodeExpandEvent) {
     const node = event.node;

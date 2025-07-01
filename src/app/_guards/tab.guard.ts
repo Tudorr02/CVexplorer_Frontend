@@ -10,7 +10,7 @@ export const tabGuard: CanActivateFn = (route, state) => {
   if (selectedNode?.data?.publicId && selectedNode.data.type === 'position') {
     return true; // Allow access to the route
   } else {
-    router.navigate(['/dashboard']); // Or show warning
+    router.navigate(['/dashboard']); 
   }
-  return false; // block /settings route from loading
+  return false; // block
 };

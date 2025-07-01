@@ -3,8 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Round } from '../_models/round';
-import { RoundEntry } from '../_models/round-entry';
-import { CvEvaluationResult, Evaluation } from '../_models/evaluation';
 import { RoundStage } from '../_models/round-stage';
 
 @Injectable({

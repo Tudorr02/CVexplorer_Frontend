@@ -8,15 +8,15 @@ export class NodeSelectionService {
   private selectedNodeSignal = signal<TreeNode | null>(null); // ✅ create signal correctly
 
   setSelectedNode(node: TreeNode) {
-    this.selectedNodeSignal.set(node); // ✅ call .set()
+    this.selectedNodeSignal.set(node); 
   }
 
   setSelectedNodeNull() {
-    this.selectedNodeSignal.set(null); // ✅ call .set()
+    this.selectedNodeSignal.set(null);
   }
 
   getSelectedNode(): TreeNode | null {
-    return this.selectedNodeSignal(); // ✅ call the signal as a function
+    return this.selectedNodeSignal();
   }
 
 }

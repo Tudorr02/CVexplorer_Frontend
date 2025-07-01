@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Account } from '../_models/account';
 import { Observable, tap , interval, Subscription } from 'rxjs';
-import { UserDetails } from '../_models/userDetails';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { NotificationService } from './notification.service';
@@ -21,7 +20,7 @@ export class AccountService {
 
   constructor() {
     this.loadUserData();
-    this.startTokenCheck(); // ✅ Start checking expiration on app load
+    this.startTokenCheck(); // Start checking expiration on app load
   }
 
   private startTokenCheck() {
@@ -46,11 +45,11 @@ export class AccountService {
     if (userData) {
       let user: Account = JSON.parse(userData);
 
-      // ✅ Decode the token to extract roles & expirationTime
+      // Decode the token to extract roles & expirationTime
       try {
         const decoded: any = jwtDecode(user.token);
         user.role = decoded.role || '';
-        user.expirationTime = decoded.exp * 1000; // ✅ Convert UNIX timestamp to ms
+        user.expirationTime = decoded.exp * 1000; // Convert UNIX timestamp to ms
       } catch (error) {
         console.error('Error decoding JWT on load:', error);
         user.role = '';
@@ -89,7 +88,6 @@ export class AccountService {
         console.log('Session expired. Stopping token check !');
         this.NotificationService.showWarning('Session expired. Please login again !');
       }
-      //this.Router.navigate(['/login']);
       this.tokenCheckInterval.unsubscribe();
     }
     localStorage.removeItem('userData');

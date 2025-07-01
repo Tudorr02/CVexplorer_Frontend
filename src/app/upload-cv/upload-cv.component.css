@@ -20,7 +20,6 @@
 }
 
 
-/* target the drop‐zone wrapper, then any <p> or <i> inside it on hover */
 :host ::ng-deep .p-fileupload-content > div:hover p,
 :host ::ng-deep .p-fileupload-content > div:hover i{
   color: var(--p-text-color) !important;

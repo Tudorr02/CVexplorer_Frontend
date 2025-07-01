@@ -11,6 +11,6 @@ export class RoleService {
     private apiUrl = `${environment.apiBaseUrl}/Roles`;
 
     getRoles(): Observable<string[]> {
-      return this.http.get<string[]>(`${this.apiUrl}`); // ✅ Directly call API
+      return this.http.get<string[]>(`${this.apiUrl}`); 
     }
 }

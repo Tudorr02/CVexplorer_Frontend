@@ -1,7 +1,6 @@
-import { Component, EventEmitter, inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { GmailService } from '../_services/gmail.service';
 import { CommonModule } from '@angular/common';
-import { Select } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';  
 import { FormsModule } from '@angular/forms';
@@ -137,7 +136,6 @@ export class GmailAuthComponent implements OnInit , OnDestroy {
 
 
   private loadLabels() {
-    // 3. după ce popup-ul s-a închis, obține folderele
     this.gmailService.loadFolders(this.positionId).subscribe({
       next: lbls => {
         this.labels = lbls;

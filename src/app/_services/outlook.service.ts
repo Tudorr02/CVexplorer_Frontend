@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
 export interface SessionData {
   processedCVs: number;
   expiry: string;  
-  isProcessing : boolean;  // ISO-string sau null
-  processingRoundId? :string ; // ID-ul rundei de procesare sau null
+  isProcessing : boolean;  
+  processingRoundId? :string ; 
 }
 
 export interface SessionResponse {
@@ -49,10 +49,10 @@ export class OutlookService {
         }
       };
 
-      // 3) Atașezi listener-ul
+      
       window.addEventListener('message', handler);
 
-      // 4) Cleanup la unsubscribe
+      
       return () => {
         window.removeEventListener('message', handler);
         //popup?.close();

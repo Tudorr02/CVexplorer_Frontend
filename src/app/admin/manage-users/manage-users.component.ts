@@ -15,9 +15,8 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { Table } from 'primeng/table';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { waitForAsync } from '@angular/core/testing';
-import { finalize } from 'rxjs';
 import { AccountService } from '../../_services/account.service';
+
 @Component({ 
   selector: 'app-manage-users',
   imports: [ScrollPanelModule,InputIcon,IconField,MultiSelectModule,FormsModule,TableModule, ToastModule, CommonModule, TagModule, SelectModule, ButtonModule, InputTextModule],
@@ -27,7 +26,7 @@ import { AccountService } from '../../_services/account.service';
 })
 export class ManageUsersComponent implements OnInit{
 
-  @ViewChild('dtUsers') dt!: Table; // Reference to PrimeNG Table
+  @ViewChild('dtUsers') dt!: Table;
 
   cdr = inject(ChangeDetectorRef);
   private ro?: ResizeObserver;   
@@ -42,7 +41,7 @@ export class ManageUsersComponent implements OnInit{
 
   globalFilter: string = '';
   clonedUsers: { [username: string]: UserManagement } = {};
-  deletingUsers: { [userId: number]: boolean } = {}; // ✅ Track rows in delete mode
+  deletingUsers: { [userId: number]: boolean } = {};
   isModerator: boolean = false;
 
   
@@ -58,21 +57,21 @@ export class ManageUsersComponent implements OnInit{
   ngAfterViewInit(): void {
     this.updateHeight();
 
-    // dacă vrei să reacţionezi când utilizatorul redimensionează fereastra
+    
     this.ro = new ResizeObserver(() => this.updateHeight());
     this.ro.observe(this.wrapper.nativeElement);
   }
 
   private updateHeight(): void {
     if (!this.wrapper) return;
-    const h = this.wrapper.nativeElement.offsetHeight;  // pixeli incluşi padding
+    const h = this.wrapper.nativeElement.offsetHeight; 
     this.scrollHeight = `${Math.max(h - 49 - 16, 300)}px`;   
     console.log('Scroll height updated:', h);
-    this.cdr.detectChanges();                           // forţează aplicaţia
+    this.cdr.detectChanges();                           
   }
 
   ngOnDestroy(): void {
-    this.ro?.disconnect();   // curăţă observaţia de resize
+    this.ro?.disconnect();   
   }
 
   private checkIfModerator() {
@@ -98,7 +97,7 @@ export class ManageUsersComponent implements OnInit{
     this.adminService.getRoles().subscribe({
       next: (roles) => this.roles= roles.map(role => ({
         name: role,
-        disabled: this.isModerator && role === 'Admin' // ✅ Disable only "Admin" for moderators
+        disabled: this.isModerator && role === 'Admin' 
     })),
       error: (err) => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load roles' })
     });
@@ -106,24 +105,23 @@ export class ManageUsersComponent implements OnInit{
 
   loadCompanies() {
 
-    if (this.companies.length > 0) return; // Prevent multiple requests
+    if (this.companies.length > 0) return;
 
     this.adminService.getCompanies().subscribe({
       next: (companies) => {
-        this.companies = companies.map(company => company.name); // Format company names
-    }, // Format company names
+        this.companies = companies.map(company => company.name);
+    }, 
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch companies' });
       }
     });
   }
 
-  // ✅ Start editing a row (store backup)
+
   onRowEditInit(user: UserManagement) {
     this.clonedUsers[user.username] = { ...user };
   }
 
-  // ✅ Save user after edit
   onRowEditSave(user: UserManagement) {
     if (user.id === undefined) {
       this.messageService.add({ 
@@ -138,16 +136,16 @@ export class ManageUsersComponent implements OnInit{
       () => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User updated successfully' });
         delete this.clonedUsers[user.username]; // Remove backup
-        this.loadUsers(); // Refresh users
+        this.loadUsers(); 
       },
       (error) => {
-        if (error.status === 403) {  // ✅ Handle Forbidden error
+        if (error.status === 403) {  
           this.messageService.add({ 
             severity: 'warn', 
             summary: 'Forbidden', 
             detail: `You are not allowed to edit the user '${user.username}'` 
           });
-        } else { // ✅ Handle other errors
+        } else {
           this.messageService.add({ 
             severity: 'error', 
             summary: 'Error', 
@@ -159,7 +157,6 @@ export class ManageUsersComponent implements OnInit{
     );
   }
 
-  // ✅ Cancel edit and restore backup
   onRowEditCancel(user: UserManagement) {
     const originalUser = this.clonedUsers[user.username];
     if (originalUser) {
@@ -168,7 +165,7 @@ export class ManageUsersComponent implements OnInit{
     }
   }
 
-  // ✅ Role badge color based on role
+  
   getRoleSeverity(role: string) {
     switch (role) {
       case 'Admin':return 'danger';
@@ -179,17 +176,15 @@ export class ManageUsersComponent implements OnInit{
     }
   }
 
-  // ✅ Enable Delete Mode
+
   onRowDeleteInit(userId: number) {
     this.deletingUsers[userId] = true; 
   }
 
-  // ✅ Cancel Delete
   onRowDeleteCancel(userId: number) {
     delete this.deletingUsers[userId];
   }
 
-  // ✅ Confirm Deletion
   onRowDeleteConfirm(userId: number, username: string) {
     
     this.adminService.deleteUser(userId).subscribe(
@@ -200,13 +195,13 @@ export class ManageUsersComponent implements OnInit{
         delete this.deletingUsers[userId];
       },
       (error) => {
-        if (error.status === 403) {  // ✅ Handle Forbidden error
+        if (error.status === 403) { 
           this.messageService.add({ 
             severity: 'warn', 
             summary: 'Forbidden', 
             detail: `You are not allowed to delete the user '${username}'` 
           });
-        } else { // ✅ Handle other errors
+        } else { 
           this.messageService.add({ 
             severity: 'error', 
             summary: 'Error', 

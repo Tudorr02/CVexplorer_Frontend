@@ -36,14 +36,6 @@ export class DashboardComponent implements OnInit {
   departmentId?:     number;
  
   ngOnInit(): void {
-    // this.route.queryParamMap.subscribe(qp => {
-    //     this.positionPublicId = qp.get('positionPublicId') ?? undefined;
-    //     const dept = qp.get('departmentId');
-    //     this.departmentId = dept != null ? Number(dept) : undefined;   
-    //     this.loadSeniorityChart(this.positionPublicId!, this.departmentId!);  
-    //     this.loadScoresChart(this.positionPublicId, this.departmentId);
-    // });
-
     combineLatest([this.route.paramMap, this.route.queryParamMap]).subscribe(
       ([paramMap, qp]) => {
         this.departmentId = paramMap.get('id') ? +paramMap.get('id')! : undefined;
@@ -70,7 +62,6 @@ export class DashboardComponent implements OnInit {
         const labels = rawLabels.map(l => `Score ${l}`);
         const values = Object.values(data);
 
-        // Colors from CSS tokens
         const bgColor = [
           documentStyle.getPropertyValue('--p-cyan-500'),
           documentStyle.getPropertyValue('--p-primary-color'),
@@ -90,7 +81,6 @@ export class DashboardComponent implements OnInit {
           labels,
           datasets: [
             {
-              // label: 'Score Density',
               data: values,
               backgroundColor: bgColor.slice(0, labels.length),
               borderColor: borderColor.slice(0, labels.length),
@@ -155,15 +145,14 @@ export class DashboardComponent implements OnInit {
 
 
       if (totalRaw === 0 || labels.length === 0) {
-        // Nu există date: afișăm doughnut gri complet și legendă “No Data Available”
         this.chart1Data = {
           labels: ['No Data Available'],
           datasets: [
             {
-              data: [1], // o valoare unică pentru a umple tot doughnut-ul
+              data: [1], 
               backgroundColor: [noDataBgColor],
               hoverBackgroundColor: [noDataHoverColor],
-              rawData: [] // nu folosește rawData în tooltip, putem lăsa array gol
+              rawData: []
             }
           ]
         };
@@ -201,7 +190,7 @@ export class DashboardComponent implements OnInit {
               data: adjusted,
               backgroundColor: backgroundColor.slice(0, labels.length),
               hoverBackgroundColor: hoverBackgroundColor.slice(0, labels.length),
-              rawData: rawValues, // păstrăm valorile originale pentru tooltip
+              rawData: rawValues, 
             }
           ]
         };
@@ -253,7 +242,6 @@ export class DashboardComponent implements OnInit {
 
    @HostListener('window:resize', ['$event'])
   onResize(): void {
-    // forțează redimensionare: primeNG păstrează obiectul Chart în proprietate .chart
     if (this.chart1 && this.chart1.chart) {
       this.chart1.chart.resize();
     }

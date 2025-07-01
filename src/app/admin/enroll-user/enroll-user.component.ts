@@ -8,14 +8,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { SplitterModule } from 'primeng/splitter';
-import { CompanyManagement } from '../../_models/companyManagement';
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../_services/account.service';
 import { SelectButton } from 'primeng/selectbutton';
 
 @Component({
   selector: 'app-enroll-user',
-  standalone: true, // ✅ Allows the component to be used without a module
+  standalone: true, 
   imports: [SelectButton,SelectModule,SplitterModule,TagModule,CommonModule, FormsModule, MultiSelectModule, InputTextModule, ButtonModule],
   templateUrl: './enroll-user.component.html',
   styleUrl: './enroll-user.component.css'
@@ -39,7 +38,7 @@ export class EnrollUserComponent implements OnInit {
 
   roles: { key: string; name: string ; disabled: boolean }[] = [];
   companies:string[] = [];
-  loadingCompanies: boolean = false; // Control loading state
+  loadingCompanies: boolean = false; 
 
 
   ngOnInit() {
@@ -59,7 +58,7 @@ export class EnrollUserComponent implements OnInit {
         this.roles = roles.map(role => ({ 
           key: role, 
           name: role,
-          disabled: this.isModerator && role === 'Admin' })); // Format role names
+          disabled: this.isModerator && role === 'Admin' })); 
       },
       error: () => this.notificationService.showError("Failed to load roles.")
     });
@@ -67,18 +66,18 @@ export class EnrollUserComponent implements OnInit {
 
   fetchCompanies() {
 
-    if (this.companies.length > 0) return; // Prevent multiple requests
+    if (this.companies.length > 0) return; 
 
-    this.loadingCompanies = true; // Show loading indicator
+    this.loadingCompanies = true; 
 
     this.adminService.getCompanies().subscribe({
       next: (companies) => {
-        this.companies = companies.map(company => company.name); // Format company names
-        this.loadingCompanies = false; // Hide loading indicator
-    }, // Format company names
+        this.companies = companies.map(company => company.name); 
+        this.loadingCompanies = false;
+    }, 
       error: () => {
         this.notificationService.showError("Failed to fetch companies.")
-        this.loadingCompanies = false; // Hide loading indicator
+        this.loadingCompanies = false; 
       }
     });
   }

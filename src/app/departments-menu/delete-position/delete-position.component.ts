@@ -37,7 +37,7 @@ export class DeletePositionComponent {
     this.positionService.deletePosition(publicId)
       .pipe(finalize(() => setTimeout(() => {
         this.loading = false;
-        this.positionDeleted.emit(); // 🔁 emite după finalizare
+        this.positionDeleted.emit(); 
       }, 1000)))
       .subscribe({
         next: () => {

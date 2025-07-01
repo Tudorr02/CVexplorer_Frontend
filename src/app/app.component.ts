@@ -95,7 +95,7 @@ export class AppComponent  {
         if (publicId) {
           return { ...tab, queryParams: { positionPublicId: publicId } , disabled: false };
         }else{
-          return { ...tab, disabled: true }; // Disable Explore tab if no positionPublicId or departmentId
+          return { ...tab, disabled: true }; 
         }
         
       } else if (tab.label === 'Evaluate') {
@@ -107,7 +107,7 @@ export class AppComponent  {
           return { ...tab, queryParams: { positionPublicId: publicId } , disabled: false };
         }
         else{
-          return { ...tab, disabled: true }; // Disable Explore tab if no positionPublicId or departmentId
+          return { ...tab, disabled: true }; 
         }
         
       } 

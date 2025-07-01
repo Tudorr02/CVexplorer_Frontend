@@ -8,7 +8,7 @@
       </p-tag>
     </div>
     <div class="flex justify-center items-center">
-      <p-button *ngIf="sessionActive"   text="true" icon="pi pi-caret-right" label="Start" (onClick)="watch()" size="small"/>
+      <p-button *ngIf="sessionActive"   text="true" icon="pi pi-caret-right" [disabled]="isProcessing" label="Start" (onClick)="watch()" size="small"/>
       <p-menu #menu [model]="settings" [popup]="true" />
       <p-button *ngIf="sessionActive" icon="pi pi-cog" [rounded]="true" [text]="true" severity="secondary" (click)="menu.toggle($event)" size="large"/>
     </div>
