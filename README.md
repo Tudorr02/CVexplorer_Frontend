@@ -38,28 +38,25 @@ CVexplorer is a web platform that automates and simplifies the candidate selecti
 ## Application Features
 
 ### Login
-<p align="center">
   <img
     src="https://github.com/user-attachments/assets/1a58b0a6-8156-46b0-8991-7323ce563e04"
-    alt="Demo GIF"
-    width="400"
   />
-</p>
 
 - Users cannot self-register; only company moderators or HR leaders can create accounts.
 - Upon logging in, a JWT token is issued to authorize all subsequent backend interactions.
 
 
 ### Admin Panel
-> Accessible only to users with Admin or Moderator roles
-<p align="center">
-  <img width="800" src="https://github.com/user-attachments/assets/55e7cfc4-d219-4d4f-bb83-53e85dad35a4" />
-  <img width="800" alt="Screenshot 2025-07-17 161553" src="https://github.com/user-attachments/assets/80df489e-5adf-4ebc-89bb-bf659f4b5485" />
-  <img width="800" alt="Screenshot 2025-07-17 161553" src="https://github.com/user-attachments/assets/83b56c71-4ed3-45c5-b1bd-9124e90fbf2d" />
-</p>
+> Accessible only to users with `Admin` or `Moderator` roles
+  
+- **CRUD** operations for users
+- **CRUD** operations for companies
+  
+![gif (1)](https://github.com/user-attachments/assets/6f2f5872-ea29-4140-9783-8a5fd644ef75)
 
-- **CRUD operations for companies**  
-- **CRUD operations for users**  
-- **Global Data View**
-
+### Departments & Positions Panel
+> Accessible only to users with `HRLeader` or `HRUser` roles
+- **CRUD operations for departmens** ( `HRLeader` role only)
+  
+  ![gif (2)](https://github.com/user-attachments/assets/018dc63d-fadc-48e3-a99f-6d1595812bbd)
 
