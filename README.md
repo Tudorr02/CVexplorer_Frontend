@@ -5,3 +5,32 @@
 
 ## Description
 CVexplorer is a web platform that automates and simplifies the candidate selection process for job openings within companies. With this application, HR department employees can significantly reduce the time spent on manual CV evaluation and eliminate subjectivity from the selection process.
+
+## Technologies Used
+- **Angular** (v19.1.4) with TypeScript  
+- **Tailwind CSS** for utility-first styling  
+- **PrimeNG** for modern UI components and data visualization
+- **Node.js** (v22.14.0) as runtime environment and package manager  
+
+
+## Angular Features Used
+- **Custom Directives**: implementing reusable UI behaviors via Angular directive classes.  
+- **Signals**: leveraging Angular Signals for reactive state management in components.  
+- **HTTP Interceptors**: centralizing request/response handling for auth tokens and error processing.  
+- **Routing & Guards**: defining routes with `@angular/router` and protecting routes with `CanActivate` guards.  
+- **Reactive Forms**: using `ReactiveFormsModule` for model-driven forms with dynamic validation.  
+- **Template-driven Forms**: utilizing `FormsModule` for simpler two-way-bound forms.  
+- **RxJS**: using reactive streams and operators for event handling, data transformation, and HTTP call management.
+
+## Project Structure
+    src/
+    ├── app/
+    │   ├── components/        # Reusable UI components
+    │   ├── services/          # Business logic & HTTP services
+    │   ├── models/            # Data interfaces & DTOs
+    │   ├── guards/            # Route protection logic
+    │   ├── directives/        # Custom DOM behaviors
+    │   ├── interceptors/      # HTTP request/response handlers
+    │   └── admin/             # Admin features ( components )
+    └── assets/                # Fonts, PrimeNG custom preset
+    public/                    # Application logos & icons
