@@ -39,9 +39,11 @@ CVexplorer is a web platform that automates and simplifies the candidate selecti
 
 ### Login
 <p align="center">
-  
-![gif](https://github.com/user-attachments/assets/1a58b0a6-8156-46b0-8991-7323ce563e04)
-
+  <img
+    src="https://github.com/user-attachments/assets/1a58b0a6-8156-46b0-8991-7323ce563e04"
+    alt="Demo GIF"
+    width="400"
+  />
 </p>
 
 - Users cannot self-register; only company moderators or HR leaders can create accounts.
