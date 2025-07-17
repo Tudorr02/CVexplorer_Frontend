@@ -38,9 +38,7 @@ CVexplorer is a web platform that automates and simplifies the candidate selecti
 ## Application Features
 
 ### Login
-  <img
-    src="https://github.com/user-attachments/assets/1a58b0a6-8156-46b0-8991-7323ce563e04"
-  />
+https://github.com/user-attachments/assets/39a85f95-1c14-4955-ade1-cda723a77a6b
 
 - Users cannot self-register; only company moderators or HR leaders can create accounts.
 - Upon logging in, a JWT token is issued to authorize all subsequent backend interactions.
@@ -57,6 +55,5 @@ CVexplorer is a web platform that automates and simplifies the candidate selecti
 ### Departments & Positions Panel
 > Accessible only to users with `HRLeader` or `HRUser` roles
 - **CRUD operations for departmens** ( `HRLeader` role only)
-  
-  ![gif (2)](https://github.com/user-attachments/assets/018dc63d-fadc-48e3-a99f-6d1595812bbd)
+https://github.com/user-attachments/assets/c652dbdd-1bbf-43c2-8bcb-0286a67b34f0
 
