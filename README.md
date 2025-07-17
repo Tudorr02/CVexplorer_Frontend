@@ -51,16 +51,13 @@ CVexplorer is a web platform that automates and simplifies the candidate selecti
 ### Admin Panel
 > Accessible only to users with Admin or Moderator roles
 <p align="center">
-  <img
-    src="https://github.com/user-attachments/assets/55e7cfc4-d219-4d4f-bb83-53e85dad35a4"
-    alt="Screenshot 2025-07-17 161546"
-    width="400"
-  />
+  <img width="800" src="https://github.com/user-attachments/assets/55e7cfc4-d219-4d4f-bb83-53e85dad35a4" />
+  <img width="800" alt="Screenshot 2025-07-17 161553" src="https://github.com/user-attachments/assets/80df489e-5adf-4ebc-89bb-bf659f4b5485" />
+  <img width="800" alt="Screenshot 2025-07-17 161553" src="https://github.com/user-attachments/assets/83b56c71-4ed3-45c5-b1bd-9124e90fbf2d" />
 </p>
 
-- CRUD on Companies: create, read, update, and delete company records
-- Global Data View: view platform-wide data
-- CRUD on Users: manage user accounts across the platform
-- Role Assignment: assign and change user roles within companies
+- **CRUD operations for companies**  
+- **CRUD operations for users**  
+- **Global Data View**
 
 
