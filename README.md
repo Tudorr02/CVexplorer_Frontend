@@ -55,5 +55,6 @@ https://github.com/user-attachments/assets/39a85f95-1c14-4955-ade1-cda723a77a6b
 ### Departments & Positions Panel
 > Accessible only to users with `HRLeader` or `HRUser` roles
 - **CRUD operations for departmens** ( `HRLeader` role only)
+  
 https://github.com/user-attachments/assets/c652dbdd-1bbf-43c2-8bcb-0286a67b34f0
 
