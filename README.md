@@ -49,8 +49,8 @@ https://github.com/user-attachments/assets/39a85f95-1c14-4955-ade1-cda723a77a6b
   
 - **CRUD** operations for users
 - **CRUD** operations for companies
-  
-![gif (1)](https://github.com/user-attachments/assets/6f2f5872-ea29-4140-9783-8a5fd644ef75)
+
+https://github.com/user-attachments/assets/f5d53534-e019-475d-9211-bb662a26808f
 
 ### Departments & Positions Panel
 > Accessible only to users with `HRLeader` or `HRUser` roles
