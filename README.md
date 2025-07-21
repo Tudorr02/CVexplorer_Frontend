@@ -125,5 +125,8 @@ https://github.com/user-attachments/assets/b7c77c4f-1208-4f1e-94a6-73ae42e41614
 - **Light/Dark** mode
 - Account Details menu
 
+## See also :
 
+- **Backend Repo**: [CVexplorer - Backend](https://github.com/Tudorr02/CVexplorer_Backend)
+- **Evaluation Service**: [CVexplorer - Evaluation Service](https://github.com/Tudorr02/CVexplorer_EvaluationModel)
 
