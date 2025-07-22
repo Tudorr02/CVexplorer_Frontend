@@ -63,16 +63,16 @@ https://github.com/user-attachments/assets/c4117889-1a87-4599-849e-bace569adc68
 
 - Adding a position involves going through a series of steps in which you provide details about the role, specify the characteristics of the ideal candidate, and (at your discretion) assign weights to the fields to be analyzed (technical skills, soft skills, certifications, etc.), which are then used to calculate the final score for each applicant. 
   
-### Main Panel
+###  Main Panel
 > Accessible only to users with `HRLeader` or `HRUser` roles
 
-#### Dashboard Tab
+#### 🏠 Dashboard Tab
 
 https://github.com/user-attachments/assets/468e112f-a3be-472a-811f-9b6a0cdaec9e
 
 - This tab serves as a home page, and you also have the option to view statistics on applications. This tab displays statistics by position/department. If neither is selected, it shows company‑wide statistics.
 
-#### Upload Tab
+#### 📤 Upload Tab
 
 https://github.com/user-attachments/assets/88cbbab6-608c-4a95-a8ee-e5f4da160a0d
 
@@ -95,7 +95,7 @@ https://github.com/user-attachments/assets/88cbbab6-608c-4a95-a8ee-e5f4da160a0d
   - Sync Connection option: Refresh the integration tokens’ expiration dates and display the résumés processed automatically.
 
 
-#### Explore Tab
+#### 🌐 Explore Tab
 > Accessible only to users with `HRLeader` or `HRUser` roles
 
 https://github.com/user-attachments/assets/7de95fe5-4612-4b06-ac96-62b14f3c3983
@@ -106,7 +106,7 @@ https://github.com/user-attachments/assets/7de95fe5-4612-4b06-ac96-62b14f3c3983
 - Before saving any manual changes, you can preview the newly calculated score using the Recalculate button.
 - The candidate’s final score is computed as: similarity score × position analysis field weight ( set on position creation , 3rd tab ).
 
-#### Evaluate Tab
+#### 🔎 Evaluate Tab
 
 https://github.com/user-attachments/assets/8a01f9de-a4c2-4112-bba4-7ceb7711fe32
 
